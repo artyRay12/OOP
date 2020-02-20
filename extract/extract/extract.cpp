@@ -2,6 +2,7 @@
 #include <fstream>
 #include <optional>
 #include <string>
+#include "extract.h"
 
 using namespace std;
 
@@ -64,7 +65,7 @@ bool ExtractFragment(ifstream& input, ofstream& output, int start, int size)
 	}
 }
 
-bool CheckFiles(ifstream& input, ofstream& output, string inputFileName, string outputFileName)
+bool CheckFilesForOpen(ifstream& input, ofstream& output, string inputFileName, string outputFileName)
 {
 	input.open(inputFileName);
 	if (!input.is_open())
@@ -83,7 +84,22 @@ bool CheckFiles(ifstream& input, ofstream& output, string inputFileName, string 
 	return true;
 }
 
+bool checkFiles(std::ifstream& input, std::ofstream& output)
+{
+	if (input.bad())
+	{
+		cout << "Failed to reading data from disk \n";
+		return false;
+	}
 
+	if (!output.flush())
+	{
+		cout << "Failed to writing data on disk \n";
+		return false;
+	}
+
+	return true;
+}
 
 
 int main(int argc, char* argv[])
@@ -94,9 +110,9 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input;
+	ifstream input; 
 	ofstream output;
-	if (!CheckFiles(input, output, args->inputFileName, args->outputFileName))
+	if (!CheckFilesForOpen(input, output, args->inputFileName, args->outputFileName))
 	{
 		return 1;
 	}
@@ -108,17 +124,11 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (input.bad())
+	if (!checkFiles(input, output))
 	{
-		cout << "Failed to reading data from disk \n";
-		return 1;
-	}
-
-	if (!output.flush())
-	{
-		cout << "Failed to writing data on disk \n";
 		return 1;
 	}
 
 	return 0;
 }
+

@@ -175,6 +175,9 @@
   <ItemGroup>
     <None Include="Tests.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="extract.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
