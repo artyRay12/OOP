@@ -64,6 +64,27 @@ bool ExtractFragment(ifstream& input, ofstream& output, int start, int size)
 	}
 }
 
+bool CheckFiles(ifstream& input, ofstream& output, string inputFileName, string outputFileName)
+{
+	input.open(inputFileName);
+	if (!input.is_open())
+	{
+		cout << "cant open input file" << endl;
+		return false;
+	}
+
+	output.open(outputFileName);
+	if (!output.is_open())
+	{
+		cout << "cant open output file" << endl;
+		return false;
+	}
+	
+	return true;
+}
+
+
+
 
 int main(int argc, char* argv[])
 {
@@ -73,21 +94,10 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	/* Открываем входной файл */
 	ifstream input;
-	input.open(args->inputFileName);
-	if (!input.is_open())
-	{
-		cout << "cant open input file" << endl;
-		return 1;
-	}
-
-	/* Открываем выходной файл */
 	ofstream output;
-	output.open(args->outputFileName);
-	if (!output.is_open())
+	if (!CheckFiles(input, output, args->inputFileName, args->outputFileName))
 	{
-		cout << "cant open output file" << endl;
 		return 1;
 	}
 
