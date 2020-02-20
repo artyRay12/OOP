@@ -13,6 +13,7 @@ struct Args
 
 optional<Args> ParseArgs(int argc, char* argv[])
 {
+	cout << argv[3] << endl;
 	if ((argc != 5))
 	{
 		cout << "Invalid number of parametres" << endl;

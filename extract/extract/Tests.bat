@@ -25,17 +25,16 @@ REM without args
 %MyProgram% && goto err
 echo test 5 passed
 
-
 REM with zero fragment length
-%MyProgram% input.txt "%TEMP%\output.txt" 10 0 ||goto err
+%MyProgram% input.txt "%TEMP%\output.txt" 10 0 && goto err
 echo test 6 passed
 
 REM with zero fragment length < 0
-%MyProgram% input.txt "%TEMP%\output.txt" 10 -5 || goto err
+%MyProgram% input.txt "%TEMP%\output.txt" 10 -5 && goto err
 echo test 7 passed
 
 REM without zero fragment start < 0
-%MyProgram% input.txt "%TEMP%\output.txt" -10 5 || goto err
+%MyProgram% input.txt "%TEMP%\output.txt" -10 5 && goto err
 echo test 8 passed
 
 REM Успешно
