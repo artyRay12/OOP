@@ -166,6 +166,7 @@
     <ClCompile Include="extract.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="emptyOutput.txt" />
     <Text Include="input.txt" />
     <Text Include="nonEmpty.txt" />
     <Text Include="nonEmptyOutput.txt" />

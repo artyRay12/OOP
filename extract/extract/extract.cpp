@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <optional>
+#include <string>
+
 using namespace std;
 
 struct Args
@@ -13,14 +15,13 @@ struct Args
 
 optional<Args> ParseArgs(int argc, char* argv[])
 {
-	cout << argv[3] << endl;
 	if ((argc != 5))
 	{
 		cout << "Invalid number of parametres" << endl;
 		return nullopt;
 	}
 
-	if ((atoi(argv[3]) < 0) || ((atoi(argv[4]) <= 0)))
+	if ((stoi(argv[3]) < 0) || ((stoi(argv[4]) < 0)))
 	{
 		cout << "Invalid fragment start or fragment size" << endl;
 		return nullopt;
@@ -29,22 +30,21 @@ optional<Args> ParseArgs(int argc, char* argv[])
 	Args args;
 	args.inputFileName = argv[1];
 	args.outputFileName = argv[2];
-	args.fragmentStart = atoi(argv[3]);
-	args.fragmentSize = atoi(argv[4]);
+	args.fragmentStart = stoi(argv[3]);
+	args.fragmentSize = stoi(argv[4]);
 	return args;
 
 }
 
-void extractFragment(ifstream& input, ofstream& output, optional<Args> args)
+bool ExtractFragment(ifstream& input, ofstream& output, int start, int size)
 {
 	char ch;
-	string fragment;
 	int charNumber = 0;
 
 	while (input.get(ch))
 	{
 		charNumber++;
-		if ((charNumber >= args->fragmentStart) && (charNumber <= args->fragmentStart + args->fragmentSize))
+		if ((charNumber >= start) && (charNumber <= start + size) && (size != 0))
 		{
 			if (!output.put(ch))
 			{
@@ -53,9 +53,14 @@ void extractFragment(ifstream& input, ofstream& output, optional<Args> args)
 		}
 	}
 
-	if (charNumber < args->fragmentStart + args->fragmentSize)
+	if (charNumber < start + size)
 	{
 		cout << "fragment size too big" << endl;
+		return false;
+	}
+	else 
+	{
+		return true;
 	}
 }
 
@@ -86,9 +91,12 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	/* Копируем input -> output */
-	extractFragment(input, output, args);
-
+	/* extract fragment */
+	if (!ExtractFragment(input, output, args->fragmentStart, args->fragmentSize))
+	{
+		cout << "fail with extract" << endl;
+		return 1;
+	}
 
 	if (input.bad())
 	{

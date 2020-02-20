@@ -24,6 +24,7 @@
     <Text Include="output.txt" />
     <Text Include="nonEmpty.txt" />
     <Text Include="nonEmptyOutput.txt" />
+    <Text Include="emptyOutput.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat">

@@ -26,7 +26,8 @@ REM without args
 echo test 5 passed
 
 REM with zero fragment length
-%MyProgram% input.txt "%TEMP%\output.txt" 10 0 && goto err
+%MyProgram% input.txt "%TEMP%\output.txt" 10 0 || goto err
+fc emptyOutput.txt "%TEMP%\output.txt" > nul || goto err
 echo test 6 passed
 
 REM with zero fragment length < 0
@@ -36,6 +37,10 @@ echo test 7 passed
 REM without zero fragment start < 0
 %MyProgram% input.txt "%TEMP%\output.txt" -10 5 && goto err
 echo test 8 passed
+
+REM fragment borders bigger than file
+%MyProgram% input.txt "%TEMP%\output.txt" 10 150 && goto err
+echo test 9 passed
 
 REM Успешно
 echo tests passed succesfull
