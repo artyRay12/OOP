@@ -1,0 +1,13 @@
+﻿  extract.cpp
+  extract.vcxproj -> C:\Users\art\source\repos\OOP\extract\Debug\extract.exe
+  test 2 passed
+  cant open input file
+  test 3 passed
+  Invalid number of parametres
+  test 4 passed
+  Invalid number of parametres
+  test 5 passed
+  Invalid fragment start or fragment size
+  error here
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(149,5): error MSB3073: выход из команды ""C:\Users\art\source\repos\OOP\extract\extract\Tests.bat" "C:\Users\art\source\repos\OOP\extract\Debug\extract.exe"
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(149,5): error MSB3073: :VCEnd" с кодом 1.
