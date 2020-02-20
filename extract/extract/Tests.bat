@@ -25,6 +25,7 @@ REM without args
 %MyProgram% && goto err
 echo test 5 passed
 
+
 REM with zero fragment length
 %MyProgram% input.txt "%TEMP%\output.txt" 10 0 ||goto err
 echo test 6 passed
