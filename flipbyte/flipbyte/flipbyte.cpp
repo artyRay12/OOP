@@ -10,11 +10,11 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    int n;
-    cout << "Введите число: ";
-    cin >> n;
-    for (int i = sizeof(int) * 8; i > -1; --i)
-        cout << (n >> i) & 1;
+    unsigned char n = 100;
+    n = ~n;
+    cout << int(n);
+
+    cout << "\n";
     system("pause");
     return 0;
 }
