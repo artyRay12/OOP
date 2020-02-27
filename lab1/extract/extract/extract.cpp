@@ -16,31 +16,57 @@ struct Args
 
 optional<Args> ParseArgs(int argc, char* argv[])
 {
+	Args args;
+
 	if ((argc != 5))
 	{
 		cout << "Invalid number of parametres" << endl;
 		return nullopt;
 	}
 
-	if ((stoi(argv[3]) < 0) || ((stoi(argv[4]) < 0)))
+	try
+	{
+		args.fragmentStart = stoi(argv[3]);
+		args.fragmentSize = stoi(argv[4]);
+	}
+	catch (const std::invalid_argument & err)
+	{
+		cout << err.what();
+		return nullopt;
+	}
+
+	if ((args.fragmentStart < 0) || ((args.fragmentSize < 0)))
 	{
 		cout << "Invalid fragment start or fragment size" << endl;
 		return nullopt;
 	}
 
-	Args args;
 	args.inputFileName = argv[1];
 	args.outputFileName = argv[2];
-	args.fragmentStart = stoi(argv[3]);
-	args.fragmentSize = stoi(argv[4]);
 	return args;
 
 }
 
-bool ExtractFragment(ifstream& input, ofstream& output, int start, int size)
+bool ExtractFragment(string& inputFileName, string& outputFileName, int start, int size)
 {
 	char ch;
 	int charNumber = 0;
+
+	ifstream input;
+	input.open(inputFileName);
+	if (!input.is_open())
+	{
+		cout << "cant open input file" << endl;
+		return false;
+	}
+
+	ofstream output;
+	output.open(outputFileName);
+	if (!output.is_open())
+	{
+		cout << "cant open output file" << endl;
+		return false;
+	}
 
 	while (input.get(ch))
 	{
@@ -59,33 +85,7 @@ bool ExtractFragment(ifstream& input, ofstream& output, int start, int size)
 		cout << "fragment size too big" << endl;
 		return false;
 	}
-	else 
-	{
-		return true;
-	}
-}
 
-bool CheckFilesForOpen(ifstream& input, ofstream& output, string inputFileName, string outputFileName)
-{
-	input.open(inputFileName);
-	if (!input.is_open())
-	{
-		cout << "cant open input file" << endl;
-		return false;
-	}
-
-	output.open(outputFileName);
-	if (!output.is_open())
-	{
-		cout << "cant open output file" << endl;
-		return false;
-	}
-	
-	return true;
-}
-
-bool checkFiles(std::ifstream& input, std::ofstream& output)
-{
 	if (input.bad())
 	{
 		cout << "Failed to reading data from disk \n";
@@ -101,7 +101,6 @@ bool checkFiles(std::ifstream& input, std::ofstream& output)
 	return true;
 }
 
-
 int main(int argc, char* argv[])
 {
 	auto args = ParseArgs(argc, argv);
@@ -110,22 +109,9 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input; 
-	ofstream output;
-	if (!CheckFilesForOpen(input, output, args->inputFileName, args->outputFileName))
-	{
-		return 1;
-	}
-
-	/* extract fragment */
-	if (!ExtractFragment(input, output, args->fragmentStart, args->fragmentSize))
+	if (!ExtractFragment(args->inputFileName, args->outputFileName, args->fragmentStart, args->fragmentSize))
 	{
 		cout << "fail with extract" << endl;
-		return 1;
-	}
-
-	if (!checkFiles(input, output))
-	{
 		return 1;
 	}
 

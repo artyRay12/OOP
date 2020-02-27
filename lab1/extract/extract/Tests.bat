@@ -7,9 +7,10 @@ if %MyProgram%=="" (
 	echo Please specify path to program
 	exit /B 1
 )
+echo test 1 passed
 
 REM copy non empty file
-%MyProgram% nonEmpty.txt "%TEMP%\output.txt" 0 13 || goto err
+%MyProgram% nonEmpty.txt "%TEMP%\output.txt" 1 5 || goto err
 fc nonEmptyOutput.txt "%TEMP%\output.txt" > nul || goto err
 echo test 2 passed
 
@@ -41,6 +42,11 @@ echo test 8 passed
 REM fragment borders bigger than file
 %MyProgram% input.txt "%TEMP%\output.txt" 10 150 && goto err
 echo test 9 passed
+
+REM fragment borders bigger than file
+%MyProgram% input.txt "%TEMP%\output.txt" 1 lettersInsteadDigits && goto err
+echo test 10 passed
+
 
 REM Успешно
 echo tests passed succesfull
