@@ -20,7 +20,7 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 	if ((argc != 5))
 	{
-		cout << "Invalid number of parametres" << endl;
+		cout << "Invalid number of parametres \n usage extract.txt <input File> <output File> <fragment start> <fragment length>" << endl;
 		return nullopt;
 	}
 
@@ -29,7 +29,7 @@ optional<Args> ParseArgs(int argc, char* argv[])
 		args.fragmentStart = stoi(argv[3]);
 		args.fragmentSize = stoi(argv[4]);
 	}
-	catch (const std::invalid_argument & err)
+	catch (const exception & err)
 	{
 		cout << err.what();
 		return nullopt;
@@ -47,11 +47,33 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 }
 
-bool ExtractFragment(string& inputFileName, string& outputFileName, int start, int size)
+bool Extract(ifstream& input, ofstream& output, int &start, int &size)
 {
-	char ch;
 	int charNumber = 0;
+	char ch;
+	while (input.get(ch))
+	{
+		charNumber++;
+		if ((charNumber >= start) && (charNumber <= start + size) && (size != 0))
+		{
+			if (!output.put(ch))
+			{
+				break;
+			}
+		}
+	}
+	cout << charNumber << endl;
+	if (charNumber < start + size)
+	{
+		cout << "fragment size too big" << endl;
+		return false;
+	}
 
+	return true;
+}
+
+bool ExtractFragment(const string& inputFileName, const string& outputFileName, int start, int size)
+{
 	ifstream input;
 	input.open(inputFileName);
 	if (!input.is_open())
@@ -68,21 +90,8 @@ bool ExtractFragment(string& inputFileName, string& outputFileName, int start, i
 		return false;
 	}
 
-	while (input.get(ch))
+	if (!Extract(input, output, start, size))
 	{
-		charNumber++;
-		if ((charNumber >= start) && (charNumber <= start + size) && (size != 0))
-		{
-			if (!output.put(ch))
-			{
-				break;
-			}
-		}
-	}
-
-	if (charNumber < start + size)
-	{
-		cout << "fragment size too big" << endl;
 		return false;
 	}
 
