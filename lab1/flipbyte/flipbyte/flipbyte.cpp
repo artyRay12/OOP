@@ -9,50 +9,51 @@
 #include <bitset>
 using namespace std;
 
-using namespace std;
 
-bool IsNumber(const char* str)
+bool IsCorrectNumber(const string str)
 {
-	for (int i = 0; i < strlen(str); ++i)
+	for (int i = 0; i < str.length(); ++i)
 	{
 		if (!isdigit(str[i])) {
 			return false;
 		}
 	}
+
+	if ((stoi(str) > 255) || (stoi(str) < 0))
+	{
+		return false;
+	}
+
 	return true;
 }
 
 void FlipByte(uint8_t& byte)
 {
 	byte = ((byte & 0b10101010) >> 1) | ((byte & 0b01010101) << 1);
-	cout << "            " << bitset<8>(byte) << endl;
+	//cout << "            " << bitset<8>(byte) << endl;
 	byte = ((byte & 0b11001100) >> 2) | ((byte & 0b00110011) << 2);
-	cout << "            " << bitset<8>(byte) << endl;
+	//cout << "            " << bitset<8>(byte) << endl;
 	byte = (byte << 4) | (byte >> 4);
-	cout << "            " << bitset<8>(byte) << endl;
+	//cout << "            " << bitset<8>(byte) << endl;
 }
 
 int main(int argc, char* argv[])
 {
 	if (argc != 2)
 	{
-		cout << "Invalid arguments count\n" << "Usage: flipbyte.exe <input byte>\n";
+		cout << "Invalid arguments count";
 		return 1;
 	}
 
-
-
-	if ((!IsNumber(argv[1])) || !((stoi(argv[1]) <= 255) && (stoi(argv[1]) >= 0)))
+	if (!IsCorrectNumber(argv[1]))
 	{
-		cout << "Invalid value\n" << "<input byte> must be unsigned int(0 .. 255)\n";
+		cout << "Value must be 0 .. 255\n";
 		return 1;
 	}
 
-	uint8_t byte = static_cast <uint8_t> (stoi(argv[1]));
-	bitset<8> test(stoi(argv[1]));
-	cout << "Input byte: " << test << endl;
+	uint8_t byte = stoi(argv[1]);
+	cout << "Input: " << int(byte) << endl;
 	FlipByte(byte);
-	bitset<8> test1(byte);
-	cout << "Output byte: " << static_cast <int> (byte) << "    " << test1 << endl;
+	cout << "Output: " << static_cast<int>(byte) << endl;
 	return 0;
 }
