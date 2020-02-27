@@ -27,14 +27,16 @@ bool IsCorrectNumber(const string str)
 	return true;
 }
 
-void FlipByte(uint8_t& byte)
+unsigned char FlipByte(int num)
 {
-	byte = ((byte & 0b10101010) >> 1) | ((byte & 0b01010101) << 1);
-	//cout << "            " << bitset<8>(byte) << endl;
-	byte = ((byte & 0b11001100) >> 2) | ((byte & 0b00110011) << 2);
-	//cout << "            " << bitset<8>(byte) << endl;
-	byte = (byte << 4) | (byte >> 4);
-	//cout << "            " << bitset<8>(byte) << endl;
+	unsigned char flippedNumber = 0;
+	for (size_t i = 0; i < 8; ++i)
+	{
+		flippedNumber = flippedNumber << 1;
+		flippedNumber = flippedNumber | (num & 0x01);
+		num >>= 1;
+	}
+	return flippedNumber;
 }
 
 int main(int argc, char* argv[])
@@ -51,9 +53,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	uint8_t byte = stoi(argv[1]);
-	cout << "Input: " << int(byte) << endl;
-	FlipByte(byte);
-	cout << "Output: " << static_cast<int>(byte) << endl;
+	cout << "Output: " << static_cast<int>(FlipByte(stoi(argv[1]))) << endl;
 	return 0;
 }
