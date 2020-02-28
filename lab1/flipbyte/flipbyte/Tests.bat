@@ -24,15 +24,15 @@ echo test 4 passed
 
 REM arg > 250
 %MyProgram% 300 && goto err
-echo test 6 passed
+echo test 5 passed
 
 REM arg < 0
 %MyProgram% -50 && goto err
-echo test 7 passed
+echo test 6 passed
 
 REM arg is not digits
 %MyProgram% notDigit && goto err
-echo test 8 passed
+echo test 7 passed
 
 REM =)
 echo tests passed succesfull

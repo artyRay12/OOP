@@ -10,48 +10,41 @@
 #include <optional>
 using namespace std;
 
-
-bool IsCorrectNumber(const string str)
-{
-
-	if ((stoi(str) > 255) || (stoi(str) < 0))
-	{
-		return false;
-	}
-
-	return true;
-}
-
 optional<uint8_t> ParseCommandLine(int argc, char* argv[])
 {
-	size_t pos;
+	size_t pos = 0;
 	string test = argv[1];
+	optional<uint8_t> num = 0;
+
 	if (argc != 2)
 	{
-		cout << "Invalid arguments count \n Usage: flipbyte.exe <number>";
-		return 1;
+		return nullopt;
 	}
 
 	try
 	{
-		test = stoi(argv[1], &pos);
+		num = stoi(argv[1], &pos);
 	}
 	catch (const exception & err)
 	{
-		cout << err.what();
+		cout << err.what() << endl;;
 		return nullopt;
 	}
 
-	if (*pos != (test.size()))
+	if (pos != test.length())
 	{
 		return nullopt;
 	}
 
-	return static_cast<optional<uint8_t>>(stoi(test));
+	if ((stoi(argv[1]) > 255) || (stoi(argv[1]) < 0))
+	{
+		return nullopt;
+	}
+
+	return num;
 }
 
-
-unsigned char FlipByte(int num)
+int GetFlippedByte(uint8_t num)
 {
 	unsigned char flippedNumber = 0;
 	for (size_t i = 0; i < 8; ++i)
@@ -60,12 +53,18 @@ unsigned char FlipByte(int num)
 		flippedNumber = flippedNumber | (num & 0x01);
 		num >>= 1;
 	}
-	return flippedNumber;
+	return static_cast<int>(flippedNumber);
 }
 
 int main(int argc, char* argv[])
 {
 	auto byte = ParseCommandLine(argc, argv);
-	cout << "Output: " << static_cast<int>(FlipByte(stoi(argv[1]))) << endl;
+	if (!byte)
+	{
+		cout << "Invalid argument! \n Usage: flipbyte.exe <number 0..255>\n";
+		return 1;
+	}
+
+	cout << "Output: " << GetFlippedByte(byte.value()) << endl;
 	return 0;
 }
