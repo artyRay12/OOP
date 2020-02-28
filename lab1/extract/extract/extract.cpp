@@ -29,6 +29,7 @@ optional<Args> ParseArgs(int argc, char* argv[])
 		args.fragmentStart = stoi(argv[3]);
 		args.fragmentSize = stoi(argv[4]);
 	}
+
 	catch (const exception & err)
 	{
 		cout << err.what();

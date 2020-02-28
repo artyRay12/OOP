@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 
 SET MyProgram="%~1"
 

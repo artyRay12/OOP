@@ -7,17 +7,12 @@
 #include <conio.h>
 #include <string>
 #include <bitset>
+#include <optional>
 using namespace std;
 
 
 bool IsCorrectNumber(const string str)
 {
-	for (int i = 0; i < str.length(); ++i)
-	{
-		if (!isdigit(str[i])) {
-			return false;
-		}
-	}
 
 	if ((stoi(str) > 255) || (stoi(str) < 0))
 	{
@@ -26,6 +21,35 @@ bool IsCorrectNumber(const string str)
 
 	return true;
 }
+
+optional<uint8_t> ParseCommandLine(int argc, char* argv[])
+{
+	size_t pos;
+	string test = argv[1];
+	if (argc != 2)
+	{
+		cout << "Invalid arguments count \n Usage: flipbyte.exe <number>";
+		return 1;
+	}
+
+	try
+	{
+		test = stoi(argv[1], &pos);
+	}
+	catch (const exception & err)
+	{
+		cout << err.what();
+		return nullopt;
+	}
+
+	if (*pos != (test.size()))
+	{
+		return nullopt;
+	}
+
+	return static_cast<optional<uint8_t>>(stoi(test));
+}
+
 
 unsigned char FlipByte(int num)
 {
@@ -41,18 +65,7 @@ unsigned char FlipByte(int num)
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
-	{
-		cout << "Invalid arguments count";
-		return 1;
-	}
-
-	if (!IsCorrectNumber(argv[1]))
-	{
-		cout << "Value must be 0 .. 255\n";
-		return 1;
-	}
-
+	auto byte = ParseCommandLine(argc, argv);
 	cout << "Output: " << static_cast<int>(FlipByte(stoi(argv[1]))) << endl;
 	return 0;
 }
