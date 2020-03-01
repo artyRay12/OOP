@@ -43,9 +43,17 @@ REM fragment borders bigger than file
 %MyProgram% input.txt "%TEMP%\output.txt" 10 150 && goto err
 echo test 9 passed
 
-REM fragment borders bigger than file
+REM fragment letters instead digits
 %MyProgram% input.txt "%TEMP%\output.txt" 1 lettersInsteadDigits && goto err
 echo test 10 passed
+
+REM fragment digit + string as digit
+%MyProgram% input.txt "%TEMP%\output.txt" 1 14sajdlk && goto err
+echo test 11 passed
+
+REM fragment numbit bigger than int borders
+%MyProgram% input.txt "%TEMP%\output.txt" 1 299999999999999999 && goto err
+echo test 12 passed
 
 
 REM Успешно

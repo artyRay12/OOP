@@ -34,6 +34,10 @@ REM arg is not digits
 %MyProgram% notDigit && goto err
 echo test 7 passed
 
+REM arg is digits + string instead digit
+%MyProgram% 100HiImHere && goto err
+echo test 8 passed
+
 REM =)
 echo tests passed succesfull
 exit /B 0

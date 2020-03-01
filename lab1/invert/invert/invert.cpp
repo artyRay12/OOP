@@ -4,43 +4,118 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cfloat>
+#include <cmath>
+#include "matrixUtilities.h";
 using namespace std;
 
-vector<vector<int>> getMatrix(ifstream &inputFile)
+bool isNumber(const string& str)
 {
-    vector<vector<int>> outVector;
-    string str, newStr;
-    
+    size_t pos = 0;
 
-    while (getline(inputFile, str, ' '))
+    try
     {
-        stringstream strStream(str);
-        while (getline(strStream, newStr , ' '))
-        {
-            outVector.push_back(stoi(newStr));
-        }
-
-        for (size_t i = 0; i < outVector.size(); i++)
-        {
-            for (size_t j = 0; j < outVector[i].size(); j++)
-            {
-                outVector[i][j].push_back(newStr);
-                break;
-            }
-        }
+        stoi(str, &pos);
     }
-    return outVector;
+    catch (const exception & err)
+    {
+        cout << err.what() << endl;;
+        return false;
+    }
+
+    if (pos != str.length())
+    {
+        return false;
+    }
+
+    return true;
 }
+
+optional<vector<int>> ParseLine(string& line)
+{
+    stringstream lineStream(line);
+    string elem;
+    vector<int> matrixLine;
+
+    while (getline(lineStream, elem, ' '))
+    {
+        if (!isNumber(elem))
+        {
+            return nullopt;
+        }
+        matrixLine.push_back(stoi(elem));
+    }
+
+    return matrixLine;
+}
+
+
+optional<vector<vector<int>>> getMatrix(ifstream& input)
+{
+    vector<vector<int>> matrix;
+    string line;
+
+    while (getline(input, line))
+    {
+        auto parsedLine = ParseLine(line);
+        if (!parsedLine)
+        {
+            return nullopt;
+        }
+        matrix.push_back(parsedLine.value());
+    }
+
+    return matrix;
+}
+
+optional<vector<vector<int>>> GetMatrixFromFile(const string& inputFileName)
+{
+    ifstream input(inputFileName);
+
+    if (!input.is_open())
+    {
+        cout << "Error!\n Can't open file\n";
+        return nullopt;
+    }
+
+    return getMatrix(input);
+}
+
+optional<string> ParseArgs(int argc, char* argv[])
+{
+    if (argc != 2)
+    {
+        return nullopt;
+    }
+
+    return argv[1];
+}
+
 
 int main(int argc, char* argv[])
 {
-    vector<vector<int>> matrix;
+    auto inputFileName = ParseArgs(argc, argv);
+    if (!inputFileName)
+    {
+        cout << "Error! \nUsage: invert.exe <file.txt> \n";
+        return 1;
+    }
 
-    ifstream input;
-    input.open(argv[1]);
-    ofstream output;
+    auto matrix = GetMatrixFromFile(inputFileName.value());
+    if (!matrix)
+    {
+        cout << "Matrix read with error, check matrix in your file\n";
+        return 1;
+    }
 
-    martrix = getMatrix(input)
+    auto invertedMatrix = InvertMatrix(matrix.value());
+    if (!invertedMatrix)
+    {
+        return 1;
+    }
 
-    
+    PrintMatrix(invertedMatrix.value());
+
+    return 0;
+
 }

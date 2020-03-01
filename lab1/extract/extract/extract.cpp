@@ -14,9 +14,12 @@ struct Args
 	int fragmentSize;
 };
 
+
 optional<Args> ParseArgs(int argc, char* argv[])
 {
 	Args args;
+	size_t fragmentStartPos = 0;
+	size_t fragmentSizePos = 0;
 
 	if ((argc != 5))
 	{
@@ -24,26 +27,35 @@ optional<Args> ParseArgs(int argc, char* argv[])
 		return nullopt;
 	}
 
+	string fragmentStartNumberLength = argv[3];
+	string fragmentSizeNumberLength = argv[4];
+
 	try
 	{
-		args.fragmentStart = stoi(argv[3]);
-		args.fragmentSize = stoi(argv[4]);
+		args.fragmentStart = stoi(argv[3], &fragmentStartPos);
+		args.fragmentSize = stoi(argv[4], &fragmentSizePos);
 	}
-
 	catch (const exception & err)
 	{
 		cout << err.what();
 		return nullopt;
 	}
 
+	if ((fragmentStartPos != fragmentStartNumberLength.length()) || (fragmentSizePos != fragmentSizeNumberLength.length()))
+	{
+		cout << "Error!\nPlease check <fragment start> or <fragment length>\n";
+		return nullopt;
+	}
+
 	if ((args.fragmentStart < 0) || ((args.fragmentSize < 0)))
 	{
-		cout << "Invalid fragment start or fragment size" << endl;
+		cout << "Invalid <fragment start> or <fragment length>" << endl;
 		return nullopt;
 	}
 
 	args.inputFileName = argv[1];
 	args.outputFileName = argv[2];
+
 	return args;
 
 }
@@ -63,7 +75,7 @@ bool Extract(ifstream& input, ofstream& output, int &start, int &size)
 			}
 		}
 	}
-	cout << charNumber << endl;
+
 	if (charNumber < start + size)
 	{
 		cout << "fragment size too big" << endl;
@@ -118,6 +130,7 @@ int main(int argc, char* argv[])
 	{
 		return 1;
 	}
+
 
 	if (!ExtractFragment(args->inputFileName, args->outputFileName, args->fragmentStart, args->fragmentSize))
 	{

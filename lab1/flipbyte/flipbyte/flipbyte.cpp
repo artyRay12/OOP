@@ -13,13 +13,14 @@ using namespace std;
 optional<uint8_t> ParseCommandLine(int argc, char* argv[])
 {
 	size_t pos = 0;
-	string test = argv[1];
 	optional<uint8_t> num = 0;
 
 	if (argc != 2)
 	{
 		return nullopt;
 	}
+
+	string numberLength = argv[1];
 
 	try
 	{
@@ -31,7 +32,7 @@ optional<uint8_t> ParseCommandLine(int argc, char* argv[])
 		return nullopt;
 	}
 
-	if (pos != test.length())
+	if (pos != numberLength.length())
 	{
 		return nullopt;
 	}
