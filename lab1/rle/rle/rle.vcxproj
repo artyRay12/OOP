@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{DECD2F60-00C8-4DB5-BF14-4BF4D6474902}</ProjectGuid>
+    <ProjectGuid>{98A581B5-8233-4C32-B2B2-11BDC0431955}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>invert</RootNamespace>
+    <RootNamespace>rle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,15 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="invert.cpp" />
-    <ClCompile Include="matrixUtilities.cpp" />
+    <ClCompile Include="rle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="matrix.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="invert.h" />
-    <ClInclude Include="matrixUtilities.h" />
+    <Text Include="input.txt" />
+    <Text Include="output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
