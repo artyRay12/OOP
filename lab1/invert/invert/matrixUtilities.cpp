@@ -1,5 +1,7 @@
-#include "matrixUtilities.h";
+#include "matrixUtilities.h"
 const float MATRIX_SIZE = 3;
+//"$(ProjectDir)Tests.bat" "$(TargetDir)"
+
 
 void PrintMatrix(vector<vector<float>>& matrix)
 {

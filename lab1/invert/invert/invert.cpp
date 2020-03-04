@@ -9,6 +9,7 @@
 #include "matrixUtilities.h"
 using namespace std;
 
+
 bool isNumber(const string& str)
 {
     size_t pos = 0;
@@ -41,6 +42,7 @@ optional<vector<float>> ParseLine(string& line)
     {
         if (!isNumber(elem))
         {
+            cout << "Error!\nWrong elem matrix plase use numbers!\n";
             return nullopt;
         }
         matrixLine.push_back(stof(elem));
@@ -62,6 +64,13 @@ optional<vector<vector<float>>> getMatrix(ifstream& input)
         {
             return nullopt;
         }
+
+        if ((parsedLine.value().size() != 3) || (matrix.size() != 3))
+        {
+            cout << "Error\nYour matrix is not 3x3\nPlease use 3x3 matrix\n";
+            return nullopt;
+        }
+
         matrix.push_back(parsedLine.value());
     }
 
@@ -85,6 +94,7 @@ optional<string> ParseArgs(int argc, char* argv[])
 {
     if (argc != 2)
     {
+        cout << "Error!\nUsage: invert.exe <file.txt> \n";
         return nullopt;
     }
 
@@ -97,14 +107,12 @@ int main(int argc, char* argv[])
     auto inputFileName = ParseArgs(argc, argv);
     if (!inputFileName)
     {
-        cout << "Error! \nUsage: invert.exe <file.txt> \n";
         return 1;
     }
 
     auto matrix = GetMatrixFromFile(inputFileName.value());
     if (!matrix)
     {
-        cout << "Matrix read with error, check matrix in your file\n";
         return 1;
     }
 

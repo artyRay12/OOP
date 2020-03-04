@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix.txt" />
+    <Text Include="matrix3x4.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="invert.h">
@@ -32,5 +33,10 @@
     <ClInclude Include="matrixUtilities.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tests.bat">
+      <Filter>Исходные файлы</Filter>
+    </None>
   </ItemGroup>
 </Project>
