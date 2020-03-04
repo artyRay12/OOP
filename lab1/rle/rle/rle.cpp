@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (!rle(args->inputFileName, args->outputFileName))
+	if (!Rle(args->inputFileName, args->outputFileName))
 	{
 		cout << "SomeThingWrong";
 	}
