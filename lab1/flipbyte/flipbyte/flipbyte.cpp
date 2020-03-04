@@ -10,10 +10,10 @@
 #include <optional>
 using namespace std;
 
-optional<uint8_t> ParseCommandLine(int argc, char* argv[])
+optional<int> ParseCommandLine(int argc, char* argv[])
 {
 	size_t pos = 0;
-	optional<uint8_t> num = 0;
+	optional<int> num = 0;
 
 	if (argc != 2)
 	{
@@ -32,29 +32,31 @@ optional<uint8_t> ParseCommandLine(int argc, char* argv[])
 		return nullopt;
 	}
 
+
 	if (pos != numberLength.length())
 	{
 		return nullopt;
 	}
 
-	if ((stoi(argv[1]) > 255) || (stoi(argv[1]) < 0))
+	if ((num > 255) || (num < 0))
 	{
 		return nullopt;
 	}
 
+
 	return num;
 }
 
-int GetFlippedByte(uint8_t num)
+uint8_t GetFlippedByte(uint8_t num)
 {
-	unsigned char flippedNumber = 0;
+	uint8_t flippedNumber = 0;
 	for (size_t i = 0; i < 8; ++i)
 	{
 		flippedNumber = flippedNumber << 1;
 		flippedNumber = flippedNumber | (num & 0x01);
 		num >>= 1;
 	}
-	return static_cast<int>(flippedNumber);
+	return flippedNumber;
 }
 
 int main(int argc, char* argv[])
@@ -66,6 +68,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	cout << "Output: " << GetFlippedByte(byte.value()) << endl;
+	cout << "Output: " << static_cast<int>(GetFlippedByte(static_cast<uint8_t>(byte.value()))) << endl;
 	return 0;
 }
