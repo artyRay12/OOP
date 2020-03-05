@@ -48,26 +48,26 @@ float GetConjugateMatrixElem(vector<vector<float>>& matrix, size_t& line, size_t
         }
     }
     
-    return ((line + col + 2) % 2 == 0) ? CountAlgebraicAddition(algExpr) : -CountAlgebraicAddition(algExpr);
+    return ((line + col) % 2 == 0) ? CountAlgebraicAddition(algExpr) : -CountAlgebraicAddition(algExpr);
 
 }
 
 vector<vector<float>> GetConjugateMatirx(vector<vector<float>>& matrix)
 {
-    vector<float> addMatrixLine;
-    vector<vector<float>> addMatrix;
+    vector<float> conjugateMatrixLine;
+    vector<vector<float>> conjugateMatrix;
 
     for (size_t x = 0; x < MATRIX_SIZE; x++)
     {
         for (size_t y = 0; y < MATRIX_SIZE; y++)
         {
-            addMatrixLine.push_back(GetConjugateMatrixElem(matrix, x, y));
+            conjugateMatrixLine.push_back(GetConjugateMatrixElem(matrix, x, y));
         }
-        addMatrix.push_back(addMatrixLine);
-        addMatrixLine.clear();
+        conjugateMatrix.push_back(conjugateMatrixLine);
+        conjugateMatrixLine.clear();
     }
        
-    return addMatrix;
+    return conjugateMatrix;
 }
 
 float GetDeterminant(vector<vector<float>>& matrix)
