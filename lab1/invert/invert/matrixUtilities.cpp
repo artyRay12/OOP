@@ -1,7 +1,5 @@
 #include "matrixUtilities.h"
 const float MATRIX_SIZE = 3;
-//"$(ProjectDir)Tests.bat" "$(TargetDir)"
-
 
 void PrintMatrix(vector<vector<float>>& matrix)
 {
@@ -54,7 +52,7 @@ float GetAddMatrixElem(vector<vector<float>>& matrix, size_t& line, size_t& col)
 
 }
 
-vector<vector<float>> GetAlgebraicAdditions(vector<vector<float>>& matrix)
+vector<vector<float>> GetConjugateMatirx(vector<vector<float>>& matrix)
 {
     vector<float> addMatrixLine;
     vector<vector<float>> addMatrix;
@@ -79,7 +77,7 @@ float GetDeterminant(vector<vector<float>>& matrix)
 }
 
 
-vector<vector<float>> Invent(vector<vector<float>>& matrix, float det)
+vector<vector<float>> Invert(vector<vector<float>>& matrix, float det)
 {
     vector<float> inventedMatrixLine;
     vector<vector<float>> inventedMatrix;
@@ -107,7 +105,7 @@ optional<vector<vector<float>>> InvertMatrix(vector<vector<float>>& matrix)
     }
 
     vector<vector<float>> transposedMatrix = GetTransposedMatrix(matrix);
-    vector<vector<float>> algAdds = GetAlgebraicAdditions(transposedMatrix);
+    vector<vector<float>> conjugateMatrix= GetConjugateMatirx(transposedMatrix);
 
-    return Invent(algAdds, det);
+    return Invert(conjugateMatrix, det);
 }

@@ -11,7 +11,7 @@ using namespace std;
 
 void PrintMatrix(vector<vector<float>>& matrix);
 vector<vector<float>> GetTransposedMatrix(vector<vector<float>> matrix);
-vector<vector<float>> GetAlgebraicAdditions(vector<vector<float>>& matrix);
+vector<vector<float>> GetConjugateMatirx(vector<vector<float>>& matrix);
 float GetDeterminant(vector<vector<float>>& matrix);
 optional<vector<vector<float>>> InvertMatrix(vector<vector<float>>& matrix);
 float CountAlgebraicAddition(vector<float> algExp);

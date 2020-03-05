@@ -9,7 +9,6 @@
 #include "matrixUtilities.h"
 using namespace std;
 
-
 bool isNumber(const string& str)
 {
     size_t pos = 0;
@@ -58,14 +57,13 @@ optional<vector<float>> ParseLine(string& line)
 }
 
 
-optional<vector<vector<float>>> getMatrix(ifstream& input)
+optional<vector<vector<float>>> GetMatrix(ifstream& input)
 {
     vector<vector<float>> matrix;
     string line;
 
     while (getline(input, line))
     {
-
         auto parsedLine = ParseLine(line);
         if (!parsedLine)
         {
@@ -100,7 +98,7 @@ optional<vector<vector<float>>> GetMatrixFromFile(const string& inputFileName)
         return nullopt;
     }
 
-    return getMatrix(input);
+    return GetMatrix(input);
 }
 
 optional<string> ParseArgs(int argc, char* argv[])
