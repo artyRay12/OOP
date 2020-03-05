@@ -34,7 +34,7 @@ float CountAlgebraicAddition(vector<float> algExpr)
 
 }
 
-float GetAddMatrixElem(vector<vector<float>>& matrix, size_t& line, size_t& col)
+float GetConjugateMatrixElem(vector<vector<float>>& matrix, size_t& line, size_t& col)
 {
     vector<float> algExpr;
     for (size_t i = 0; i < MATRIX_SIZE; i++)
@@ -61,7 +61,7 @@ vector<vector<float>> GetConjugateMatirx(vector<vector<float>>& matrix)
     {
         for (size_t y = 0; y < MATRIX_SIZE; y++)
         {
-            addMatrixLine.push_back(GetAddMatrixElem(matrix, x, y));
+            addMatrixLine.push_back(GetConjugateMatrixElem(matrix, x, y));
         }
         addMatrix.push_back(addMatrixLine);
         addMatrixLine.clear();
