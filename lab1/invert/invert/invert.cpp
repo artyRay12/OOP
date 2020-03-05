@@ -20,12 +20,13 @@ bool isNumber(const string& str)
     }
     catch (const exception & err)
     {
-        cout << err.what() << endl;;
+        cout << err.what() << "\nError! You should use only numbers in your 3x3 matrix.\nString example <number><space><number><space><number>" << endl;
         return false;
     }
 
     if (pos != str.length())
     {
+        cout << "Error!\n Some number in yout matrix have letter instead digits\n";
         return false;
     }
 
@@ -38,11 +39,16 @@ optional<vector<float>> ParseLine(string& line)
     string elem;
     vector<float> matrixLine;
 
+    if (line.empty())
+    {
+        cout << "Error!\nRemove empty lines from ur file!\n";
+        return nullopt;
+    }
+
     while (getline(lineStream, elem, ' '))
     {
         if (!isNumber(elem))
         {
-            cout << "Error!\nWrong elem matrix plase use numbers!\n";
             return nullopt;
         }
         matrixLine.push_back(stof(elem));
@@ -59,19 +65,26 @@ optional<vector<vector<float>>> getMatrix(ifstream& input)
 
     while (getline(input, line))
     {
+
         auto parsedLine = ParseLine(line);
         if (!parsedLine)
         {
             return nullopt;
         }
 
-        if ((parsedLine.value().size() != 3) || (matrix.size() != 3))
+        if ((parsedLine.value().size() != 3) || (matrix.size() == 3))
         {
             cout << "Error\nYour matrix is not 3x3\nPlease use 3x3 matrix\n";
             return nullopt;
         }
 
         matrix.push_back(parsedLine.value());
+    }
+
+    if (matrix.empty())
+    {
+        cout << "Error!\nFile is empty! Please put matrix 3x3 in ur file\n";
+        return nullopt;
     }
 
     return matrix;
