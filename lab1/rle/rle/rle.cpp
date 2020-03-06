@@ -34,12 +34,13 @@ optional<Args> ParseArgs(int argc, char* argv[])
 bool Encode(ifstream& input, ofstream& output)
 {
 	char ch;
-	map<char, int> rleInfo;
+	multimap<char, int> rleInfo;
 	rleInfo.clear();
 	map<char, int>::iterator it;
 
 	while (input.get(ch))
 	{	
+		cout << rleInfo.cend() << endl;
 		if (rleInfo.find(ch) == rleInfo.end()) {
 			rleInfo.emplace(ch , 1);
 		}
@@ -78,8 +79,6 @@ bool Rle(const string& inputFileName, const string& outputFileName)
 	{
 
 	}
-
-
 }
 
 int main(int argc, char* argv[])
@@ -94,5 +93,5 @@ int main(int argc, char* argv[])
 	{
 		cout << "SomeThingWrong";
 	}
-    
+	return 0;
 }

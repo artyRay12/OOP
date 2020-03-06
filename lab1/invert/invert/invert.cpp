@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cfloat>
 #include <cmath>
+#include <array>
+#include "invert.h"
 #include "matrixUtilities.h"
 using namespace std;
 
@@ -32,11 +34,12 @@ bool isNumber(const string& str)
     return true;
 }
 
-optional<vector<float>> ParseLine(string& line)
+optional<Matrix3x3Line> ParseLine(string& line)
 {
     stringstream lineStream(line);
     string elem;
-    vector<float> matrixLine;
+    Matrix3x3Line matrixLine;
+    int matrixLineIndex = 0;
 
     if (line.empty())
     {
@@ -50,33 +53,48 @@ optional<vector<float>> ParseLine(string& line)
         {
             return nullopt;
         }
-        matrixLine.push_back(stof(elem));
+        matrixLine[matrixLineIndex] = stof(elem);
+        if (matrixLineIndex < MATRIX_SIZE_3x3)
+        {
+            matrixLineIndex++;
+        }
+        else
+        {
+            cout << "Error!\n Your matrix not 3x3\n";
+            return nullopt;
+        }
     }
-
     return matrixLine;
 }
 
 
-optional<vector<vector<float>>> GetMatrix(ifstream& input)
+optional<Matrix3x3> GetMatrix(ifstream& input)
 {
-    vector<vector<float>> matrix;
+    Matrix3x3 matrix;
     string line;
+    int lineIndex = 0;
 
     while (getline(input, line))
     {
         auto parsedLine = ParseLine(line);
+
         if (!parsedLine)
         {
             return nullopt;
         }
 
-        if ((parsedLine.value().size() != 3) || (matrix.size() == 3))
+        matrix[lineIndex] = parsedLine.value();
+
+        if (lineIndex < MATRIX_SIZE_3x3)
         {
-            cout << "Error\nYour matrix is not 3x3\nPlease use 3x3 matrix\n";
+            lineIndex++;
+        }
+        else
+        {
+            cout << "Ur matrix is not 3x3";
             return nullopt;
         }
-
-        matrix.push_back(parsedLine.value());
+        
     }
 
     if (matrix.empty())
@@ -88,7 +106,7 @@ optional<vector<vector<float>>> GetMatrix(ifstream& input)
     return matrix;
 }
 
-optional<vector<vector<float>>> GetMatrixFromFile(const string& inputFileName)
+optional<Matrix3x3> GetMatrixFromFile(const string& inputFileName)
 {
     ifstream input(inputFileName);
 
