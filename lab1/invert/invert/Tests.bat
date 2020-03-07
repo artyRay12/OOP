@@ -34,12 +34,13 @@ REM matrix size != 3x3
 echo test 5 passed
 
 REM empty file
-%MyProgram% %InputDir%\input_empty_file.txt && goto err
-echo test 6 passed
+ %MyProgram% %InputDir%\input_empty_file.txt && goto err
+ echo test 6 passed
 
 REM matrix with letters
 %MyProgram% %InputDir%\input_matrix_with_letters.txt && goto err
 echo test 7 passed
+
 
 REM matrix with "digit + letter" instead digits
 %MyProgram% %InputDir%\input_matrix_with_digit+letter.txt && goto err
@@ -52,6 +53,8 @@ echo test 9 passed
 REM determinant = 0
 %MyProgram% %InputDir%\input_matrix_where_det_is_zero.txt && goto err
 echo test 10 passed
+
+
 
 REM =)
 echo tests passed succesfull

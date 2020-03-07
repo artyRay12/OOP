@@ -9,7 +9,17 @@
 #include <array>
 #include "invert.h"
 #include "matrixUtilities.h"
+
 using namespace std;
+
+template<typename T> 
+void PushLineInMatrix(Matrix3x3& matrix, const T& matrixLine, size_t rowNumber)
+{
+    for (size_t i = 0; i < MATRIX_SIZE_3x3; i++)
+    {
+        matrix[rowNumber - 1][i] = matrixLine[i];
+    }
+}
 
 bool isNumber(const string& str)
 {
@@ -21,7 +31,7 @@ bool isNumber(const string& str)
     }
     catch (const exception & err)
     {
-        cout << err.what() << "\nError! You should use only numbers in your 3x3 matrix.\nString example <number><space><number><space><number>" << endl;
+        cout << err.what() << "\nError! You should use only number and one space between them.\nString example: <number><space><number><space><number><end of line>" << endl;
         return false;
     }
 
@@ -34,12 +44,12 @@ bool isNumber(const string& str)
     return true;
 }
 
-optional<Matrix3x3Line> ParseLine(string& line)
+
+optional<vector<float>> getMatrixLine(string& line)
 {
     stringstream lineStream(line);
     string elem;
-    Matrix3x3Line matrixLine;
-    int matrixLineIndex = 0;
+    vector<float> matrixLine;
 
     if (line.empty())
     {
@@ -53,48 +63,36 @@ optional<Matrix3x3Line> ParseLine(string& line)
         {
             return nullopt;
         }
-        matrixLine[matrixLineIndex] = stof(elem);
-        if (matrixLineIndex < MATRIX_SIZE_3x3)
-        {
-            matrixLineIndex++;
-        }
-        else
-        {
-            cout << "Error!\n Your matrix not 3x3\n";
-            return nullopt;
-        }
+
+        matrixLine.push_back(stof(elem)); 
     }
+
     return matrixLine;
 }
-
 
 optional<Matrix3x3> GetMatrix(ifstream& input)
 {
     Matrix3x3 matrix;
     string line;
-    int lineIndex = 0;
+    size_t lineIndex = 1;
 
     while (getline(input, line))
     {
-        auto parsedLine = ParseLine(line);
+        auto matrixLine = getMatrixLine(line);
 
-        if (!parsedLine)
+        if (!matrixLine)
         {
             return nullopt;
         }
 
-        matrix[lineIndex] = parsedLine.value();
-
-        if (lineIndex < MATRIX_SIZE_3x3)
-        {
-            lineIndex++;
-        }
-        else
+        if ((lineIndex > MATRIX_SIZE_3x3) || (matrixLine.value().size() != MATRIX_SIZE_3x3))
         {
             cout << "Ur matrix is not 3x3";
             return nullopt;
         }
-        
+
+        PushLineInMatrix(matrix, matrixLine.value(), lineIndex);
+        lineIndex++;
     }
 
     if (matrix.empty())
@@ -119,7 +117,7 @@ optional<Matrix3x3> GetMatrixFromFile(const string& inputFileName)
     return GetMatrix(input);
 }
 
-optional<string> ParseArgs(int argc, char* argv[])
+optional<string> getInputFileName(int argc, char* argv[])
 {
     if (argc != 2)
     {
@@ -133,7 +131,7 @@ optional<string> ParseArgs(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    auto inputFileName = ParseArgs(argc, argv);
+    auto inputFileName = getInputFileName(argc, argv);
     if (!inputFileName)
     {
         return 1;
@@ -145,7 +143,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    auto invertedMatrix = InvertMatrix(matrix.value());
+    auto invertedMatrix = GetInvertedMatrix(matrix.value());
     if (!invertedMatrix)
     {
         return 1;
@@ -154,5 +152,4 @@ int main(int argc, char* argv[])
     PrintMatrix(invertedMatrix.value());
 
     return 0;
-
 }
