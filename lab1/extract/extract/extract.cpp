@@ -60,7 +60,7 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 }
 
-bool Extract(ifstream& input, ofstream& output, int &start, int &size)
+bool Extract(istream& input, ostream& output, int start, int size)
 {
 	int charNumber = 0;
 	char ch;
@@ -78,7 +78,6 @@ bool Extract(ifstream& input, ofstream& output, int &start, int &size)
 
 	if (charNumber < start + size)
 	{
-		cout << "fragment size too big" << endl;
 		return false;
 	}
 
@@ -105,6 +104,7 @@ bool ExtractFragment(const string& inputFileName, const string& outputFileName, 
 
 	if (!Extract(input, output, start, size))
 	{
+		cout << "fragment size too big" << endl;
 		return false;
 	}
 

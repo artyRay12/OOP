@@ -76,6 +76,12 @@ optional<Matrix3x3> GetMatrix(ifstream& input)
     string line;
     size_t lineIndex = 1;
 
+    if (input.peek() == EOF)
+    {
+        cout << "Error!\nYour file is empty!";
+        return nullopt;
+    }
+
     while (getline(input, line))
     {
         auto matrixLine = getMatrixLine(line);
@@ -93,12 +99,6 @@ optional<Matrix3x3> GetMatrix(ifstream& input)
 
         PushLineInMatrix(matrix, matrixLine.value(), lineIndex);
         lineIndex++;
-    }
-
-    if (matrix[0].empty())
-    {
-        cout << "Error!\nFile is empty! Please put matrix 3x3 in ur file\n";
-        return nullopt;
     }
 
     return matrix;
