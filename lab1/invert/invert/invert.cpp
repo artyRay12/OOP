@@ -95,7 +95,7 @@ optional<Matrix3x3> GetMatrix(ifstream& input)
         lineIndex++;
     }
 
-    if (matrix.empty())
+    if (matrix[0].empty())
     {
         cout << "Error!\nFile is empty! Please put matrix 3x3 in ur file\n";
         return nullopt;

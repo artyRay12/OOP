@@ -67,7 +67,6 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t line, size_t col)
         {
             if ((i != line) && (j != col))
             {
-                cout << minorLineIndex << " " << minorElemIndex << endl;
                 minor[minorLineIndex][minorElemIndex] = matrix[i][j];
                 updateMinorCurrentPosition(minorLineIndex, minorElemIndex);
             }
