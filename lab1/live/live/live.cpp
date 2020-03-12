@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	{
 		auto output = GetOutputStream(args->outputFileName.value());
 		if (!output)
-		{ 
+		{
 			return 1;
 		}
 

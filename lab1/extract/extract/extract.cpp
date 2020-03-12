@@ -23,7 +23,6 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 	if ((argc != 5))
 	{
-		cout << "Invalid number of parametres \n usage extract.txt <input File> <output File> <fragment start> <fragment length>" << endl;
 		return nullopt;
 	}
 
@@ -128,6 +127,7 @@ int main(int argc, char* argv[])
 	auto args = ParseArgs(argc, argv);
 	if (!args)
 	{
+		cout << "Invalid number of parametres \n usage extract.txt <input File> <output File> <fragment start> <fragment length>" << endl;
 		return 1;
 	}
 
