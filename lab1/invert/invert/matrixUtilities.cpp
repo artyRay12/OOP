@@ -1,4 +1,3 @@
-#include "matrixUtilities.h"
 #include <iostream>
 #include <fstream>
 #include <optional>
@@ -7,8 +6,11 @@
 #include <cfloat>
 #include <iomanip>
 #include <cmath>
+#include "matrixUtilities.h"
+
 using namespace std;
 
+//template<typename Tt>
 void PrintMatrix(const Matrix3x3& matrix)
 {
     for (auto &row : matrix)
@@ -42,7 +44,7 @@ float CountConjugateMatrixElem(const Matrix2x2 &algExpr, size_t line, size_t col
     return  static_cast<float>(pow(-1, line + col)) * (algExpr[0][0] * algExpr[1][1] - algExpr[0][1] * algExpr[1][0]);
 }
 
-void updateMinorCurrentPosition(size_t &line, size_t &elem)
+void UpdateMinorCurrentPosition(size_t &line, size_t &elem)
 {
     if (elem == 1)
     {
@@ -68,7 +70,7 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t line, size_t col)
             if ((i != line) && (j != col))
             {
                 minor[minorLineIndex][minorElemIndex] = matrix[i][j];
-                updateMinorCurrentPosition(minorLineIndex, minorElemIndex);
+                UpdateMinorCurrentPosition(minorLineIndex, minorElemIndex);
             }
         }
     }

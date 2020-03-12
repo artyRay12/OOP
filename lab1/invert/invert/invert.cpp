@@ -10,16 +10,7 @@
 #include "invert.h"
 #include "matrixUtilities.h"
 
-using namespace std;
-
-template<typename T> 
-void PushLineInMatrix(Matrix3x3& matrix, const T& matrixLine, size_t rowNumber)
-{
-    for (size_t i = 0; i < MATRIX_SIZE_3x3; i++)
-    {
-        matrix[rowNumber - 1][i] = matrixLine[i];
-    }
-}
+using namespace std; 
 
 bool isNumber(const string& str)
 {
@@ -37,19 +28,19 @@ bool isNumber(const string& str)
 
     if (pos != str.length())
     {
-        cout << "Error!\n Some number in yout matrix have letter instead digits\n";
+        cout << "Error!\nSome number in yout matrix have letter instead digits\n";
         return false;
     }
 
     return true;
 }
 
-
-optional<vector<float>> getMatrixLine(string& line)
+optional<Matrix3x3Line> ParseMatrixLine(string& line)
 {
     stringstream lineStream(line);
     string elem;
-    vector<float> matrixLine;
+    size_t elemIndex = 0;
+    Matrix3x3Line matrixLine;
 
     if (line.empty())
     {
@@ -64,41 +55,53 @@ optional<vector<float>> getMatrixLine(string& line)
             return nullopt;
         }
 
-        matrixLine.push_back(stof(elem)); 
-    }
-
-    return matrixLine;
-}
-
-optional<Matrix3x3> GetMatrix(ifstream& input)
-{
-    Matrix3x3 matrix;
-    string line;
-    size_t lineIndex = 1;
-
-    if (input.peek() == EOF)
-    {
-        cout << "Error!\nYour file is empty!";
-        return nullopt;
-    }
-
-    while (getline(input, line))
-    {
-        auto matrixLine = getMatrixLine(line);
-
-        if (!matrixLine)
-        {
-            return nullopt;
-        }
-
-        if ((lineIndex > MATRIX_SIZE_3x3) || (matrixLine.value().size() != MATRIX_SIZE_3x3))
+        if (elemIndex + 1 > MATRIX_SIZE_3x3)
         {
             cout << "Ur matrix is not 3x3";
             return nullopt;
         }
 
-        PushLineInMatrix(matrix, matrixLine.value(), lineIndex);
+        matrixLine[elemIndex] = (stof(elem));
+        elemIndex++;
+    }
+
+    if (elemIndex < MATRIX_SIZE_3x3)
+    {
+        cout << "Ur matrix is not 3x3";
+        return nullopt;
+    }
+
+    return matrixLine;
+}
+
+optional<Matrix3x3> GetMatrix(istream& input)
+{
+    Matrix3x3 matrix;
+    string line;
+    size_t lineIndex = 0;
+
+    while (getline(input, line))
+    {
+        auto matrixLine = ParseMatrixLine(line);
+        if (!matrixLine)
+        {
+            return nullopt;
+        }
+
+        if (lineIndex + 1> MATRIX_SIZE_3x3)
+        {
+            cout << "Ur matrix is not 3x3";
+            return nullopt;
+        }
+
+        matrix[lineIndex] = matrixLine.value();
         lineIndex++;
+    }
+
+    if (lineIndex != MATRIX_SIZE_3x3)
+    {
+        cout << "Ur matrix is not 3x3";
+        return nullopt;
     }
 
     return matrix;
@@ -111,6 +114,12 @@ optional<Matrix3x3> GetMatrixFromFile(const string& inputFileName)
     if (!input.is_open())
     {
         cout << "Error!\n Can't open file\n";
+        return nullopt;
+    }
+
+    if (input.peek() == EOF)
+    {
+        cout << "Error!\nYour file is empty!\n";
         return nullopt;
     }
 

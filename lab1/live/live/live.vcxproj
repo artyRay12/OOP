@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{98A581B5-8233-4C32-B2B2-11BDC0431955}</ProjectGuid>
+    <ProjectGuid>{06B37236-D0A7-40E4-AA3C-5EA792150D67}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>rle</RootNamespace>
+    <RootNamespace>live</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -151,17 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="rle.cpp" />
+    <ClCompile Include="live.cpp" />
+    <ClCompile Include="liveUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
-    <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\live\live.vcxproj" />
+    <ClInclude Include="liveUtilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

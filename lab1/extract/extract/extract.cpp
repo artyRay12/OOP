@@ -10,8 +10,8 @@ struct Args
 {
 	string inputFileName;
 	string outputFileName;
-	int fragmentStart;
-	int fragmentSize;
+	int fragmentStart = 0;
+	int fragmentSize = 0;
 };
 
 
