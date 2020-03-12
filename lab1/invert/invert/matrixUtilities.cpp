@@ -39,16 +39,16 @@ Matrix3x3 GetTransposedMatrix(Matrix3x3 matrix)
     return matrix;
 }
 
-float CountConjugateMatrixElem(const Matrix2x2 &algExpr, size_t line, size_t col)
+float CountConjugateMatrixElem(const Matrix2x2 &algExpr, size_t row, size_t col)
 {   
-    return  static_cast<float>(pow(-1, line + col)) * (algExpr[0][0] * algExpr[1][1] - algExpr[0][1] * algExpr[1][0]);
+    return  static_cast<float>(pow(-1, row + col)) * (algExpr[0][0] * algExpr[1][1] - algExpr[0][1] * algExpr[1][0]);
 }
 
-void UpdateMinorCurrentPosition(size_t &line, size_t &elem)
+void UpdateMinorCurrentPosition(size_t & row, size_t &elem)
 {
     if (elem == 1)
     {
-        line = 1;
+        row = 1;
         elem = 0;
     }
     else
@@ -57,31 +57,31 @@ void UpdateMinorCurrentPosition(size_t &line, size_t &elem)
     }
 }
 
-float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t line, size_t col)
+float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
 {
     Matrix2x2 minor;
-    size_t minorLineIndex = 0;
+    size_t minorRowIndex = 0;
     size_t minorElemIndex = 0;
 
     for (size_t i = 0; i < MATRIX_SIZE_3x3; i++)
     {
         for (size_t j = 0; j < MATRIX_SIZE_3x3; j++)
         {
-            if ((i != line) && (j != col))
+            if ((i != row) && (j != col))
             {
-                minor[minorLineIndex][minorElemIndex] = matrix[i][j];
-                UpdateMinorCurrentPosition(minorLineIndex, minorElemIndex);
+                minor[minorRowIndex][minorElemIndex] = matrix[i][j];
+                UpdateMinorCurrentPosition(minorRowIndex, minorElemIndex);
             }
         }
     }
        
-    return CountConjugateMatrixElem(minor, line, col);
+    return CountConjugateMatrixElem(minor, row, col);
 }
 
 Matrix3x3 GetConjugateMatrix(const Matrix3x3& matrix)
 {
 
-    Matrix3x3Line conjugateMatrixLine;
+    Matrix3x3Row conjugateMatrixRow;
     Matrix3x3 conjugateMatrix;
     int sign = 1;
 
@@ -89,9 +89,9 @@ Matrix3x3 GetConjugateMatrix(const Matrix3x3& matrix)
     {
         for (size_t y = 0; y < MATRIX_SIZE_3x3; y++)
         {
-            conjugateMatrixLine[y] = GetConjugateMatrixElem(matrix, x, y);
+            conjugateMatrixRow[y] = GetConjugateMatrixElem(matrix, x, y);
         }
-        conjugateMatrix[x] = conjugateMatrixLine;
+        conjugateMatrix[x] = conjugateMatrixRow;
     }
  
     return conjugateMatrix;

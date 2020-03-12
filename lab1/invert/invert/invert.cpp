@@ -35,20 +35,20 @@ bool isNumber(const string& str)
     return true;
 }
 
-optional<Matrix3x3Line> ParseMatrixLine(string& line)
+optional<Matrix3x3Row> ParseMatrixRow(string& row)
 {
-    stringstream lineStream(line);
+    stringstream rowStream(row);
     string elem;
     size_t elemIndex = 0;
-    Matrix3x3Line matrixLine;
+    Matrix3x3Row matrixRow;
 
-    if (line.empty())
+    if (row.empty())
     {
-        cout << "Error!\nRemove empty lines from ur file!\n";
+        cout << "Error!\nRemove empty rows from ur file!\n";
         return nullopt;
     }
 
-    while (getline(lineStream, elem, ' '))
+    while (getline(rowStream, elem, ' '))
     {
         if (!isNumber(elem))
         {
@@ -61,7 +61,7 @@ optional<Matrix3x3Line> ParseMatrixLine(string& line)
             return nullopt;
         }
 
-        matrixLine[elemIndex] = (stof(elem));
+        matrixRow[elemIndex] = (stof(elem));
         elemIndex++;
     }
 
@@ -71,34 +71,34 @@ optional<Matrix3x3Line> ParseMatrixLine(string& line)
         return nullopt;
     }
 
-    return matrixLine;
+    return matrixRow;
 }
 
 optional<Matrix3x3> GetMatrix(istream& input)
 {
     Matrix3x3 matrix;
-    string line;
-    size_t lineIndex = 0;
+    string row;
+    size_t rowIndex = 0;
 
-    while (getline(input, line))
+    while (getline(input, row))
     {
-        auto matrixLine = ParseMatrixLine(line);
-        if (!matrixLine)
+        auto matrixRow = ParseMatrixRow(row);
+        if (!matrixRow)
         {
             return nullopt;
         }
 
-        if (lineIndex + 1> MATRIX_SIZE_3x3)
+        if (rowIndex + 1> MATRIX_SIZE_3x3)
         {
             cout << "Ur matrix is not 3x3";
             return nullopt;
         }
 
-        matrix[lineIndex] = matrixLine.value();
-        lineIndex++;
+        matrix[rowIndex] = matrixRow.value();
+        rowIndex++;
     }
 
-    if (lineIndex != MATRIX_SIZE_3x3)
+    if (rowIndex != MATRIX_SIZE_3x3)
     {
         cout << "Ur matrix is not 3x3";
         return nullopt;

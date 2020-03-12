@@ -11,7 +11,7 @@ if %OutputDir%=="" set IsArgsCorrect=F
 if %InputDir%=="" set IsArgsCorrect=F
 
 if %IsArgsCorrect%==F (
-	echo Please specify path to program
+	echo Please specify all paths to program
 	exit /B 1
 )
 echo test 1 passed
