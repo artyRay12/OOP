@@ -125,6 +125,12 @@ optional<vector<vector<char>>> GetCurrentGenerationFromFile(const string& inputF
 		return nullopt;
 	}
 
+	if (input.peek() == EOF)
+	{
+		cout << "Your file is empty!\n";
+		return nullopt;
+	}
+
 	return GetCurrentGeneration(input);
 }
 
