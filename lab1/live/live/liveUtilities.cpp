@@ -4,13 +4,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <set>
 #include <conio.h>
 #include "liveUtilities.h"
 
 using namespace std;
-set<char> chars = {'#', '*', ' '};
-
 
 void PrintGeneration(const vector<vector<char>>& generation, ostream& output)
 {
@@ -24,26 +21,78 @@ void PrintGeneration(const vector<vector<char>>& generation, ostream& output)
 	}
 }
 
+bool isValidMap(const vector<vector<char>>& generation)
+{
+
+	if ((generation.size() > 256) || (generation.size() < 3))
+	{
+		cout << "Error!\nWrong size of ur map, please use 3x3..256x256 sizes\n";
+		return false;
+	}
+
+	size_t lineLength = generation[0].size();
+
+	for (size_t i = 0; i < generation.size(); i++)
+	{
+		if ((generation[i].size() > 256) || (generation[i].size() < 3))
+		{
+			cout << "Error!\nWrong size of ur map, please use 3x3..256x256 sizes\n";
+			return false;
+		}
+
+		for (size_t j = 0; j < generation[i].size(); j++)
+		{
+
+			if (lineLength != generation[i].size())
+			{
+				cout << "Error!\n Ur lines Your line should have same length\n";
+				return false;
+			}
+
+			if (((i == 0) || (i == generation.size() - 1)) && (generation[i][j] != '*'))
+			{
+				cout << "Error!\nCheck ur borders!\n";
+				return false;
+			}
+
+			if (((j == 0) || (j == generation[i].size() - 1)) && (generation[i][j] != '*'))
+			{
+				cout << "Error!\nCheck ur borders!\n";
+				return false;
+			}
+
+			if ((i != 0 && i != generation.size() - 1) && (j != 0 && j != generation[i].size() - 1))
+			{
+				if ((generation[i][j] != ' ') && (generation[i][j] != '#'))
+				{
+					cout << "Error!\nWrong symbol on map!\n" << "line = " << i << "\nelem = " << j;
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 optional<vector<char>> ParseLine(const string& line)
 {
 	vector<char> genLine;
+
 	for (auto& elem : line)
 	{
-		if (chars.find(elem) == chars.end())
-		{
-			cout << "wrong char DETECTED!!!";
-			return nullopt;
-		}
+	
 		genLine.push_back(elem);
 	}
+
 	return genLine;
 }
 
 optional<vector<vector<char>>> GetCurrentGeneration(istream& input)
 {
-	vector<vector<char>> firstGeneration;
+	vector<vector<char>> generation;
 	string line;
-	int lineLength = 0;
+	unsigned int lineCounter = 0;
 
 	while (getline(input, line))
 	{
@@ -53,11 +102,17 @@ optional<vector<vector<char>>> GetCurrentGeneration(istream& input)
 			return nullopt;
 		}
 
-		firstGeneration.push_back(generationLine.value());
+		generation.push_back(generationLine.value());
 		generationLine.value().clear();
+		lineCounter++;
 	}
 
-	return firstGeneration;
+	if (!isValidMap(generation))
+	{
+		return nullopt;
+	}
+
+	return generation;
 }
 
 optional<vector<vector<char>>> GetCurrentGenerationFromFile(const string& inputFileName)
@@ -125,5 +180,6 @@ vector<vector<char>> GetNextGeneration(const vector<vector<char>>& currentGenera
 		nextGenerationLine.clear();
 		neighborCounter = 0;
 	}
+
 	return nextGeneration;
 }

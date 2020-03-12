@@ -13,7 +13,7 @@ using namespace std;
 struct Args
 {
 	string inputFileName;
-	optional<string> outputFileName;
+	optional<string> outputFileName = nullopt;
 };
 
 optional<Args> ParseArgs(int argc, char* argv[])
@@ -32,7 +32,6 @@ optional<Args> ParseArgs(int argc, char* argv[])
 		args.outputFileName = argv[2];
 	}
 
-	args.outputFileName = nullopt;
 	return args;
 }
 
