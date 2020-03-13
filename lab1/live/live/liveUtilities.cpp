@@ -6,6 +6,23 @@
 #include <iostream>
 #include <conio.h>
 #include "liveUtilities.h"
+#include <set>
+
+const char BORDER = '*';
+const char ALIVE_CELL = '#';
+const char DEATH_CELL = ' ';
+
+enum CellStates {
+	dead,
+	alive
+};
+
+struct Population
+{
+	size_t mapWidth = 0;
+	size_t mapHeight = 0;
+	vector<vector<CellStates>> population;
+};
 
 using namespace std;
 
@@ -74,29 +91,31 @@ bool isValidMap(const vector<vector<char>>& generation)
 
 	return true;
 }
-
-optional<vector<char>> ParseLine(const string& line)
+optional<CellStates> ParseLine(const string& line)
 {
-	vector<char> genLine;
-
-	for (auto& elem : line)
+	CellStates cellState;
+	for (auto& state: line)
 	{
-	
-		genLine.push_back(elem);
+		if ((state != ALIVE_CELL) || (state != DEATH_CELL) || (state != BORDER))
+		{
+			cout << "Wrong symbol" << endl;
+			return nullopt;
+		}
 	}
 
-	return genLine;
+	return 
 }
 
-optional<vector<vector<char>>> GetCurrentGeneration(istream& input)
+optional<Population> GetCurrentGeneration(istream& input)
 {
-	vector<vector<char>> generation;
+	Population generation;
 	string line;
 	unsigned int lineCounter = 0;
+	char ch;
 
-	while (getline(input, line))
+	while (input.get(ch))
 	{
-		auto generationLine = ParseLine(line);
+		auto cellState = getCellState(line);
 		if (!generationLine)
 		{
 			return nullopt;
@@ -115,7 +134,7 @@ optional<vector<vector<char>>> GetCurrentGeneration(istream& input)
 	return generation;
 }
 
-optional<vector<vector<char>>> GetCurrentGenerationFromFile(const string& inputFileName)
+optional<Population> GetCurrentGenerationFromFile(const string& inputFileName)
 {
 	ifstream input;
 	input.open(inputFileName);
