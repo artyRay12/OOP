@@ -52,7 +52,6 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
     Matrix2x2 minor;
     size_t minorRowIndex = 1;
     size_t minorColIndex = 1;
-    float sign = 1;
 
     for (size_t i = 0; i < MATRIX_SIZE_3x3; i++)
     {
@@ -75,23 +74,21 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
         }
     }
 
-    sign *= -sign;
-    return sign * GetDeterminant2x2(minor);
+    return GetDeterminant2x2(minor);
 }
 
 Matrix3x3 GetConjugateMatrix(const Matrix3x3& matrix)
 {
-    Matrix3x3Row conjugateMatrixRow;
     Matrix3x3 conjugateMatrix;
-    int sign = 1;
+    float sign = 1;
 
     for (size_t rowIndex = 0; rowIndex < MATRIX_SIZE_3x3; rowIndex++)
     {
         for (size_t colIndex = 0; colIndex < MATRIX_SIZE_3x3; colIndex++)
         {
-            conjugateMatrixRow[colIndex] = GetConjugateMatrixElem(matrix, rowIndex, colIndex);
+            conjugateMatrix[rowIndex][colIndex] = sign * GetConjugateMatrixElem(matrix, rowIndex, colIndex);
+            sign *= -1;
         }
-        conjugateMatrix[rowIndex] = conjugateMatrixRow;
     }
  
     return conjugateMatrix;

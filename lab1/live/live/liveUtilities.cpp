@@ -5,138 +5,152 @@
 #include <vector>
 #include <iostream>
 #include <conio.h>
+#include <iomanip>
+#include <iterator>
 #include "liveUtilities.h"
 #include <set>
 
-const char BORDER = '*';
-const char ALIVE_CELL = '#';
-const char DEATH_CELL = ' ';
-
-enum CellStates {
-	dead,
-	alive
-};
-
-struct Population
-{
-	size_t mapWidth = 0;
-	size_t mapHeight = 0;
-	vector<vector<CellStates>> population;
-};
-
 using namespace std;
+set<char> partsOfTheMap = { ALIVE_CELL, DEATH_CELL };
 
-void PrintGeneration(const vector<vector<char>>& generation, ostream& output)
+const size_t MIN_HEIGHT = 3;
+const size_t MAX_HEIGHT = 256;
+
+const size_t MIN_WIDTH = 3;
+const size_t MAX_WIDTH = 256;
+
+
+void PrintGeneration(const GameMap &map, ostream& output)
 {
-	for (auto& row : generation)
+	for (auto& row : map)
 	{
-		for (auto elem : row)
+		for (CellStates elem : row)
 		{
-			output << elem;
+			if (elem == CellStates::alive) output << ALIVE_CELL;
+			if (elem == CellStates::dead) output << DEATH_CELL;
 		}
 		output << endl;
 	}
 }
 
-bool isValidMap(const vector<vector<char>>& generation)
+void SetCellAlive(CellStates& cell)  // void SetCellAlive(GameMap & map, size_t mapRowIndex, size_t mapColIndex)
 {
+	cell = CellStates::alive;
+}
 
-	if ((generation.size() > 256) || (generation.size() < 3))
+void SetCellDeath(CellStates& cell)
+{
+	cell = CellStates::dead;
+}
+
+bool IsCellAlive(CellStates cell)
+{
+	return cell == CellStates::alive;
+}
+
+void SetCellState(CellStates& cellState, CellStates cellState1)
+{
+	cellState = cellState1;
+}
+
+size_t GetMapHeight(istream& input)
+{
+	size_t height = 0;
+	string mapRow;
+	while (getline(input, mapRow))
 	{
-		cout << "Error!\nWrong size of ur map, please use 3x3..256x256 sizes\n";
+		height++;
+	}
+
+	return height;
+}
+
+
+size_t SetMapSize(GameMap& map, size_t height, size_t width)
+{
+	map.resize(height);
+	for (auto &row : map)
+	{
+		row.resize(width);
+	}
+
+	return 1;
+}
+
+optional<Map> GetMap(istream& input)
+{
+	Map map;
+	string line;
+	
+	while (getline(input, line))
+	{
+		if (line.empty())
+		{
+			cout << "Error!\nRemove empty lines from ur map please\n";
+			return nullopt;
+		}
+
+		MapLine mapLine(line.begin(), line.end());
+		map.push_back(mapLine);
+	}
+
+	return map;
+}
+
+bool IsMapSizeValid(size_t width, size_t height)
+{
+	return (width <= MAX_WIDTH) && (height <= MAX_HEIGHT);
+}
+
+bool IsValidMap(const Map& map)
+{
+	size_t mapWidth = map[0].size();
+	size_t mapHeight = map.size();
+
+	size_t firstLineIndex = 0;
+	size_t lastLineIndex = map.size() - 1;
+
+	size_t firstColIndex = 0;
+	size_t lastColIndex = map[0].size() - 1;
+
+	if (!IsMapSizeValid(mapWidth, mapHeight))
+	{
+		cout << "Map too big bro\n";
 		return false;
 	}
 
-	size_t lineLength = generation[0].size();
-
-	for (size_t i = 0; i < generation.size(); i++)
+	for (size_t lineIndex = 0; lineIndex < mapHeight; lineIndex++)
 	{
-		if ((generation[i].size() > 256) || (generation[i].size() < 3))
+		if (mapWidth != map[lineIndex].size())
 		{
-			cout << "Error!\nWrong size of ur map, please use 3x3..256x256 sizes\n";
+			cout << "Ur lines have diff size";
 			return false;
 		}
 
-		for (size_t j = 0; j < generation[i].size(); j++)
+		for (size_t colIndex = 0; colIndex < mapWidth; colIndex++)
 		{
-
-			if (lineLength != generation[i].size())
+			if (((lineIndex == firstLineIndex) || (lineIndex == lastLineIndex)) || ((colIndex == firstColIndex) || (colIndex == lastColIndex)))
 			{
-				cout << "Error!\n Ur lines Your line should have same length\n";
-				return false;
-			}
-
-			if (((i == 0) || (i == generation.size() - 1)) && (generation[i][j] != '*'))
-			{
-				cout << "Error!\nCheck ur borders!\n";
-				return false;
-			}
-
-			if (((j == 0) || (j == generation[i].size() - 1)) && (generation[i][j] != '*'))
-			{
-				cout << "Error!\nCheck ur borders!\n";
-				return false;
-			}
-
-			if ((i != 0 && i != generation.size() - 1) && (j != 0 && j != generation[i].size() - 1))
-			{
-				if ((generation[i][j] != ' ') && (generation[i][j] != '#'))
+				if (map[lineIndex][colIndex] != BORDER)
 				{
-					cout << "Error!\nWrong symbol on map!\n" << "line = " << i << "\nelem = " << j;
+					cout << "Check ur border bro";
 					return false;
 				}
 			}
+			else if (partsOfTheMap.find(map[lineIndex][colIndex]) == partsOfTheMap.end())
+			{
+				cout << "Check map elements bro";
+				return false;
+			}
 		}
 	}
-
 	return true;
 }
-optional<CellStates> ParseLine(const string& line)
-{
-	CellStates cellState;
-	for (auto& state: line)
-	{
-		if ((state != ALIVE_CELL) || (state != DEATH_CELL) || (state != BORDER))
-		{
-			cout << "Wrong symbol" << endl;
-			return nullopt;
-		}
-	}
 
-	return 
-}
-
-optional<Population> GetCurrentGeneration(istream& input)
-{
-	Population generation;
-	string line;
-	unsigned int lineCounter = 0;
-	char ch;
-
-	while (input.get(ch))
-	{
-		auto cellState = getCellState(line);
-		if (!generationLine)
-		{
-			return nullopt;
-		}
-
-		generation.push_back(generationLine.value());
-		generationLine.value().clear();
-		lineCounter++;
-	}
-
-	if (!isValidMap(generation))
-	{
-		return nullopt;
-	}
-
-	return generation;
-}
-
-optional<Population> GetCurrentGenerationFromFile(const string& inputFileName)
+optional<Map> GetMapFromFile(const string& inputFileName)
 {
 	ifstream input;
+
 	input.open(inputFileName);
 	if (!input.is_open())
 	{
@@ -150,20 +164,72 @@ optional<Population> GetCurrentGenerationFromFile(const string& inputFileName)
 		return nullopt;
 	}
 
-	return GetCurrentGeneration(input);
+	auto map = GetMap(input);
+	if (!map)
+	{
+		cout << "GetMap Error!";
+		return nullopt;
+	}
+
+	if (!IsValidMap(map.value()))
+	{
+		cout << "IsValid Error";
+		return nullopt;
+	}
+
+	return map;
 }
 
-size_t CalculateNeighbors(size_t line, size_t elem, const vector<vector<char>>& currentGeneration)
+Population GetCurrentGeneration(const Map& map)
 {
-	size_t neighborCounter = 0;
+	Population generation;
 
-	for (size_t i = line - 1; i <= line + 1; i++)
+	generation.mapWidth = map[0].size();
+	generation.mapHeight = map.size();
+
+	generation.map.resize(generation.mapHeight);
+
+
+	for (size_t lineIndex = 0; lineIndex < generation.mapHeight; lineIndex++)
 	{
-		for (size_t j = elem - 1; j <= elem + 1; j++)
-		{		
-			if ((currentGeneration[i][j] == '#') && !((i == line) && (j == elem)))
+		generation.map[lineIndex].resize(generation.mapWidth);
+
+		for (size_t colIndex = 0; colIndex < generation.mapWidth; colIndex++)
+		{
+			if (map[lineIndex][colIndex] == BORDER)
 			{
-				neighborCounter++;
+				continue;
+			}
+
+			if (map[lineIndex][colIndex] == ALIVE_CELL)
+			{
+				SetCellAlive(generation.map[lineIndex][colIndex]);
+			}
+
+			if (map[lineIndex][colIndex] == DEATH_CELL)
+			{
+				SetCellDeath(generation.map[lineIndex][colIndex]);
+			}
+		}
+	}
+	return generation;
+}
+
+
+size_t CalculateNeighbors(size_t line, size_t elem, const GameMap& currentGeneration, size_t mapWidth, size_t mapHeight)
+{
+	size_t neighborCounter = 0; 
+
+	for (size_t lineIndex = line - 1; lineIndex <= line + 1; lineIndex++)
+	{
+		for (size_t colIndex = elem - 1; colIndex <= elem + 1; colIndex++)
+		{		
+			if ((lineIndex >= 0) && (lineIndex < mapHeight) && (colIndex >= 0) && (colIndex < mapWidth))
+			{
+				if ((IsCellAlive(currentGeneration[lineIndex][colIndex])) && !((lineIndex == line) && (colIndex == elem)))
+				{
+					neighborCounter++;
+				}
 			}
 		}
 	}
@@ -172,39 +238,35 @@ size_t CalculateNeighbors(size_t line, size_t elem, const vector<vector<char>>& 
 }
 
 
-vector<vector<char>> GetNextGeneration(const vector<vector<char>>& currentGeneration)
+void GetNextGeneration(Population &generation)
 {
-	vector<vector<char>> nextGeneration;
-	vector<char> nextGenerationLine;
 	size_t neighborCounter = 0;
+	generation.nextMap = generation.map;
 
-	for (size_t i = 0; i < currentGeneration.size(); i++)
+	for (size_t lineIndex = 0; lineIndex < generation.mapHeight; lineIndex++)
 	{
-		for (size_t j = 0; j < currentGeneration[i].size(); j++)
+		for (size_t colIndex = 0; colIndex < generation.mapWidth; colIndex++)
 		{
-			if (currentGeneration[i][j] != '*')
-			{
-				neighborCounter = CalculateNeighbors(i, j, currentGeneration);
+			neighborCounter = CalculateNeighbors(lineIndex, colIndex, generation.map, generation.mapWidth, generation.mapHeight);
+			cout << neighborCounter;
 
-				if ((neighborCounter == 2) || (neighborCounter == 3))
+			if (IsCellAlive(generation.map[lineIndex][colIndex]))
+			{
+				if ((neighborCounter > 3) || (neighborCounter < 2))
 				{
-					nextGenerationLine.push_back('#');
-				}
-				else
-				{
-					nextGenerationLine.push_back(' ');
+					SetCellDeath(generation.nextMap[lineIndex][colIndex]);
 				}
 			}
-			else
+
+			if (!IsCellAlive(generation.map[lineIndex][colIndex]))
 			{
-				nextGenerationLine.push_back('*');
+				if (neighborCounter == 3)
+				{
+					SetCellAlive(generation.nextMap[lineIndex][colIndex]);
+				}
 			}
 		}
-
-		nextGeneration.push_back(nextGenerationLine);
-		nextGenerationLine.clear();
+		cout << endl;
 		neighborCounter = 0;
 	}
-
-	return nextGeneration;
 }

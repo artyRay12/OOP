@@ -5,7 +5,6 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
-#include <set>
 #include "liveUtilities.h"
 
 using namespace std;
@@ -54,15 +53,21 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	auto currentGeneration = GetCurrentGenerationFromFile(args->inputFileName);
-	if (!currentGeneration)
+	auto map = GetMapFromFile(args->inputFileName);
+	if (!map)
 	{
 		return 1;
 	}
 
-	if (!args->outputFileName)
+	Population birds;
+	birds = GetCurrentGeneration(map.value());
+	PrintGeneration(birds.map, cout);
+	GetNextGeneration(birds);
+	PrintGeneration(birds.nextMap, cout);
+
+	/*if (!args->outputFileName)
 	{
-		PrintGeneration(GetNextGeneration(currentGeneration.value()), cout);
+		PrintGeneration(GetNextGeneration(currentGeneration.value().map), cout);
 	}
 	else
 	{
@@ -73,7 +78,7 @@ int main(int argc, char* argv[])
 		}
 
 		PrintGeneration(GetNextGeneration(currentGeneration.value()), output.value());
-	}
+	}*/
 
 	return 0;
 }
