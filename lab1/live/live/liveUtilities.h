@@ -10,7 +10,7 @@ const char DEATH_CELL = ' ';
 
 //std::set<char> partsOfTheMap = { BORDER, ALIVE_CELL, DEATH_CELL };
 
-enum CellStates {
+enum class CellStates {
 	dead,
 	alive
 };
@@ -20,7 +20,6 @@ using Map = std::vector<MapLine>;
 
 using GameMapLine = std::vector<CellStates>;
 using GameMap = std::vector<GameMapLine>;
-
 
 struct Population
 {

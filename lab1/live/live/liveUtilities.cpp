@@ -19,20 +19,6 @@ const size_t MAX_HEIGHT = 256;
 const size_t MIN_WIDTH = 3;
 const size_t MAX_WIDTH = 256;
 
-
-void PrintGeneration(const GameMap &map, ostream& output)
-{
-	for (auto& row : map)
-	{
-		for (CellStates elem : row)
-		{
-			if (elem == CellStates::alive) output << ALIVE_CELL;
-			if (elem == CellStates::dead) output << DEATH_CELL;
-		}
-		output << endl;
-	}
-}
-
 void SetCellAlive(CellStates& cell)  // void SetCellAlive(GameMap & map, size_t mapRowIndex, size_t mapColIndex)
 {
 	cell = CellStates::alive;
@@ -53,29 +39,39 @@ void SetCellState(CellStates& cellState, CellStates cellState1)
 	cellState = cellState1;
 }
 
-size_t GetMapHeight(istream& input)
+size_t GetMapHeight(const GameMap& map)
 {
-	size_t height = 0;
-	string mapRow;
-	while (getline(input, mapRow))
-	{
-		height++;
-	}
+	return map.size();
+}
 
-	return height;
+size_t GetMapWidth(const GameMap& map)
+{
+	return map[0].size();
 }
 
 
-size_t SetMapSize(GameMap& map, size_t height, size_t width)
+void PrintGeneration(const GameMap &map, ostream& output)
 {
-	map.resize(height);
-	for (auto &row : map)
+	for (size_t i = 0; i <= GetMapWidth(map) + 1; i++) output << BORDER;
+	cout << endl;
+
+	for (auto& row : map)
 	{
-		row.resize(width);
+		output << BORDER;
+		for (CellStates elem : row)
+		{
+			if (elem == CellStates::alive) output << ALIVE_CELL;
+			if (elem == CellStates::dead) output << DEATH_CELL;
+		}
+		output << BORDER;
+		output << endl;
 	}
 
-	return 1;
+	for (size_t i = 0; i <= GetMapWidth(map) + 1; i++) output << BORDER;
+	cout << endl;
 }
+
+
 
 optional<Map> GetMap(istream& input)
 {
