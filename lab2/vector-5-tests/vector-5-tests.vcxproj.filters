@@ -18,15 +18,15 @@
     <ClCompile Include="catch-sample.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="sum-tests.cpp">
+    <ClCompile Include="..\vector-5\vectorUtilities.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\vector-5\sum.cpp">
+    <ClCompile Include="vectorTests.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\vector-5\sum.h">
+    <ClInclude Include="..\vector-5\VectorUtilities.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

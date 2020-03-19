@@ -59,15 +59,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Population birds;
-	birds = GetCurrentGeneration(map.value());
-	PrintGeneration(birds.map, cout);
-	GetNextGeneration(birds);
-	PrintGeneration(birds.nextMap, cout);
+	Population cells;
+	
+	
 
-	/*if (!args->outputFileName)
+	if (!args->outputFileName)
 	{
-		PrintGeneration(GetNextGeneration(currentGeneration.value().map), cout);
+		cells = GetCurrentGeneration(map.value());
+		GetNextGeneration(cells);
+		PrintGeneration(cells.next, cout);
 	}
 	else
 	{
@@ -77,8 +77,11 @@ int main(int argc, char* argv[])
 			return 1;
 		}
 
-		PrintGeneration(GetNextGeneration(currentGeneration.value()), output.value());
-	}*/
+
+		cells = GetCurrentGeneration(map.value());
+		GetNextGeneration(cells);
+		PrintGeneration(cells.next, output.value());
+	}
 
 	return 0;
 }

@@ -1,11 +1,32 @@
 ﻿#include <iostream>
-#include "sum.h"
-#define CATCH_CONFIG_MAIN 
-#include <catch2/catch.hpp>
+#include <vector>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iterator>
+#include <fstream>
+#include <functional> 
+#include <vector>
+#include <algorithm>
+#include <fstream>
+
+#include "vectorUtilities.h"
 using namespace std;
 
 int main()
 {
-    return 1;
+    vector<float> vec = ReadVector(cin);
+
+    if (!vec.empty())
+    {
+        PrintVector(SortVector(MultiplyVectorByNumber(vec, GetMinValue(vec))));
+    }
+    else
+    {
+        PrintVector(vec);
+    }
 }
+
+
 

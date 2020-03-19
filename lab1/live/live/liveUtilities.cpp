@@ -39,23 +39,23 @@ void SetCellState(CellStates& cellState, CellStates cellState1)
 	cellState = cellState1;
 }
 
-size_t GetMapHeight(const GameMap& map)
+size_t GetGenHeight(const Generation& gen)
 {
-	return map.size();
+	return gen.size();
 }
 
-size_t GetMapWidth(const GameMap& map)
+size_t GetGenWidth(const Generation& gen)
 {
-	return map[0].size();
+	return gen[0].size();
 }
 
 
-void PrintGeneration(const GameMap &map, ostream& output)
+void PrintGeneration(const Generation& gen, ostream& output)
 {
-	for (size_t i = 0; i <= GetMapWidth(map) + 1; i++) output << BORDER;
+	for (size_t i = 0; i <= GetGenWidth(gen) + 1; i++) output << BORDER;
 	cout << endl;
 
-	for (auto& row : map)
+	for (auto& row : gen)
 	{
 		output << BORDER;
 		for (CellStates elem : row)
@@ -67,7 +67,7 @@ void PrintGeneration(const GameMap &map, ostream& output)
 		output << endl;
 	}
 
-	for (size_t i = 0; i <= GetMapWidth(map) + 1; i++) output << BORDER;
+	for (size_t i = 0; i <= GetGenWidth(gen) + 1; i++) output << BORDER;
 	cout << endl;
 }
 
@@ -180,17 +180,16 @@ Population GetCurrentGeneration(const Map& map)
 {
 	Population generation;
 
-	generation.mapWidth = map[0].size();
-	generation.mapHeight = map.size();
+	generation.genWidth = map[0].size();
+	generation.genHeight = map.size();
 
-	generation.map.resize(generation.mapHeight);
+	generation.current.resize(generation.genHeight);
 
 
-	for (size_t lineIndex = 0; lineIndex < generation.mapHeight; lineIndex++)
+	for (size_t lineIndex = 0; lineIndex < generation.genHeight; lineIndex++)
 	{
-		generation.map[lineIndex].resize(generation.mapWidth);
-
-		for (size_t colIndex = 0; colIndex < generation.mapWidth; colIndex++)
+		generation.current[lineIndex].resize(generation.genWidth);
+		for (size_t colIndex = 0; colIndex < generation.genWidth; colIndex++)
 		{
 			if (map[lineIndex][colIndex] == BORDER)
 			{
@@ -199,12 +198,12 @@ Population GetCurrentGeneration(const Map& map)
 
 			if (map[lineIndex][colIndex] == ALIVE_CELL)
 			{
-				SetCellAlive(generation.map[lineIndex][colIndex]);
+				SetCellAlive(generation.current[lineIndex][colIndex]);
 			}
 
 			if (map[lineIndex][colIndex] == DEATH_CELL)
 			{
-				SetCellDeath(generation.map[lineIndex][colIndex]);
+				SetCellDeath(generation.current[lineIndex][colIndex]);
 			}
 		}
 	}
@@ -212,7 +211,7 @@ Population GetCurrentGeneration(const Map& map)
 }
 
 
-size_t CalculateNeighbors(size_t line, size_t elem, const GameMap& currentGeneration, size_t mapWidth, size_t mapHeight)
+size_t CalculateNeighbors(size_t line, size_t elem, const Generation& currentGeneration, size_t mapWidth, size_t mapHeight)
 {
 	size_t neighborCounter = 0; 
 
@@ -237,28 +236,27 @@ size_t CalculateNeighbors(size_t line, size_t elem, const GameMap& currentGenera
 void GetNextGeneration(Population &generation)
 {
 	size_t neighborCounter = 0;
-	generation.nextMap = generation.map;
+	generation.next = generation.current;
 
-	for (size_t lineIndex = 0; lineIndex < generation.mapHeight; lineIndex++)
+	for (size_t lineIndex = 0; lineIndex < GetGenHeight(generation.current); lineIndex++)
 	{
-		for (size_t colIndex = 0; colIndex < generation.mapWidth; colIndex++)
+		for (size_t colIndex = 0; colIndex < GetGenWidth(generation.current); colIndex++)
 		{
-			neighborCounter = CalculateNeighbors(lineIndex, colIndex, generation.map, generation.mapWidth, generation.mapHeight);
-			cout << neighborCounter;
+			neighborCounter = CalculateNeighbors(lineIndex, colIndex, generation.current, GetGenWidth(generation.current), GetGenHeight(generation.current));
 
-			if (IsCellAlive(generation.map[lineIndex][colIndex]))
+			if (IsCellAlive(generation.current[lineIndex][colIndex]))
 			{
 				if ((neighborCounter > 3) || (neighborCounter < 2))
 				{
-					SetCellDeath(generation.nextMap[lineIndex][colIndex]);
+					SetCellDeath(generation.next[lineIndex][colIndex]);
 				}
 			}
 
-			if (!IsCellAlive(generation.map[lineIndex][colIndex]))
+			if (!IsCellAlive(generation.current[lineIndex][colIndex]))
 			{
 				if (neighborCounter == 3)
 				{
-					SetCellAlive(generation.nextMap[lineIndex][colIndex]);
+					SetCellAlive(generation.next[lineIndex][colIndex]);
 				}
 			}
 		}

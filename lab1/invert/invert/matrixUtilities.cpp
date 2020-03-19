@@ -49,7 +49,7 @@ float GetDeterminant2x2(const Matrix2x2& algExpr)
 
 float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
 {
-    Matrix2x2 minor;
+    Matrix2x2 minorMatrix;
     size_t minorRowIndex = 1;
     size_t minorColIndex = 1;
 
@@ -59,7 +59,7 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
         {
             if ((i != row) && (j != col))
             {
-                minor[minorRowIndex - 1][minorColIndex - 1] = matrix[i][j];
+                minorMatrix[minorRowIndex - 1][minorColIndex - 1] = matrix[i][j];
 
                 if (minorColIndex == MATRIX_SIZE_2x2)
                 {
@@ -74,7 +74,7 @@ float GetConjugateMatrixElem(const Matrix3x3& matrix, size_t row, size_t col)
         }
     }
 
-    return GetDeterminant2x2(minor);
+    return GetDeterminant2x2(minorMatrix);
 }
 
 Matrix3x3 GetConjugateMatrix(const Matrix3x3& matrix)
@@ -87,7 +87,7 @@ Matrix3x3 GetConjugateMatrix(const Matrix3x3& matrix)
         for (size_t colIndex = 0; colIndex < MATRIX_SIZE_3x3; colIndex++)
         {
             conjugateMatrix[rowIndex][colIndex] = sign * GetConjugateMatrixElem(matrix, rowIndex, colIndex);
-            sign *= -1;
+            sign = -sign;
         }
     }
  
