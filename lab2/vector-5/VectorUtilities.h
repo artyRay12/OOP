@@ -4,12 +4,13 @@
 #include <string>
 #include <sstream>
 #include <iterator>
+#include <optional>
 #include <fstream>
 #include <functional> 
 #include <algorithm>
 
 std::vector<float> ReadVector(std::istream& inputStream);
-std::vector<float> MultiplyVectorByNumber(const std::vector<float>& vec, float number);
-float GetMinValue(const std::vector<float>& vec);
-std::vector<float> GetSortVector(const std::vector<float>& vec);
+void MultiplyVectorByNumber(std::vector<float>& vec, std::optional<float> number);
+std::optional<float> GetMinValue(const std::vector<float>& vec);
+void GetSortVector(std::vector<float>& vec);
 void PrintVector(const std::vector<float>& vec);

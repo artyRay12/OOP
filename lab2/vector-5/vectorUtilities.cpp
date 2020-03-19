@@ -1,72 +1,56 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <iterator>
-#include <fstream>
-#include <functional> 
-#include <algorithm>
 #include "vectorUtilities.h"
+#include <algorithm>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <vector>
 using namespace std;
 
 vector<float> ReadVector(istream& inputStream)
 {
-    string line;
-    vector<float> vec;
-    if (getline(inputStream, line))
-    {
-        stringstream stringIterator(line);
-        copy(istream_iterator<float>(stringIterator), istream_iterator<float>(), inserter(vec, vec.end()));
-    }
+	string line;
+	vector<float> vec;
+	if (getline(inputStream, line))
+	{
+		stringstream stringIterator(line);
+		copy(istream_iterator<float>(stringIterator), istream_iterator<float>(), inserter(vec, vec.end()));
+	}
 
-    return vec;
+	return vec;
 }
 
-vector<float> MultiplyVectorByNumber(const vector<float>& vec, float number)
+void MultiplyVectorByNumber(vector<float>& vec, optional<float> number)
 {
-    vector<float> multypliedVector;
-
-    for_each(begin(vec), end(vec), [number, &multypliedVector](float vectorElem)
-        {
-            multypliedVector.push_back(vectorElem * number);
-        });
-
-    return multypliedVector;
+	if (number != 1)
+	{
+		for (auto& item : vec)
+		{
+			item *= number.value();
+		}
+	}
 }
 
-
-float GetMinValue(const vector<float>& vec)
+optional<float> GetMinValue(const vector<float>& vec)
 {
+	if (!vec.empty())
+	{
+		return *min_element(begin(vec), end(vec));
+	}
 
-    return *min_element(begin(vec), end(vec));
-
+	return nullopt;
 }
 
-vector<float> GetSortVector(const vector<float>& vec)
+void GetSortVector(vector<float>& vec)
 {
-    vector<float> sortedVector = vec;
-    sort(sortedVector.begin(), sortedVector.end());
-
-    return sortedVector;
+	sort(vec.begin(), vec.end());
 }
 
 void PrintVector(const vector<float>& vec)
 {
-    copy(vec.begin(), vec.end(), ostream_iterator<float>(cout, " "));
-    cout << endl;
-}
-
-
-
-vector<float> ReadVectorTest(istream& inputStream)
-{
-    string line;
-    vector<float> vec;
-    if (getline(inputStream, line))
-    {
-        stringstream stringIterator(line);
-        copy(istream_iterator<float>(stringIterator), istream_iterator<float>(), inserter(vec, vec.end()));
-    }
-
-    return vec;
+	copy(vec.begin(), vec.end(), ostream_iterator<float>(cout, " "));
+	cout << endl;
 }

@@ -1,28 +1,18 @@
-﻿#include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <iterator>
-#include <fstream>
-#include <functional> 
+﻿#include "vectorUtilities.h"
 #include <algorithm>
-
-#include "vectorUtilities.h"
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <sstream>
+#include <string>
+#include <vector>
 using namespace std;
 
 int main()
 {
-    vector<float> vec = ReadVector(cin);
-
-    if (!vec.empty())
-    {
-        PrintVector(GetSortVector(MultiplyVectorByNumber(vec, GetMinValue(vec))));
-    }
-    else
-    {
-        PrintVector(vec);
-    }
+  vector<float> vec = ReadVector(cin);
+  MultiplyVectorByNumber(vec, GetMinValue(vec));
+  GetSortVector(vec);
+  PrintVector(vec);
 }
-
-
-
