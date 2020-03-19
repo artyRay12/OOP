@@ -1,9 +1,5 @@
 ﻿#include <iostream>
-#include <cstring>
-#include <iostream>
 #include <map>
-#include <stdio.h>
-#include <string.h>
 #include <string>
 #include "htmlEncoder.h"
 using namespace std;
