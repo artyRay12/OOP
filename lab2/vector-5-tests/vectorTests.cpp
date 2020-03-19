@@ -14,13 +14,13 @@ TEST_CASE("ReadVector() must be return vector<float>")
 	/*not Empty input*/
 	string str = "1.24 2.12 3";
 	stringstream notEmptyStream(str);
-	vector<float> notEmptyVector = { 1.24, 2.12, 3.0 };
+	vector<float> notEmptyVector = { 1.24f, 2.12f, 3.0f };
 	CHECK(ReadVector(notEmptyStream) == notEmptyVector);
 
 	/*Input with extra blanks*/
 	string strWithExptraBlanks = "        1.24    2.12       3";
 	stringstream extraBlanksStream(strWithExptraBlanks);
-	vector<float> extraBlanksVector = { 1.24, 2.12, 3.0 };
+	vector<float> extraBlanksVector = { 1.24f, 2.12f, 3.0f };
 	CHECK(ReadVector(extraBlanksStream) == extraBlanksVector);
 }
 
@@ -33,16 +33,16 @@ TEST_CASE("GetMinValue() should return min element from vector")
 
 TEST_CASE("MultiplyVectorByNumber() should return vector<float> where each element was multyplied by number")
 {
-	vector<float> inputVector = { 2.2, 2.25, 1.1, 0.0 };
-	vector<float> outputVecor = { 4.4, 4.5, 2.2, 0 };
+	vector<float> inputVector = { 2.2f, 2.25f, 1.1f, 0.0f };
+	vector<float> outputVecor = { 4.4f, 4.5f, 2.2f, 0.0f };
 	float number = 2;
 	CHECK(MultiplyVectorByNumber(inputVector, number) == outputVecor);
 }
 
 TEST_CASE("GetSortVecor() should return sorted vector")
 {
-	vector<float> notSortedVector = { 3.25, 2.25, 1, 0.5, 2.5 };
-	vector<float> sortedVector = {0.5, 1, 2.25, 2.5, 3.25 };
+	vector<float> notSortedVector = { 3.25f, 2.25f, 1.0f, 0.5f, 2.5f };
+	vector<float> sortedVector = {0.5f, 1.0f, 2.25f, 2.5f, 3.25f};
 	CHECK(GetSortVector(notSortedVector) == sortedVector);
 }
 
