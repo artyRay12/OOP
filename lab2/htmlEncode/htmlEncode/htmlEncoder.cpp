@@ -20,7 +20,7 @@ void HtmlEncode(string& str)
 		if (test.find(str[stringIndex]) != test.end())
 		{
 			Replace(str, stringIndex);
-			stringIndex += test[str[stringIndex]].length() - 0;
+			stringIndex += test[str[stringIndex]].length() - 1;
 		}
 		else
 		{
