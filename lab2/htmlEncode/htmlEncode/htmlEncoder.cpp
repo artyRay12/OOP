@@ -1,7 +1,16 @@
 #include "htmlEncoder.h"
 using namespace std;
 
-string HtmlEncode(string& str)
+std::map<char, std::string> test = { { '"', "&quot"}, {'\'', "&apos"}, {'<', "&lt"}, {'>', "&gt"}, {'&', "&amp"} };
+
+void Replace(string& str, size_t &strIndex)
+{
+	str.replace(strIndex, 1, test[str[strIndex]]);
+	strIndex += test[str[strIndex]].length();
+}
+
+
+void HtmlEncode(string& str)
 {
 	char ch;
 	size_t stringIndex = 0;
@@ -10,12 +19,21 @@ string HtmlEncode(string& str)
 
 	for (char ch : str)
 	{
-		cout << ch << endl;
+		if (test.find(ch) != test.end())
+		{
+			Replace(str, stringIndex);
+		}
+		stringIndex++;
 	}
-
-	return encodedString;
-	
 }
+
+string ReadString(istream& inputStream)
+{
+	string line;
+	getline(inputStream, line);
+	return line;
+}
+
 
 
 

@@ -20,7 +20,7 @@ int main()
 
     if (!vec.empty())
     {
-        PrintVector(SortVector(MultiplyVectorByNumber(vec, GetMinValue(vec))));
+        PrintVector(GetSortVector(MultiplyVectorByNumber(vec, GetMinValue(vec))));
     }
     else
     {

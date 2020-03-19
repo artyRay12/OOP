@@ -8,7 +8,7 @@
 #include <string>
 #include <sstream>
 
-std::map<char, std::string> test = { {'"', "&quot"}, {'\'', "&apos"}, {'<', "&lt"}, {'>', "&gt"}, {'&', "&amp"} };
-std::string HtmlEncode(std::string& str);
+void HtmlEncode(std::string& str);
+std::string ReadString(std::istream& inputStream);
 
 

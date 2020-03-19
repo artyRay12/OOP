@@ -8,19 +8,13 @@
 #include "htmlEncoder.h"
 using namespace std;
 
-
-
-
 int main()
 {
-	string html;
+	string html = ReadString(cin);
 
-	while (cin >> html)
-	{
-		HtmlEncode(html);
-		cout << html << endl;
-	}
+	HtmlEncode(html);
 
+	cout << html << endl;
 	return 0;
 }
         
