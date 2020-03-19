@@ -7,13 +7,13 @@ using namespace std;
 TEST_CASE("ReadVector() must be return vector<float>")
 {
 	/*Empty input*/
-	istringstream emptyStream;
+	stringstream emptyStream;
 	vector<float> emptyVector;
 	CHECK(ReadVector(emptyStream) == emptyVector);
 
 	/*not Empty input*/
 	string str = "1 2 3";
-	istringstream notEmptyStream(str);
+	stringstream notEmptyStream(str);
 	vector<float> notEmptyVector = { 1, 2, 3 };
 	CHECK(ReadVector(notEmptyStream) == notEmptyVector);
 }
@@ -27,8 +27,8 @@ TEST_CASE("GetMinValue() should return min element from vector")
 
 TEST_CASE("MultiplyVectorByNumber() should return vector<float> where each element was multyplied by number")
 {
-	vector<float> inputVector = { 2.2, 2.25, 3, 0 };
-	vector<float> outputVecor = { 4.4, 4.5, 6, 0 };
+	vector<float> inputVector = { 2.2, 2.25, 1.1, 0 };
+	vector<float> outputVecor = { 4.4, 4.5, 2.2, 0 };
 	float number = 2;
 	CHECK(MultiplyVectorByNumber(inputVector, number) == outputVecor);
 }

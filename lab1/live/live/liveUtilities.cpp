@@ -260,7 +260,6 @@ void GetNextGeneration(Population &generation)
 				}
 			}
 		}
-		cout << endl;
 		neighborCounter = 0;
 	}
 }

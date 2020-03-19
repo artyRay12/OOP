@@ -1,15 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <iostream>
-#include <vector>
 #include <string>
 #include <sstream>
 #include <iterator>
 #include <fstream>
 #include <functional> 
-#include <vector>
 #include <algorithm>
-#include <fstream>
 #include "vectorUtilities.h"
 using namespace std;
 
