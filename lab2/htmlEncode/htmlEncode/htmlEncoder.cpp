@@ -5,11 +5,8 @@ std::map<char, std::string> test = { { '"', "&quot"}, {'\'', "&apos"}, {'<', "&l
 
 void Replace(string& str, size_t &strIndex)
 {
-	//cout << str[strIndex] << endl;
 	str.replace(strIndex, 1, test[str[strIndex]]);
-	
 }
-
 
 void HtmlEncode(string& str)
 {
@@ -23,7 +20,7 @@ void HtmlEncode(string& str)
 		if (test.find(str[stringIndex]) != test.end())
 		{
 			Replace(str, stringIndex);
-			stringIndex += test[str[stringIndex]].length() - 1;
+			stringIndex += test[str[stringIndex]].length() - 0;
 		}
 		else
 		{
