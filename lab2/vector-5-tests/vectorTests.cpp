@@ -13,7 +13,7 @@ TEST_CASE("GetMinValue() should return min element from vector")
 
 TEST_CASE("MultiplyVectorByNumber() should return vector<float> where each "
 		  "element was multyplied by number")
-{
+{umki 
 	vector<float> inputVector = { 2.2f, 2.25f, 1.1f, 0.0f };
 	vector<float> outputVector = { 4.4f, 4.5f, 2.2f, 0.0f };
 	float number = 2;

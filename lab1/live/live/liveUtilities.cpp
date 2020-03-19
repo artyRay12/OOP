@@ -111,7 +111,7 @@ bool IsValidMap(const Map& map)
 
 	if (!IsMapSizeValid(mapWidth, mapHeight))
 	{
-		cout << "Map too big bro\n";
+		cout << "Map too big\n";
 		return false;
 	}
 
@@ -129,13 +129,13 @@ bool IsValidMap(const Map& map)
 			{
 				if (map[lineIndex][colIndex] != BORDER)
 				{
-					cout << "Check ur border bro";
+					cout << "Check ur borders! They have wrong symbol\nUse only '*' as border!";
 					return false;
 				}
 			}
 			else if (partsOfTheMap.find(map[lineIndex][colIndex]) == partsOfTheMap.end())
 			{
-				cout << "Check map elements bro";
+				cout << "Check generation elements!\nUse -- '*' as dead cell\n    -- '#' as alive";
 				return false;
 			}
 		}
