@@ -94,8 +94,6 @@ void PutDictionaryInFile(ostream& output, const Dictionary& dictionary)
 	}
 }
 
-//"$(ProjectDir)dictionary.txt"
-
 void SaveNewDictionary(const Dictionary& dictionary, string dictionaryFileName)
 {
 
@@ -122,31 +120,31 @@ void DictionaryDialog(const Dictionary& dictionary, const string& dictionaryFile
 		{
 			if (!newWords.empty())
 			{
-				cout << "U added new words, wanna save it? Y/N";
+				cout << "U added new words, wanna save it? Y for save\n";
 				char ch;
 				cin >> ch;
 				if (ch == 'Y' || ch == 'y')
 					SaveNewDictionary(newWords, dictionaryFileName);
 			}
-
 			break;
 		}
 
 		if (auto translate = GetTranslate(dictionary, word); translate) // чтобы работал такой if надо включить в проекте поддержку C++17
 		{
-			copy(translate.value().begin(), translate.value().end(), ostream_iterator<string>(cout, " "));
+			copy(translate.value().begin(), translate.value().end(), ostream_iterator<string>(cout, ","));
 			cout << endl;
 			continue;
 		}
 
 		if (auto translate = GetTranslate(newWords, word); translate) // чтобы работал такой if надо включить в проекте поддержку C++17
 		{
-			copy(translate.value().begin(), translate.value().end(), ostream_iterator<string>(cout, " "));
+			copy(translate.value().begin(), translate.value().end(), ostream_iterator<string>(cout, ","));
 			cout << endl;
 			continue;
 		}
 
-		cout << "Unknown word \"" << word << "\" Type translation or empty string from skip it";
+		cout << "Unknown word \"" << word << "\" Type translation or empty string from skip it\n";
 		AddNewWord(newWords, word);
 	}
 }
+

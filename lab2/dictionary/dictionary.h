@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Windows.h>
 #include <array>
 #include <cstring>
@@ -22,5 +21,6 @@ const std::string WORD_DELIMITER = ", ";
 using Dictionary = std::map<std::string, std::vector<std::string>>;
 
 void DictionaryDialog(const Dictionary& dictionary = Dictionary(), const std::string& dictionaryFileName = "");
+std::optional<std::vector<std::string>> GetTranslate(const Dictionary& dictionary, const std::string& word);
 std::vector<std::string> ParseStringToVector(const std::string &str);
 void Trim(std::string& str);
