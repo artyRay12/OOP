@@ -1,4 +1,4 @@
-﻿#include "vectorUtilities.h"
+#include "vectorUtilities.h"
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -11,8 +11,8 @@ using namespace std;
 
 int main()
 {
-  vector<float> vec = ReadVector(cin);
-  MultiplyVectorByNumber(vec, GetMinValue(vec));
-  GetSortVector(vec);
-  PrintVector(vec);
+	vector<float> vec = ReadVector(cin);
+	MultiplyVectorByNumber(vec, GetMinValue(vec));
+	SortVector(vec);
+	PrintVector(vec);
 }

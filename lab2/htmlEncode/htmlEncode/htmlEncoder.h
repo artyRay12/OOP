@@ -2,13 +2,14 @@
 #include <iostream>
 #include <cstring>
 #include <iostream>
-#include <map>
-#include <stdio.h>
-#include <string.h>
 #include <string>
+#include <array>
 #include <sstream>
+#include <vector>
+#include <optional>
 
-void HtmlEncode(std::string& str);
+std::string HtmlEncode(const std::string& str);
 std::string ReadString(std::istream& inputStream);
+
 
 

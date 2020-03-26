@@ -8,9 +8,9 @@ int main()
 {
 	string html = ReadString(cin);
 
-	HtmlEncode(html);
+	string htmlEncoded = HtmlEncode(html);
 
-	cout << html << endl;
+	cout << htmlEncoded << endl;
 	return 0;
 }
         

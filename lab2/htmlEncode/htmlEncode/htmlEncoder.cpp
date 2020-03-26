@@ -1,31 +1,38 @@
 #include "htmlEncoder.h"
 using namespace std;
 
-std::map<char, std::string> test = { { '"', "&quot"}, {'\'', "&apos"}, {'<', "&lt"}, {'>', "&gt"}, {'&', "&amp"} };
+vector<std::pair<char, std::string>> HtmlEntities = { { '"', "&quot" }, { '\'', "&apos" }, { '<', "&lt" }, { '>', "&gt" }, { '&', "&amp" } };
 
-void Replace(string& str, size_t &strIndex)
+optional<string> GetHtmlEntityByChar(char ch)
 {
-	str.replace(strIndex, 1, test[str[strIndex]]);
-}
-
-void HtmlEncode(string& str)
-{
-	size_t stringIndex = 0;
-	stringstream stream(str);
-	string encodedString;
-
-	while(str[stringIndex] != '\0')
+	for (auto pair : HtmlEntities)
 	{
-		if (test.find(str[stringIndex]) != test.end())
+		if (pair.first == ch)
 		{
-			Replace(str, stringIndex);
-			stringIndex += test[str[stringIndex]].length() - 1;
-		}
-		else
-		{
-			stringIndex++;
+			return pair.second;
 		}
 	}
+
+	return nullopt;
+}
+
+string HtmlEncode(const string& str)
+{
+	string encodedString;
+
+	for (auto ch : str)
+	{
+		auto htmlEntity = GetHtmlEntityByChar(ch);
+		if (htmlEntity)
+		{
+			encodedString += htmlEntity.value();
+			continue;
+		}
+		 
+		encodedString += ch;
+	}
+
+	return encodedString;
 }
 
 string ReadString(istream& inputStream)
@@ -34,9 +41,3 @@ string ReadString(istream& inputStream)
 	getline(inputStream, line);
 	return line;
 }
-
-
-
-
-
-

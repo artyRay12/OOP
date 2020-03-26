@@ -25,7 +25,7 @@ vector<float> ReadVector(istream& inputStream)
 
 void MultiplyVectorByNumber(vector<float>& vec, optional<float> number)
 {
-	if (number != 1)
+	if (number && number != 1)
 	{
 		for (auto& item : vec)
 		{
@@ -44,7 +44,7 @@ optional<float> GetMinValue(const vector<float>& vec)
 	return nullopt;
 }
 
-void GetSortVector(vector<float>& vec)
+void SortVector(vector<float>& vec)
 {
 	sort(vec.begin(), vec.end());
 }
