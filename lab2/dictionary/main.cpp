@@ -61,13 +61,13 @@ optional<Dictionary> GetDictionaryFromFile(const string& dictionaryFileName)
 
 optional<string> GetDictionaryFileName(int argc, char* argv[])
 {
-	if (argc != 2)
+	if (argc == 2)
 	{
-		cout << "Error!\nWrong number of argument\n";
-		return nullopt;
+		return argv[1];
 	}
-
-	return argv[1];
+	
+	return nullopt;
+	
 }
 
 void SetLang()
@@ -95,8 +95,8 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	Dictionary new1;
-	//DictionaryDialog(new1);
+	Dictionary dictionary;
+	DictionaryDialog(dictionary);
 
 	return 0;
 }

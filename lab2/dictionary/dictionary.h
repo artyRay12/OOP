@@ -21,6 +21,6 @@ const std::string WORD_DELIMITER = ", ";
 
 using Dictionary = std::map<std::string, std::vector<std::string>>;
 
-void DictionaryDialog(const Dictionary &dictionary, const std::string &dictionaryFileName = "");
+void DictionaryDialog(const Dictionary& dictionary = Dictionary(), const std::string& dictionaryFileName = "");
 std::vector<std::string> ParseStringToVector(const std::string &str);
-std::string Trim(const std::string& str);
+void Trim(std::string& str);

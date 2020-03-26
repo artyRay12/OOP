@@ -2,14 +2,10 @@
 
 using namespace std;
 
-string Trim(const string& str)
+void Trim(string& str)
 {
-	string trimmedStr = str;
-	string chars = " ";
-	trimmedStr.erase(0, trimmedStr.find_first_not_of(chars));
-	trimmedStr.erase(trimmedStr.find_last_not_of(chars) + 1);
-
-	return trimmedStr;
+	str.erase(0, str.find_first_not_of(" "));
+	str.erase(str.find_last_not_of(" ") + 1);
 }
 
 vector<string> ParseStringToVector(const string& str)
@@ -20,7 +16,8 @@ vector<string> ParseStringToVector(const string& str)
 
 	while (getline(translateStream, word, ','))
 	{
-		translateWords.push_back(Trim(word));
+		Trim(word);
+		translateWords.push_back(word);
 	}
 
 	return translateWords;
@@ -63,7 +60,6 @@ optional<vector<string>> SearchRusToEnd(const Dictionary& dictionary, const stri
 				vector<string> translationWords;
 				translationWords.push_back(item.first);
 				return translationWords;
-				
 			}
 		}
 	}
@@ -73,7 +69,7 @@ optional<vector<string>> SearchRusToEnd(const Dictionary& dictionary, const stri
 
 optional<vector<string>> GetTranslate(const Dictionary& dictionary, const string& word)
 {
-	if (isalpha(Trim(word)[0]))
+	if (isalpha(word[0]))
 	{
 		return SearchEngToRus(dictionary, word);
 	}
@@ -81,28 +77,33 @@ optional<vector<string>> GetTranslate(const Dictionary& dictionary, const string
 	return SearchRusToEnd(dictionary, word);
 }
 
-/*
 void PutDictionaryInFile(ostream& output, const Dictionary& dictionary)
 {
 	for (auto& item : dictionary)
 	{
-		output << endl
-			   << item.first << " " << item.second;
+		output << item.first << TRANSLATE_DELIMITER;
+
+		for (auto word : item.second)
+		{
+			output << word << WORD_DELIMITER;
+		}
+		output << endl;
 	}
 }
+
+//"$(ProjectDir)dictionary.txt"
 
 void SaveNewDictionary(const Dictionary& dictionary, string dictionaryFileName)
 {
 
 	if (dictionaryFileName.empty())
 	{
-		dictionaryFileName = "dictionary.txt";
+		dictionaryFileName = "NEWdictionary.txt";
 	}
 
 	ofstream output(dictionaryFileName, ios::app);
 	PutDictionaryInFile(output, dictionary);
 }
-*/
 
 void DictionaryDialog(const Dictionary& dictionary, const string& dictionaryFileName)
 {
@@ -111,7 +112,10 @@ void DictionaryDialog(const Dictionary& dictionary, const string& dictionaryFile
 
 	while (getline(cin, word))
 	{
-		/*if (word == EXIT)
+		transform(word.begin(), word.end(), word.begin(), tolower);
+		Trim(word);
+
+		if (word == EXIT)
 		{
 			if (!newWords.empty())
 			{
@@ -123,7 +127,7 @@ void DictionaryDialog(const Dictionary& dictionary, const string& dictionaryFile
 			}
 
 			break;
-		}*/
+		}
 
 		if (auto translate = GetTranslate(dictionary, word); translate) // чтобы работал такой if надо включить в проекте поддержку C++17
 		{
