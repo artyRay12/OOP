@@ -19,14 +19,13 @@ vector<string> ParseStringToVector(const string& str)
 		Trim(word);
 		translateWords.push_back(word);
 	}
-
 	return translateWords;
 }
 
 void AddWord(Dictionary& dictionary, const string& word, const string& translate)
 {
 	dictionary.emplace(word, ParseStringToVector(translate));
-	cout << "New word was added\n";
+	cout << "Word \"" << word << "\" saved as \"" << translate << endl;
 }
 
 void AddNewWord(Dictionary& dictionary, const string& word)
@@ -36,6 +35,10 @@ void AddNewWord(Dictionary& dictionary, const string& word)
 	if (translate != SKIP_ADD_NEW_WORD)
 	{
 		AddWord(dictionary, word, translate);
+	}
+	else
+	{
+		cout << "Word \"" << word << "\" was ignored" << endl;
 	}
 }
 
@@ -143,7 +146,7 @@ void DictionaryDialog(const Dictionary& dictionary, const string& dictionaryFile
 			continue;
 		}
 
-		cout << "Cant find \"" << word << "\" in dictionary.\nType translation if u want add new word, or empty string for skip it\n";
+		cout << "Unknown word \"" << word << "\" Type translation or empty string from skip it";
 		AddNewWord(newWords, word);
 	}
 }

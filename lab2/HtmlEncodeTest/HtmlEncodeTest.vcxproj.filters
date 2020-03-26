@@ -18,10 +18,10 @@
     <ClCompile Include="HtmlEncodeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\vector-5-tests\catch-sample.cpp">
+    <ClCompile Include="..\htmlEncode\htmlEncode\htmlEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\htmlEncode\htmlEncode\htmlEncoder.cpp">
+    <ClCompile Include="catch-sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
