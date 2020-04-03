@@ -36,7 +36,7 @@ string Word—ensor(const string& word, const set<string>& uncensoredWords)
 	return word;
 }
 
-string StringCensor(istream& userInput, const set<string>& uncensoredWords)
+string String—ensor(istream& userInput, const set<string>& uncensoredWords)
 {
 	string str;
 	string censoredStr;
