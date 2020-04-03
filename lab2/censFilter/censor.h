@@ -15,5 +15,5 @@ const std::string WORD_REPLACER = "***";
 
 std::optional<std::set<std::string>> GetUncensoredWordsFromFile(const std::string& fileName);
 std::set<std::string> GetUncensoredWords(std::istream& input);
-std::string Word—ensor(const std::string& word, const std::set<std::string>& uncensoredWords);
-std::string String—ensor(std::istream& userInput, const std::set<std::string>& uncensoredWords);
+std::string WordCensor(const std::string& word, const std::set<std::string>& uncensoredWords);
+std::string StringCensor(std::istream& userInput, const std::set<std::string>& uncensoredWords);

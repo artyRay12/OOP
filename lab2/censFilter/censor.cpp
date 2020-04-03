@@ -36,7 +36,7 @@ optional<set<string>> GetUncensoredWordsFromFile(const string& fileName)
 	return GetUncensoredWords(input);
 }
 
-string Word—ensor(const string& word, const set<string>& uncensoredWords)
+string WordCensor(const string& word, const set<string>& uncensoredWords)
 {
 	if (uncensoredWords.find(ToLower(word)) != uncensoredWords.end())
 	{
@@ -46,7 +46,7 @@ string Word—ensor(const string& word, const set<string>& uncensoredWords)
 	return word;
 }
 
-string String—ensor(istream& userInput, const set<string>& uncensoredWords)
+string StringCensor(istream& userInput, const set<string>& uncensoredWords)
 {
 	string str;
 	string censoredStr;
