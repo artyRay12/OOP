@@ -31,7 +31,7 @@ TEST_CASE("CensorString() should return new string where bad words replaced by *
 
 		string censString1 = "***+***1cat/dog.***,shot";
 
-		string censStirng = String—ensor(uncensStream, badWords);
+		string censStirng = StringCensor(uncensStream, badWords);
 		CHECK(censString1 == censStirng);
 	}
 
@@ -43,7 +43,7 @@ TEST_CASE("CensorString() should return new string where bad words replaced by *
 
 		string censString1 = "";
 
-		string censStirng = String—ensor(uncensStream, badWords);
+		string censStirng = StringCensor(uncensStream, badWords);
 		CHECK(censString1 == censStirng);
 	}
 }
