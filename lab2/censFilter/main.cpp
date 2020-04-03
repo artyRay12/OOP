@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	}
 
 	auto uncensoredWords = GetUncensoredWordsFromFile(uncensoredWordsFileName.value());
-	string censoredStr = String—ensor(cin, uncensoredWords.value());
+	string censoredStr = StringCensor(cin, uncensoredWords.value());
 
 	cout << censoredStr << endl;
 }

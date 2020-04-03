@@ -62,7 +62,7 @@ string StringCensor(istream& userInput, const set<string>& uncensoredWords)
 		}
 		else
 		{
-			censoredStr += WordСensor(word, uncensoredWords);
+			censoredStr += WordCensor(word, uncensoredWords);
 			censoredStr += ch;
 			word.clear();
 		}
@@ -70,7 +70,7 @@ string StringCensor(istream& userInput, const set<string>& uncensoredWords)
 
 	if (!word.empty()) //Обработка последнего слова если оно есть
 	{
-		censoredStr += WordСensor(word, uncensoredWords);
+		censoredStr += WordCensor(word, uncensoredWords);
 	}
 
 	return censoredStr;
