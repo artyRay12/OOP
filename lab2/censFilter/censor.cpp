@@ -2,6 +2,17 @@
 
 using namespace std;
 
+string ToLower(const string& str)
+{
+	string lowerString;
+	for (char ch : str)
+	{
+		lowerString += tolower(ch);
+	}
+
+	return lowerString;
+}
+
 set<string> GetUncensoredWords(istream& input)
 {
 	string word;
@@ -25,10 +36,9 @@ optional<set<string>> GetUncensoredWordsFromFile(const string& fileName)
 	return GetUncensoredWords(input);
 }
 
-
 string Word—ensor(const string& word, const set<string>& uncensoredWords)
 {
-	if (uncensoredWords.find(word) != uncensoredWords.end())
+	if (uncensoredWords.find(ToLower(word)) != uncensoredWords.end())
 	{
 		return WORD_REPLACER;
 	}
