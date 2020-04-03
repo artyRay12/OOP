@@ -32,7 +32,8 @@ void AddNewWord(Dictionary& dictionary, const string& word)
 {
 	string translate;
 	getline(cin, translate);
-	if (translate != SKIP_ADD_NEW_WORD)
+
+	if (!translate.empty())//(translate != SKIP_ADD_NEW_WORD)
 	{
 		AddWord(dictionary, word, translate);
 	}
