@@ -1,6 +1,7 @@
 #include "CRemoteControl.h"
 #include "CTV.h"
 #include "boost/algorithm/string.hpp"
+#include <iterator>
 
 using namespace std;
 using namespace boost::algorithm;
@@ -12,12 +13,28 @@ CRemoteControl::CRemoteControl(CTV& tv)
 		  { "Off", [&](istream& stream) { return TurnOff(stream); } },
 		  { "SC", [&](istream& stream) { return SelectChannel(stream); } },
 		  { "SPC", [&](istream& stream) { return SelectPreviousChannel(stream); } },
+		  { "SCN", [&](istream& stream) { return SetChannelName(stream); } },
 		  { "Info", [&](istream& stream) { return Info(stream); } },
-
 	  })
 
 {
 	cout << "The remote was connected to the TV \n\n";
+}
+
+void CRemoteControl::SetChannelName(istream& stream)
+{
+	size_t channelNum;
+	stream >> channelNum;
+	string channelName;
+	string partOfChannelName;
+
+	while (getline(stream, partOfChannelName,' '))
+		if (!partOfChannelName.empty())
+			channelName += partOfChannelName + ' ';
+
+
+	m_tv.SetChannelName(channelNum, channelName);
+
 }
 
 void CRemoteControl::TurnOn(istream& stream)
@@ -56,7 +73,8 @@ void CRemoteControl::CommandHandler()
 		string action;
 		commandStream >> action;
 
-		if (auto it = m_actions.find(action); it != m_actions.end()) // чтобы работал такой if надо включить в проекте поддержку C++17
+		auto it = m_actions.find(action);
+		if (it != m_actions.end())
 		{
 			it->second(commandStream);
 		}

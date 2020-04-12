@@ -1,5 +1,6 @@
 #include "CTV.h"
 
+
 using namespace std;
 
 bool CTV::IsOn() const
@@ -39,7 +40,7 @@ void CTV::SelectChannel(size_t channel)
 	cout << "Switched on " << currentChannel << endl;
 }
 
-size_t CTV::GetCurrentChannel(istream& args) const
+size_t CTV::GetCurrentChannel() const
 {
 	cout << "Current channel = " << currentChannel << endl;
 	return currentChannel;
@@ -58,8 +59,21 @@ void CTV::SelectPreviousChannel()
 	}
 }
 
-void CTV::CommandProcessor(string command)
+void CTV::SetChannelName(size_t channelNum, string channelName)
 {
+	if ((channelNum < MIN_CHANNEL) || (channelNum > MAX_CHANNEL))
+	{
+		cout << "Channel should be in range 0..99\n";
+		return;
+	}
+
+	if (!IsOn())
+	{
+		cout << "Cant select channel, cuz TV is off\n";
+		return;
+	}
+
+
 }
 
 void CTV::Info() const
@@ -71,6 +85,6 @@ void CTV::Info() const
 	else
 	{
 		cout << "TV is off\n";
-		cout << "current channel is 0\n";
+		cout << "current channel is" << currentChannel << endl;
 	}
 }

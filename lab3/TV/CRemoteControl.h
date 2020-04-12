@@ -30,6 +30,7 @@ public:
 	void SelectChannel(std::istream& args);
 	void SelectPreviousChannel(std::istream& stream);
 	void CommandHandler();
+	void SetChannelName(std::istream& stream);
 	//void SaveChannel();
 	//void WhatChannelNumber();
 	//bool WhatChannelName();

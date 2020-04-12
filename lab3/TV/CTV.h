@@ -6,12 +6,10 @@
 #include <iterator>
 #include <map>
 #include <sstream>
-#include <stdexcept>
 #include <string>
+#include <boost/bimap.hpp>
 
-const size_t COMMAND = 0;
-const size_t COMMAND_ARGUMENT_1 = 1;
-const size_t COMMAND_ARGUMENT_2 = 2;
+typedef boost::bimap<size_t, std::string> List;
 
 class CTV
 {
@@ -22,8 +20,8 @@ public:
 	void Info() const;
 	void SelectChannel(size_t channel);
 	void SelectPreviousChannel();
-	size_t GetCurrentChannel(std::istream& args) const;
-	void CommandProcessor(std::string command);
+	size_t GetCurrentChannel() const;
+	void SetChannelName(size_t channelNum, std::string channelName);
 
 private:
 	static constexpr size_t MIN_CHANNEL = 0;
@@ -31,4 +29,8 @@ private:
 	bool isTvOn = false;
 	size_t currentChannel = 0;
 	size_t previousChannel = 0;
+
+	List channelList;
+
+	
 };
