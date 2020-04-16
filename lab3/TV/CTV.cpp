@@ -1,6 +1,5 @@
 #include "CTV.h"
 
-
 using namespace std;
 
 bool CTV::IsOn() const
@@ -10,34 +9,76 @@ bool CTV::IsOn() const
 
 void CTV::TurnOn()
 {
+	if (isTvOn)
+	{
+		cout << "!TV already ON\n";
+		return;
+	}
+
+	size_t channel = 1;
+	if (previousChannel != 0)
+	{
+		channel = previousChannel;
+	}
+
 	isTvOn = true;
-	cout << "-- TV turn on\n";
+	cout << "TV turn on\n";
+	SelectChannel(channel);
 }
 
 void CTV::TurnOff()
 {
-	isTvOn = false;
-	currentChannel = 0;
-	cout << "-- TV turn off\n";
-}
-
-void CTV::SelectChannel(size_t channel)
-{
-	if ((channel < MIN_CHANNEL) || (channel > MAX_CHANNEL))
+	if (!isTvOn)
 	{
-		cout << "Channel should be in range 0..99\n";
+		cout << "!TV already OFF\n";
 		return;
 	}
 
+	isTvOn = false;
+	previousChannel = currentChannel;
+	currentChannel = 0;
+	cout << "TV turn off\n";
+}
+
+bool CTV::SelectChannel(size_t newChannel)
+{
 	if (!IsOn())
 	{
-		cout << "Cant select channel, cuz TV is off\n";
-		return;
+		cout << "!Cant select channel, cuz TV is off\n";
+		return false;
+	}
+
+	if ((newChannel < MIN_CHANNEL) || (newChannel > MAX_CHANNEL))
+	{
+		cout << "!Channel should be in range 0..99\n";
+		return false;
 	}
 
 	previousChannel = currentChannel;
-	currentChannel = channel;
+	currentChannel = newChannel;
 	cout << "Switched on " << currentChannel << endl;
+	return true;
+}
+
+void CTV::SelectChannel(string channelName)
+{
+	if (!IsOn())
+	{
+		cout << "!Cant select channel, cuz TV is off\n";
+		return;
+	}
+
+	auto channelNum = GetChannelByName(channelName);
+	if (channelNum)
+	{
+		previousChannel = currentChannel;
+		currentChannel = channelNum.value();
+		cout << "Switched on " << currentChannel << " - " << channelName << endl;
+	}
+	else
+	{
+		cout << "channel \"" << channelName << " \" doesnt exist \n";
+	}
 }
 
 size_t CTV::GetCurrentChannel() const
@@ -50,41 +91,101 @@ void CTV::SelectPreviousChannel()
 {
 	if (IsOn())
 	{
-		cout << "Switched on previous channel " << previousChannel << endl;
-		currentChannel = previousChannel;
+		if (previousChannel != 0)
+		{
+			cout << "Switched on previous channel " << previousChannel << endl;
+			currentChannel = previousChannel;
+		}
+		else
+		{
+			cout << "!You turn on TV for the first time, can't switch previous channel\n";
+		}
 	}
 	else
 	{
-		cout << "Cant switch on previous channel, cuz TV is off\n";
+		cout << "!Cant switch on previous channel, cuz TV is off\n";
 	}
 }
 
-void CTV::SetChannelName(size_t channelNum, string channelName)
+bool CTV::SetChannelName(size_t channelNum, string channelName)
 {
 	if ((channelNum < MIN_CHANNEL) || (channelNum > MAX_CHANNEL))
 	{
-		cout << "Channel should be in range 0..99\n";
-		return;
+		cout << "!Channel should be in range 0..99\n";
+		return false;
 	}
 
 	if (!IsOn())
 	{
-		cout << "Cant select channel, cuz TV is off\n";
-		return;
+		cout << "!Cant select channel, cuz TV is off\n";
+		return false;
 	}
 
+	auto name = GetChannelName(channelNum);
+	if (name)
+	{
+		List::right_iterator itRight = channelList.right.find(name.value());
+		channelList.right.replace_key(itRight, channelName);
+		cout << channelNum << " was rename to " << channelName << endl;
+		return true;
+	}
 
+	auto num = GetChannelByName(channelName);
+	if (num)
+	{
+		List::left_iterator itLeft = channelList.left.find(num.value());
+		channelList.left.replace_key(itLeft, channelNum);
+		cout << channelName << " now its " << channelNum << endl;
+		return true;
+	}
+
+	channelList.insert(List::value_type(channelNum, channelName));
+	cout << channelName << " - " << channelNum << " added. \n";
+	return true;
 }
 
 void CTV::Info() const
 {
 	if (IsOn())
 	{
-		cout << "current channel is " << currentChannel << endl;
+		cout << "Current channel is " << currentChannel << endl;
 	}
 	else
 	{
 		cout << "TV is off\n";
-		cout << "current channel is" << currentChannel << endl;
 	}
+
+	for (List::const_iterator iter = channelList.begin(), iend = channelList.end();
+		 iter != iend; ++iter)
+	{
+		std::cout << iter->left << " - " << iter->right << std::endl;
+	}
+}
+
+void CTV::DeleteChannel(string channelName)
+{
+	cout << channelName << " was deleted from Channel List\n";
+	channelList.right.erase(channelName);
+}
+
+boost::optional<size_t> CTV::GetChannelByName(const string channelName)
+{
+	List::right_iterator itRight = channelList.right.find(channelName);
+	if (itRight != channelList.right.end())
+	{
+		return itRight->second;
+	}
+
+	return boost::none;
+}
+
+boost::optional<string> CTV::GetChannelName(size_t channelNum)
+{
+	List::left_iterator itLeft = channelList.left.find(channelNum);
+	if (itLeft != channelList.left.end())
+	{
+		return itLeft->second;
+	}
+
+	return boost::none;
 }

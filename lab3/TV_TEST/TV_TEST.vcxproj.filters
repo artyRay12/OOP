@@ -15,27 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="catch_sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTV.cpp">
+    <ClCompile Include="tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CRemoteControl.cpp">
+    <ClCompile Include="..\TV\CRemoteControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="commandHint.cpp">
+    <ClCompile Include="..\TV\CTV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CTV.h">
+    <ClInclude Include="..\TV\CRemoteControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CRemoteControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="commandHint.h">
+    <ClInclude Include="..\TV\CTV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

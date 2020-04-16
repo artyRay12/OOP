@@ -1,40 +1,36 @@
 #pragma once
 #include <iostream>
 #include <map>
-#include <cctype>
 #include <functional>
 #include <iterator>
 #include <sstream>
-#include <stdexcept>
 #include <string>
-#include <vector>
 #include <algorithm>
 
 class CTV;
-class CRemoteControl;
-using function_t = void(*)();
-
-typedef std::map<std::string, std::function<void(std::istream& stream)>> Actions;
 
 class CRemoteControl
 {
 public:
-	CRemoteControl(CTV& tv);
-	//~CRemoteControl();
-	//bool HandleCommand();
+	CRemoteControl(CTV& tv, std::istream& input);
+	bool CommandHandler();
+	~CRemoteControl();
 
-	//private:
-	void TurnOn(std::istream& stream);
-	void TurnOff(std::istream& stream);
-	void Info(std::istream& stream);
-	void SelectChannel(std::istream& args);
-	void SelectPreviousChannel(std::istream& stream);
-	void CommandHandler();
-	void SetChannelName(std::istream& stream);
-	//void SaveChannel();
-	//void WhatChannelNumber();
-	//bool WhatChannelName();
+private:
+	bool TurnOn(std::istream& stream);
+	bool TurnOff(std::istream& stream);
+	bool Info(std::istream& stream);
+	bool SelectChannel(std::istream& args);
+	bool SelectPreviousChannel(std::istream& stream);
+	bool SetChannelName(std::istream& stream);
+	bool GetChannelName(std::istream& stream);
+	bool GetChannelByName(std::istream& stream);
+	bool DeleteChannel(std::istream& stream);
 
-	CTV& m_tv;
-	Actions m_actions;
+	using Handler = std::function<bool(std::istream& args)>;
+	using ActionMap = std::map<std::pair<std::string, std::string>, Handler>;
+
+	CTV &m_tv;
+	std::istream &m_input;
+	ActionMap m_actions;
 };
