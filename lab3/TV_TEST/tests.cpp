@@ -5,11 +5,6 @@
 
 using namespace std;
 
-template <class It>
-void print(It printMe = "1")
-{
-	cout << "----> " << printMe << " <------\n";
-}
 
 stringstream input;
 void SetInput(string str1, stringstream& stream = input)
@@ -202,7 +197,7 @@ TEST_CASE("Check all comnands for CommandHandler()")
 
 		SECTION("We can SetChannelName(), lets go test SelectChannel() by string as 'SC <channelName>'")
 		{
-			SetInput("On"); //не могу понять почему с этой секции телек выключился..
+			SetInput("On"); //пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ..
 			rc.CommandHandler();
 
 			SetInput("SetChannelName 12 BBC");
