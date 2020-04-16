@@ -2,14 +2,14 @@
 
 using namespace std;
 
-bool CTV::IsOn() const
+bool CTV::IsTurnedOn() const
 {
 	return isTvOn;
 }
 
 void CTV::TurnOn()
 {
-	if (isTvOn)
+	if (IsTurnedOn())
 	{
 		cout << "!TV already ON\n";
 		return;
@@ -22,13 +22,13 @@ void CTV::TurnOn()
 	}
 
 	isTvOn = true;
-	cout << "TV turn on\n";
+	cout << "TV turned on, ";
 	SelectChannel(channel);
 }
 
 void CTV::TurnOff()
 {
-	if (!isTvOn)
+	if (!IsTurnedOn())
 	{
 		cout << "!TV already OFF\n";
 		return;
@@ -42,7 +42,7 @@ void CTV::TurnOff()
 
 bool CTV::SelectChannel(size_t newChannel)
 {
-	if (!IsOn())
+	if (!IsTurnedOn())
 	{
 		cout << "!Cant select channel, cuz TV is off\n";
 		return false;
@@ -56,13 +56,13 @@ bool CTV::SelectChannel(size_t newChannel)
 
 	previousChannel = currentChannel;
 	currentChannel = newChannel;
-	cout << "Switched on " << currentChannel << endl;
+	cout << "Channel is " << currentChannel << endl;
 	return true;
 }
 
 void CTV::SelectChannel(string channelName)
 {
-	if (!IsOn())
+	if (!IsTurnedOn())
 	{
 		cout << "!Cant select channel, cuz TV is off\n";
 		return;
@@ -89,7 +89,7 @@ size_t CTV::GetCurrentChannel() const
 
 void CTV::SelectPreviousChannel()
 {
-	if (IsOn())
+	if (IsTurnedOn())
 	{
 		if (previousChannel != 0)
 		{
@@ -115,7 +115,7 @@ bool CTV::SetChannelName(size_t channelNum, string channelName)
 		return false;
 	}
 
-	if (!IsOn())
+	if (!IsTurnedOn())
 	{
 		cout << "!Cant select channel, cuz TV is off\n";
 		return false;
@@ -146,7 +146,7 @@ bool CTV::SetChannelName(size_t channelNum, string channelName)
 
 void CTV::Info() const
 {
-	if (IsOn())
+	if (IsTurnedOn())
 	{
 		cout << "Current channel is " << currentChannel << endl;
 	}

@@ -62,7 +62,7 @@ bool CRemoteControl::CommandHandler()
 	return true;
 }
 
-bool CRemoteControl::GetChannelName(istream& stream)
+bool CRemoteControl::GetChannelName(istream& stream) const
 {
 	size_t channelNum;
 	stream >> channelNum;
@@ -81,7 +81,7 @@ bool CRemoteControl::GetChannelName(istream& stream)
 	return true;
 }
 
-bool CRemoteControl::GetChannelByName(istream& stream)
+bool CRemoteControl::GetChannelByName(istream& stream) const
 {
 	string channelName;
 	stream >> channelName;
@@ -191,7 +191,7 @@ bool CRemoteControl::SelectPreviousChannel(istream& stream)
 	return true;
 }
 
-bool CRemoteControl::Info(istream& stream)
+bool CRemoteControl::Info(istream& stream) const
 {
 	m_tv.Info();
 	return true;

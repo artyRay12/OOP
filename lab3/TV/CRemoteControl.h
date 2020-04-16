@@ -19,12 +19,12 @@ public:
 private:
 	bool TurnOn(std::istream& stream);
 	bool TurnOff(std::istream& stream);
-	bool Info(std::istream& stream);
+	bool Info(std::istream& stream) const;
 	bool SelectChannel(std::istream& args);
 	bool SelectPreviousChannel(std::istream& stream);
 	bool SetChannelName(std::istream& stream);
-	bool GetChannelName(std::istream& stream);
-	bool GetChannelByName(std::istream& stream);
+	bool GetChannelName(std::istream& stream) const;
+	bool GetChannelByName(std::istream& stream) const;
 	bool DeleteChannel(std::istream& stream);
 
 	using Handler = std::function<bool(std::istream& args)>;

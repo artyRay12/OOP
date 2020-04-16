@@ -27,11 +27,11 @@ TEST_CASE("Check RemoteControl() that connected and check that CommandHandler() 
 	{
 		SetInput("On");
 		rc.CommandHandler();
-		REQUIRE(tv.IsOn());
+		REQUIRE(tv.IsTurnedOn());
 
 		SetInput("Off");
 		rc.CommandHandler();
-		REQUIRE(!tv.IsOn());
+		REQUIRE(!tv.IsTurnedOn());
 	}
 }
 

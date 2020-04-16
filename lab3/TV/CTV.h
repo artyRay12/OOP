@@ -15,7 +15,7 @@ typedef boost::bimap<size_t, std::string> List;
 class CTV
 {
 public:
-	bool IsOn() const;
+	bool IsTurnedOn() const;
 	void TurnOn();
 	void TurnOff();
 	void Info() const;
@@ -25,8 +25,8 @@ public:
 	size_t GetCurrentChannel() const;
 	bool SetChannelName(size_t channelNum, std::string channelName);
 	void DeleteChannel(std::string channelName);
-	boost::optional<std::string> GetChannelName(size_t channelNum);
-	boost::optional<size_t> GetChannelByName(std::string channelName);
+	boost::optional<std::string> GetChannelName(size_t channelNum); //с const ругается на boost::bimap
+	boost::optional<size_t> GetChannelByName(std::string channelName); //с const ругается на boost::bimap
 
 private:
 	static constexpr size_t MIN_CHANNEL = 0;
