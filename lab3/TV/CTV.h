@@ -20,13 +20,13 @@ public:
 	void TurnOff();
 	void Info() const;
 	bool SelectChannel(size_t channel);
-	void SelectChannel(std::string channelName);
+	void SelectChannel(const std::string& channelName);
 	void SelectPreviousChannel();
 	size_t GetCurrentChannel() const;
-	bool SetChannelName(size_t channelNum, std::string channelName);
-	void DeleteChannel(std::string channelName);
+	bool SetChannelName(size_t channelNum, const std::string& channelName);
+	void DeleteChannel(const std::string& channelName);
 	boost::optional<std::string> GetChannelName(size_t channelNum); //с const ругается на boost::bimap
-	boost::optional<size_t> GetChannelByName(std::string channelName); //с const ругается на boost::bimap
+	boost::optional<size_t> GetChannelByName(const std::string& channelName); //с const ругается на boost::bimap
 
 private:
 	static constexpr size_t MIN_CHANNEL = 0;

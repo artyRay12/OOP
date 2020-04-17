@@ -60,7 +60,7 @@ bool CTV::SelectChannel(size_t newChannel)
 	return true;
 }
 
-void CTV::SelectChannel(string channelName)
+void CTV::SelectChannel(const string& channelName)
 {
 	if (!IsTurnedOn())
 	{
@@ -107,7 +107,7 @@ void CTV::SelectPreviousChannel()
 	}
 }
 
-bool CTV::SetChannelName(size_t channelNum, string channelName)
+bool CTV::SetChannelName(size_t channelNum, const string& channelName)
 {
 	if ((channelNum < MIN_CHANNEL) || (channelNum > MAX_CHANNEL))
 	{
@@ -162,13 +162,13 @@ void CTV::Info() const
 	}
 }
 
-void CTV::DeleteChannel(string channelName)
+void CTV::DeleteChannel(const string& channelName)
 {
 	cout << channelName << " was deleted from Channel List\n";
 	channelList.right.erase(channelName);
 }
 
-boost::optional<size_t> CTV::GetChannelByName(const string channelName)
+boost::optional<size_t> CTV::GetChannelByName(const string& channelName)
 {
 	List::right_iterator itRight = channelList.right.find(channelName);
 	if (itRight != channelList.right.end())
