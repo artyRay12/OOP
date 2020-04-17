@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TV", "TV\TV.vcxproj", "{0E8
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TV_TEST", "TV_TEST\TV_TEST.vcxproj", "{F6C3D72A-8595-4FE0-BCB7-E8C9649EE57E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calculator", "Calculator\Calculator.vcxproj", "{3ED9D463-37BC-407A-BC12-CA36E56FA529}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{F6C3D72A-8595-4FE0-BCB7-E8C9649EE57E}.Release|x64.Build.0 = Release|x64
 		{F6C3D72A-8595-4FE0-BCB7-E8C9649EE57E}.Release|x86.ActiveCfg = Release|Win32
 		{F6C3D72A-8595-4FE0-BCB7-E8C9649EE57E}.Release|x86.Build.0 = Release|Win32
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Debug|x64.ActiveCfg = Debug|x64
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Debug|x64.Build.0 = Debug|x64
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Debug|x86.ActiveCfg = Debug|Win32
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Debug|x86.Build.0 = Debug|Win32
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Release|x64.ActiveCfg = Release|x64
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Release|x64.Build.0 = Release|x64
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Release|x86.ActiveCfg = Release|Win32
+		{3ED9D463-37BC-407A-BC12-CA36E56FA529}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

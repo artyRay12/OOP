@@ -103,9 +103,20 @@ bool CRemoteControl::GetChannelByName(istream& stream) const
 
 bool CRemoteControl::DeleteChannel(istream& stream)
 {
-	string channelNane;
-	stream >> channelNane;
-	m_tv.DeleteChannel(channelNane);
+	string channelName;
+	string partOfChannelName;
+
+	while (getline(stream, partOfChannelName, ' '))
+		if (!partOfChannelName.empty())
+			channelName += partOfChannelName + ' ';
+
+	if (channelName.empty())
+	{
+		cout << "!! If u want set channel use \"DeleteChannel <channel name>\"\n";
+		return false;
+	}
+
+	m_tv.DeleteChannel(trim_copy(channelName));
 	return true;
 }
 
@@ -117,7 +128,7 @@ bool CRemoteControl::SetChannelName(istream& stream)
 
 	if (channelNum.empty())
 	{
-		cout << "!! If u want set channel use \"SCH <number> <channel name>\"\n";
+		cout << "!! If u want set channel use \"SetChannelName <number> <channel name>\"\n";
 		return false;
 	}
 
@@ -127,7 +138,7 @@ bool CRemoteControl::SetChannelName(istream& stream)
 	}
 	catch (exception e)
 	{
-		cout << "!! If u want set channel use \"SCH <number> <channel name>\"\n";
+		cout << "!! If u want set channel use \"SetChannelName <number> <channel name>\"\n";
 		return false;
 	}
 
@@ -140,7 +151,7 @@ bool CRemoteControl::SetChannelName(istream& stream)
 
 	if (channelName.empty())
 	{
-		cout << "!! If u want set channel use \"SCH <number> <channel name>\"\n";
+		cout << "!! If u want set channel use \"SetChannelName <number> <channel name>\"\n";
 		return false;
 	}
 
@@ -168,7 +179,7 @@ bool CRemoteControl::SelectChannel(std::istream& args)
 
 	if (newChannelName.empty())
 	{
-		cout << "!! If u want select channel use, SC <new channel name or number\n";
+		cout << "!! If u want select channel use, SC <new channel name or number>\n";
 		return false;
 	}
 
