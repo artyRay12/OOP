@@ -79,8 +79,8 @@ int main(int argc, char* argv[])
 
 
 		cells = GetCurrentGeneration(map.value());
-		GetNextGeneration(cells);
-		PrintGeneration(cells.next, output.value());
+		//GetNextGeneration(cells);
+		PrintGeneration(cells.current, output.value());
 	}
 
 	return 0;
