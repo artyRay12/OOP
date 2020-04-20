@@ -10,5 +10,5 @@ void PrintHint()
 	cout << "TurnOn - On             |   TurnOff - Off\n";
 	cout << "SelectChannel - SC      |   SelectPreviousChannel - SPC\n";
 	cout << "GetChannelName - GCN    |   GetChannelByName - GCBN\n";
-	cout << "DeleteChannel - DL      |   Info - ?\n";
+	cout << "DeleteChannel - DC      |   Info - ?\n";
 }
