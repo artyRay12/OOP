@@ -67,15 +67,15 @@ size_t CTV::GetCurrentChannel() const
 
 bool CTV::SelectPreviousChannel()
 {
-		if (previousChannel != 0)
-		{
-			currentChannel = previousChannel;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	if (previousChannel != 0)
+	{
+		currentChannel = previousChannel;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool CTV::SetChannelName(size_t channelNum, const string& channelName)
