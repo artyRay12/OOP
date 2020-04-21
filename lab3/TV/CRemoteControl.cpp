@@ -26,11 +26,7 @@ CRemoteControl::CRemoteControl(CTV& tv, istream& input)
 	cout << "The remote was connected to TV \n\n";
 }
 
-CRemoteControl::~CRemoteControl()
-{
-}
-
-bool CRemoteControl::CommandHandler()
+bool CRemoteControl::CommandHandler() const
 {
 	string command;
 	getline(m_input, command);
@@ -41,7 +37,7 @@ bool CRemoteControl::CommandHandler()
 	commandStream >> action;
 
 	auto it = m_actions.begin();
-	for(it; it != m_actions.end(); it++)
+	for (it; it != m_actions.end(); it++)
 	{
 		if ((it->first.first == action) || (it->first.second == action))
 		{
@@ -51,6 +47,7 @@ bool CRemoteControl::CommandHandler()
 
 	if (it != m_actions.end())
 	{
+
 		return it->second(commandStream);
 	}
 	else
@@ -101,7 +98,7 @@ bool CRemoteControl::GetChannelByName(istream& stream) const
 	return true;
 }
 
-bool CRemoteControl::DeleteChannel(istream& stream)
+bool CRemoteControl::DeleteChannel(istream& stream) const
 {
 	string channelName;
 	string partOfChannelName;
@@ -116,15 +113,28 @@ bool CRemoteControl::DeleteChannel(istream& stream)
 		return false;
 	}
 
-	m_tv.DeleteChannel(trim_copy(channelName));
+	bool isChannelDeleted = m_tv.DeleteChannel(trim_copy(channelName));
+	if (!isChannelDeleted)
+	{
+		cout << channelName << " doesn't exist\n";
+		return false;
+	}
+
+	cout << channelName << " was deleted from Channel List\n";
 	return true;
 }
 
-bool CRemoteControl::SetChannelName(istream& stream)
+bool CRemoteControl::SetChannelName(istream& stream) const
 {
 	string channelNum;
 	size_t channelNumber;
 	stream >> channelNum;
+
+	if (!m_tv.IsTurnedOn())
+	{
+		cout << "!Cant set channel, cuz TV is off\n";
+		return false;
+	}
 
 	if (channelNum.empty())
 	{
@@ -155,28 +165,55 @@ bool CRemoteControl::SetChannelName(istream& stream)
 		return false;
 	}
 
-	m_tv.SetChannelName(static_cast<size_t>(channelNumber), trim_copy(channelName));
+	bool isChannelSet = m_tv.SetChannelName(static_cast<size_t>(channelNumber), trim_copy(channelName));
+	if (!isChannelSet)
+	{
+		cout << "Channel should be in range 01..99\n";
+	}
+	cout << "Now \"" << channelNumber << "\" set as " << channelName << endl;
+
 	return true;
 }
 
-bool CRemoteControl::TurnOn(istream& stream)
+bool CRemoteControl::TurnOn(istream& stream) const
 {
+	if (m_tv.IsTurnedOn())
+	{
+		cout << "TV already on\n";
+		return false;
+	}
+
 	m_tv.TurnOn();
+	cout << "TV turned on\n";
+	stream.clear();
 	return true;
 }
 
-bool CRemoteControl::TurnOff(istream& stream)
+bool CRemoteControl::TurnOff(istream& stream) const
 {
+	if (!m_tv.IsTurnedOn())
+	{
+		cout << "TV already off\n";
+		return false;
+	}
+
 	m_tv.TurnOff();
+	cout << "TV turned off, ";
+	stream.clear();
 	return true;
 }
 
-bool CRemoteControl::SelectChannel(std::istream& args)
+bool CRemoteControl::SelectChannel(std::istream& args) const
 {
 	string newChannelName;
 	size_t newChannelNum;
 	args >> newChannelName;
 
+	if (!m_tv.IsTurnedOn())
+	{
+		cout << "!Cant select channel, cuz TV is off\n";
+		return false;
+	}
 	if (newChannelName.empty())
 	{
 		cout << "!! If u want select channel use, SC <new channel name or number>\n";
@@ -186,24 +223,69 @@ bool CRemoteControl::SelectChannel(std::istream& args)
 	try
 	{
 		newChannelNum = stoi(newChannelName);
-		m_tv.SelectChannel(newChannelNum);
+
+		bool isChannelSelected = m_tv.SelectChannel(newChannelNum);
+		if (!isChannelSelected)
+		{
+			cout << "Channel should be 01..99\n";
+			return false;
+		}
+		cout << "Switched on " << newChannelNum << endl;
 	}
 	catch (exception e)
 	{
-		m_tv.SelectChannel(newChannelName);
+		bool isChannelSelected = m_tv.SelectChannel(newChannelName);
+		if (!isChannelSelected)
+		{
+			cout << "channel \"" << newChannelName << " \" doesnt exist \n";
+			return false;
+		}
+		cout << "Switched on " << newChannelName << endl;
 	}
 
 	return true;
 }
 
-bool CRemoteControl::SelectPreviousChannel(istream& stream)
+bool CRemoteControl::SelectPreviousChannel(istream& stream) const
 {
-	m_tv.SelectPreviousChannel();
+	if (!m_tv.IsTurnedOn())
+	{
+		cout << "!Cant select channel, cuz TV is off\n";
+		return false;
+	}
+
+	bool isChannelSelected = m_tv.SelectPreviousChannel();
+	if (!isChannelSelected)
+	{
+		cout << "!You turn on TV for the first time, can't switch previous channel\n";
+		return false;
+	}
+
+	cout << "Switched on previous channel\n";
+	stream.clear();
 	return true;
 }
 
 bool CRemoteControl::Info(istream& stream) const
 {
-	m_tv.Info();
+	stream.clear();
+
+	if (!m_tv.IsTurnedOn())
+	{
+		cout << "TV is Off\n";
+		return true;
+	}
+
+	auto info = m_tv.Info();
+
+	cout << "TV is On\n";
+	cout << "Current channel is " << info.first << endl;
+	
+	for (List::const_iterator iter = info.second.begin(), iend = info.second.end();
+		 iter != iend; ++iter)
+	{
+		std::cout << iter->left << " - " << iter->right << std::endl;
+	}
+
 	return true;
 }

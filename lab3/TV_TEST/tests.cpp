@@ -1,5 +1,5 @@
-#include "TV/CRemoteControl.h"
-#include "TV/CTV.h"
+#include "lab3/TV/CRemoteControl.h"
+#include "lab3/TV/CTV.h"
 #include <boost/optional.hpp>
 #include <catch2/catch.hpp>
 

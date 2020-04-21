@@ -9,12 +9,6 @@ bool CTV::IsTurnedOn() const
 
 void CTV::TurnOn()
 {
-	if (IsTurnedOn())
-	{
-		cout << "!TV already ON\n";
-		return;
-	}
-
 	size_t channel = 1;
 	if (previousChannel != 0)
 	{
@@ -22,7 +16,6 @@ void CTV::TurnOn()
 	}
 
 	isTvOn = true;
-	cout << "TV turned on, ";
 	SelectChannel(channel);
 }
 
@@ -30,94 +23,65 @@ void CTV::TurnOff()
 {
 	if (!IsTurnedOn())
 	{
-		cout << "!TV already OFF\n";
 		return;
 	}
 
 	isTvOn = false;
 	previousChannel = currentChannel;
 	currentChannel = 0;
-	cout << "TV turn off\n";
 }
 
 bool CTV::SelectChannel(size_t newChannel)
 {
-	if (!IsTurnedOn())
-	{
-		cout << "!Cant select channel, cuz TV is off\n";
-		return false;
-	}
 
 	if ((newChannel < MIN_CHANNEL) || (newChannel > MAX_CHANNEL))
 	{
-		cout << "!Channel should be in range 0..99\n";
 		return false;
 	}
 
 	previousChannel = currentChannel;
 	currentChannel = newChannel;
-	cout << "Channel is " << currentChannel << endl;
 	return true;
 }
 
-void CTV::SelectChannel(const string& channelName)
+bool CTV::SelectChannel(const string& channelName)
 {
-	if (!IsTurnedOn())
-	{
-		cout << "!Cant select channel, cuz TV is off\n";
-		return;
-	}
 
 	auto channelNum = GetChannelByName(channelName);
 	if (channelNum)
 	{
 		previousChannel = currentChannel;
 		currentChannel = channelNum.value();
-		cout << "Switched on " << currentChannel << " - " << channelName << endl;
+		return true;
 	}
 	else
 	{
-		cout << "channel \"" << channelName << " \" doesnt exist \n";
+		return false;
 	}
 }
 
 size_t CTV::GetCurrentChannel() const
 {
-	cout << "Current channel = " << currentChannel << endl;
 	return currentChannel;
 }
 
-void CTV::SelectPreviousChannel()
+bool CTV::SelectPreviousChannel()
 {
-	if (IsTurnedOn())
-	{
 		if (previousChannel != 0)
 		{
-			cout << "Switched on previous channel " << previousChannel << endl;
 			currentChannel = previousChannel;
+			return true;
 		}
 		else
 		{
-			cout << "!You turn on TV for the first time, can't switch previous channel\n";
+			return false;
 		}
-	}
-	else
-	{
-		cout << "!Cant switch on previous channel, cuz TV is off\n";
-	}
 }
 
 bool CTV::SetChannelName(size_t channelNum, const string& channelName)
 {
 	if ((channelNum < MIN_CHANNEL) || (channelNum > MAX_CHANNEL))
 	{
-		cout << "!Channel should be in range 0..99\n";
-		return false;
-	}
-
-	if (!IsTurnedOn())
-	{
-		cout << "!Cant select channel, cuz TV is off\n";
 		return false;
 	}
 
@@ -126,7 +90,6 @@ bool CTV::SetChannelName(size_t channelNum, const string& channelName)
 	{
 		List::right_iterator itRight = channelList.right.find(name.value());
 		channelList.right.replace_key(itRight, channelName);
-		cout << channelNum << " was rename to " << channelName << endl;
 		return true;
 	}
 
@@ -135,37 +98,28 @@ bool CTV::SetChannelName(size_t channelNum, const string& channelName)
 	{
 		List::left_iterator itLeft = channelList.left.find(num.value());
 		channelList.left.replace_key(itLeft, channelNum);
-		cout << channelName << " now its " << channelNum << endl;
 		return true;
 	}
 
 	channelList.insert(List::value_type(channelNum, channelName));
-	cout << channelName << " - " << channelNum << " added. \n";
 	return true;
 }
 
-void CTV::Info() const
+pair<size_t, List> CTV::Info() const
 {
-	if (IsTurnedOn())
-	{
-		cout << "Current channel is " << currentChannel << endl;
-	}
-	else
-	{
-		cout << "TV is off\n";
-	}
-
-	for (List::const_iterator iter = channelList.begin(), iend = channelList.end();
-		 iter != iend; ++iter)
-	{
-		std::cout << iter->left << " - " << iter->right << std::endl;
-	}
+	return make_pair(currentChannel, channelList);
 }
 
-void CTV::DeleteChannel(const string& channelName)
+bool CTV::DeleteChannel(const string& channelName)
 {
-	cout << channelName << " was deleted from Channel List\n";
-	channelList.right.erase(channelName);
+	List::right_iterator itRight = channelList.right.find(channelName);
+	if (itRight != channelList.right.end())
+	{
+		channelList.right.erase(channelName);
+		return true;
+	}
+
+	return false;
 }
 
 boost::optional<size_t> CTV::GetChannelByName(const string& channelName)

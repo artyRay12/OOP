@@ -13,19 +13,18 @@ class CRemoteControl
 {
 public:
 	CRemoteControl(CTV& tv, std::istream& input);
-	bool CommandHandler();
-	~CRemoteControl();
+	bool CommandHandler() const; 
 
 private:
-	bool TurnOn(std::istream& stream);
-	bool TurnOff(std::istream& stream);
+	bool TurnOn(std::istream& stream) const;
+	bool TurnOff(std::istream& stream) const;
 	bool Info(std::istream& stream) const;
-	bool SelectChannel(std::istream& args);
-	bool SelectPreviousChannel(std::istream& stream);
-	bool SetChannelName(std::istream& stream);
+	bool SelectChannel(std::istream& args) const;
+	bool SelectPreviousChannel(std::istream& stream) const;
+	bool SetChannelName(std::istream& stream) const;
 	bool GetChannelName(std::istream& stream) const;
 	bool GetChannelByName(std::istream& stream) const;
-	bool DeleteChannel(std::istream& stream);
+	bool DeleteChannel(std::istream& stream) const;
 
 	using Handler = std::function<bool(std::istream& args)>;
 	using ActionMap = std::map<std::pair<std::string, std::string>, Handler>;
