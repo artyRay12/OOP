@@ -16,11 +16,11 @@ public:
 	bool CommandHandler() const; 
 
 private:
-	bool TurnOn(std::istream& stream) const;
-	bool TurnOff(std::istream& stream) const;
-	bool Info(std::istream& stream) const;
+	bool TurnOn() const;
+	bool TurnOff() const;
+	bool Info() const;
 	bool SelectChannel(std::istream& args) const;
-	bool SelectPreviousChannel(std::istream& stream) const;
+	bool SelectPreviousChannel() const;
 	bool SetChannelName(std::istream& stream) const;
 	bool GetChannelName(std::istream& stream) const;
 	bool GetChannelByName(std::istream& stream) const;

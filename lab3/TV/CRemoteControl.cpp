@@ -11,15 +11,15 @@ CRemoteControl::CRemoteControl(CTV& tv, istream& input)
 	: m_tv(tv)
 	, m_input(input)
 	, m_actions({
-		  { make_pair("TurnOn", "On"), [this](istream& stream) { return TurnOn(stream); } },
-		  { make_pair("TurnOff", "Off"), bind(&CRemoteControl::TurnOff, this, placeholders::_1) },
+		  { make_pair("TurnOn", "On"), bind(&CRemoteControl::TurnOn, this) },
+		  { make_pair("TurnOff", "Off"), bind(&CRemoteControl::TurnOff, this) },
 		  { make_pair("SelectChannel", "SC"), bind(&CRemoteControl::SelectChannel, this, placeholders::_1) },
-		  { make_pair("SelectPreviousChannel", "SPC"), bind(&CRemoteControl::SelectPreviousChannel, this, placeholders::_1) },
+		  { make_pair("SelectPreviousChannel", "SPC"), bind(&CRemoteControl::SelectPreviousChannel, this) },
 		  { make_pair("SetChannelName", "SCN"), bind(&CRemoteControl::SetChannelName, this, placeholders::_1) },
 		  { make_pair("GetChannelName", "GCN"), bind(&CRemoteControl::GetChannelName, this, placeholders::_1) },
 		  { make_pair("GetChannelByName", "GCBN"), bind(&CRemoteControl::GetChannelByName, this, placeholders::_1) },
 		  { make_pair("DeleteChannel", "DC"), bind(&CRemoteControl::DeleteChannel, this, placeholders::_1) },
-		  { make_pair("Info", "?"), bind(&CRemoteControl::Info, this, placeholders::_1) },
+		  { make_pair("Info", "?"), bind(&CRemoteControl::Info, this) },
 	  })
 
 {
@@ -175,7 +175,7 @@ bool CRemoteControl::SetChannelName(istream& stream) const
 	return true;
 }
 
-bool CRemoteControl::TurnOn(istream& stream) const
+bool CRemoteControl::TurnOn() const
 {
 	if (m_tv.IsTurnedOn())
 	{
@@ -184,12 +184,11 @@ bool CRemoteControl::TurnOn(istream& stream) const
 	}
 
 	m_tv.TurnOn();
-	cout << "TV turned on\n";
-	stream.clear();
+	cout << "TV turned on\n";;
 	return true;
 }
 
-bool CRemoteControl::TurnOff(istream& stream) const
+bool CRemoteControl::TurnOff() const
 {
 	if (!m_tv.IsTurnedOn())
 	{
@@ -199,7 +198,6 @@ bool CRemoteControl::TurnOff(istream& stream) const
 
 	m_tv.TurnOff();
 	cout << "TV turned off, ";
-	stream.clear();
 	return true;
 }
 
@@ -246,7 +244,7 @@ bool CRemoteControl::SelectChannel(std::istream& args) const
 	return true;
 }
 
-bool CRemoteControl::SelectPreviousChannel(istream& stream) const
+bool CRemoteControl::SelectPreviousChannel() const
 {
 	if (!m_tv.IsTurnedOn())
 	{
@@ -262,14 +260,11 @@ bool CRemoteControl::SelectPreviousChannel(istream& stream) const
 	}
 
 	cout << "Switched on previous channel\n";
-	stream.clear();
 	return true;
 }
 
-bool CRemoteControl::Info(istream& stream) const
+bool CRemoteControl::Info() const
 {
-	stream.clear();
-
 	if (!m_tv.IsTurnedOn())
 	{
 		cout << "TV is Off\n";
