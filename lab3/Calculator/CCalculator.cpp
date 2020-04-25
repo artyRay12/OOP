@@ -1,7 +1,35 @@
 #include "CCalculator.h"
 #include <functional>
-#include <locale>
 using namespace std;
+
+boost::optional<double> CCalculator::CalculateTwoOperands(double firstValue, double secondValue, Operations action)
+{
+	double result = numeric_limits<double>::quiet_NaN();
+	switch (action)
+	{
+	case Operations::plus:
+		result = firstValue + secondValue;
+		break;
+	case Operations::minus:
+		result = firstValue - secondValue;
+		break;
+	case Operations::mult:
+		result = firstValue * secondValue;
+		break;
+	case Operations::divide:
+		if (secondValue == 0)
+		{
+			
+			return boost::none;
+		}
+		return result = firstValue / secondValue;
+		break;
+	default:
+		break;
+	}
+
+	return result;
+}
 
 bool CCalculator::IsVariableExist(const string& variableName) const
 {
@@ -46,6 +74,7 @@ bool CCalculator::CreateVar(const string& variableName)
 {
 	if ((!IsVariableNameCorrect(variableName)) || (IsVariableExist(variableName)))
 	{
+		
 		return false;
 	}
 
@@ -64,7 +93,13 @@ bool CCalculator::SetVar(pair<string, string> variableInfo)
 	string variableValue = variableInfo.second;
 	try
 	{
-		stof(variableValue);
+		size_t pos = 0;
+		stof(variableValue, &pos);
+		if (pos != variableValue.length())
+		{
+			return false;
+		}
+
 		m_variables[variableInfo.first] = stof(variableValue);
 		return true;
 	}
@@ -81,7 +116,7 @@ bool CCalculator::SetVar(pair<string, string> variableInfo)
 	return true;
 }
 
-boost::optional<double> CCalculator::GetVarValue(const string& varName)
+boost::optional<double> CCalculator::GetVarValue(const string& varName) const
 {
 	auto it = m_variables.find(varName);
 	if (it != m_variables.end())
@@ -92,7 +127,7 @@ boost::optional<double> CCalculator::GetVarValue(const string& varName)
 	return boost::none;
 }
 
-boost::optional<double> CCalculator::GetFunctionValue(const string& varName)
+boost::optional<double> CCalculator::GetFunctionValue(const string& varName) const
 {
 	auto it = m_functions.find(varName);
 	if (it != m_functions.end())
@@ -103,19 +138,17 @@ boost::optional<double> CCalculator::GetFunctionValue(const string& varName)
 	return boost::none;
 }
 
-boost::optional<double> CCalculator::GetValueByName(const string& varName)
+boost::optional<double> CCalculator::GetValueByName(const string& varName) const
 {
 	auto value = GetVarValue(varName);
 	if (value)
 	{
-		cout << "return VarValue\n";
 		return value.value();
 	}
 
 	value = GetFunctionValue(varName);
 	if (value)
 	{
-		cout << "return function\n";
 		return value.value();
 	}
 
@@ -127,9 +160,19 @@ map<string, double> CCalculator::GetVars() const
 	return m_variables;
 }
 
+map<string, double> CCalculator::GetFunctions() const
+{
+	return m_functions;
+}
+
 bool CCalculator::SetFunction(const FunctionData& functionData)
 {
 	if (!IsVariableNameCorrect(functionData.name))
+	{
+		return false;
+	}
+
+	if (IsFunctionExist(functionData.name))
 	{
 		return false;
 	}
@@ -163,7 +206,13 @@ bool CCalculator::SetFunction(const FunctionData& functionData)
 		return false;
 	}
 
-	m_functions.emplace(functionData.name, firstValue.value() + secondValue.value());
+	auto result = CalculateTwoOperands(firstValue.value(), secondValue.value(), functionData.operand.value());
+	if (!result)
+	{
+		
+		return false;
+	}
 
+	m_functions.emplace(functionData.name, result.value());
 	return true;
 }

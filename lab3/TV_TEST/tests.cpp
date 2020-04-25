@@ -1,6 +1,5 @@
 #include "lab3/TV/CRemoteControl.h"
 #include "lab3/TV/CTV.h"
-#include <boost/optional.hpp>
 #include <catch2/catch.hpp>
 
 using namespace std;
@@ -197,7 +196,7 @@ TEST_CASE("Check all comnands for CommandHandler()")
 
 		SECTION("We can SetChannelName(), lets go test SelectChannel() by string as 'SC <channelName>'")
 		{
-			SetInput("On"); //�� ���� ������ ������ � ���� ������ ����� ����������..
+			SetInput("On"); 
 			rc.CommandHandler();
 
 			SetInput("SetChannelName 12 BBC");

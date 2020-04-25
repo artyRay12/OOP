@@ -5,26 +5,28 @@
 #include <map>
 #include <sstream>
 
-typedef std::pair<std::string, std::string> VariableInfo;
+typedef std::pair<std::string, std::string> RhsAndLhs;
 
 class CCalcControl
 {
 public:
-	CCalcControl(CCalculator calculator, std::istream& input);
+	CCalcControl(CCalculator& calculator, std::istream& input, std::ostream& output);
 	bool CalculatorDialog();
 
 private:
-	bool CreateVar(std::istream& variableName);
-	bool SetVar(std::istream& variableName);
-	bool SetFunction(std::istream& variableName);
-	bool PrintVariableValue(std::istream& arg);
-	bool PrintVars();
-	boost::optional<VariableInfo> ParseStringByEqualSign(const std::string& variable);
-	boost::optional<FunctionData> ParseStringToFunction(const std::string& functionBody);
-	
+	bool CreateVar(std::istream& variableName) const;
+	bool SetVar(std::istream& variableName) const;
+	bool SetFunction(std::istream& variableName) const;
+	bool PrintVariableValue(std::istream& arg) const;
+	bool PrintVars() const;
+	bool PrintFns() const;
 
-	CCalculator m_calc;
+	boost::optional<RhsAndLhs> ParseStringToRhsAndLhs(const std::string& variable) const;
+	boost::optional<FunctionData> ParseStringToFunctionInfo(const std::string& functionBody) const;
+	
+	CCalculator &m_calc;
 	std::istream& m_input;
+	std::ostream& m_output;
 
 	using Handler = std::function<bool(std::istream& args)>;
 	using ActionMap = std::map<std::string, Handler>;

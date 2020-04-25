@@ -7,9 +7,9 @@ using namespace std;
 int main()
 {
 	CCalculator calc;
-	CCalcControl calcControl(calc, cin);
+	CCalcControl calcControl(calc, cin, cout);
 	
-	while (1)
+	while (!cin.eof() && !cin.fail())
 	{
 		cout << "> ";
 		calcControl.CalculatorDialog();

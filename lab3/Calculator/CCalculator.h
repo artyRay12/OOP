@@ -34,22 +34,27 @@ struct FunctionData
 class CCalculator
 {
 public:
-	CCalculator() = default;
-	~CCalculator() = default;
 	bool CreateVar(const std::string& variableName);
+
 	bool SetVar(const std::pair<std::string, std::string> variableInfo);
 	bool SetFunction(const FunctionData& functionData);
-	boost::optional<double> GetVarValue(const std::string& varName);
-	boost::optional<double> GetFunctionValue(const std::string& varName);
-	boost::optional<double> GetValueByName(const std::string& varName);
+
+	boost::optional<double> GetVarValue(const std::string& varName) const;
+	boost::optional<double> GetFunctionValue(const std::string& varName) const;
+	boost::optional<double> GetValueByName(const std::string& varName) const;
+
 	std::map<std::string, double> GetVars() const;
-	
+	std::map<std::string, double> GetFunctions() const;
+
 private:
+
+	boost::optional<double> CalculateTwoOperands(double firstValue, double secondValue, Operations action);
+
 	bool IsVariableNameCorrect(const std::string & variableName) const;
 	bool IsVariableExist(const std::string& variableName) const;
 	bool IsFunctionExist(const std::string& variableName) const;
 	
 
-	std::map<std::string, double> m_variables;
 	std::map<std::string, double> m_functions;
+	std::map<std::string, double> m_variables;
 };
