@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <cctype>
+#include <vector>
 #include <boost/bind/bind.hpp>
 #include <boost/optional.hpp>
 
@@ -22,12 +23,13 @@ const std::map<std::string, Operations> OPERATION_ID{
 	{ "/", Operations::divide }
 };
 
-struct FunctionData
+struct SFunctionData
 {
-	std::string name;
-	std::string firstValue;
-	boost::optional<std::string> secondValue = boost::none;
-	boost::optional<Operations> operand = boost::none;
+	double* firstValueP;
+	double* secondsValueP;
+	Operations operand = Operations::none;
+	void Calculate();
+	double result;
 };
 
 
@@ -37,24 +39,19 @@ public:
 	bool CreateVar(const std::string& variableName);
 
 	bool SetVar(const std::pair<std::string, std::string> variableInfo);
-	bool SetFunction(const FunctionData& functionData);
+	bool SetFunction(std::string& functionName, std::string& firstValue, std::string& secondValue, Operations& operand);
 
-	boost::optional<double> GetVarValue(const std::string& varName) const;
-	boost::optional<double> GetFunctionValue(const std::string& varName) const;
-	boost::optional<double> GetValueByName(const std::string& varName) const;
-
+	boost::optional<double> GetValueByIdName(const std::string& varName);
 	std::map<std::string, double> GetVars() const;
-	std::map<std::string, double> GetFunctions() const;
+	std::map<std::string, SFunctionData> GetFunctions();
 
 private:
+	bool IsIdNameCorrect(const std::string & variableName) const;
+	bool VariableExists(const std::string& variableName) const;
+	bool FunctionExists(const std::string& variableName) const;
 
-	boost::optional<double> CalculateTwoOperands(double firstValue, double secondValue, Operations action);
-
-	bool IsVariableNameCorrect(const std::string & variableName) const;
-	bool IsVariableExist(const std::string& variableName) const;
-	bool IsFunctionExist(const std::string& variableName) const;
-	
-
-	std::map<std::string, double> m_functions;
+	double* GetPointerToValue(const std::string& varName);
+	std::map<std::string, SFunctionData> m_functions;
 	std::map<std::string, double> m_variables;
 };
+

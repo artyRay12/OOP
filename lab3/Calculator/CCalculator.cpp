@@ -2,36 +2,44 @@
 #include <functional>
 using namespace std;
 
-boost::optional<double> CCalculator::CalculateTwoOperands(double firstValue, double secondValue, Operations action)
+void SFunctionData::Calculate()
 {
-	double result = numeric_limits<double>::quiet_NaN();
-	switch (action)
+	if (operand == Operations::none)
 	{
-	case Operations::plus:
-		result = firstValue + secondValue;
-		break;
-	case Operations::minus:
-		result = firstValue - secondValue;
-		break;
-	case Operations::mult:
-		result = firstValue * secondValue;
-		break;
-	case Operations::divide:
-		if (secondValue == 0)
-		{
-			
-			return boost::none;
-		}
-		return result = firstValue / secondValue;
-		break;
-	default:
-		break;
+		result = *firstValueP;
+		return;
 	}
 
-	return result;
+	if ((*firstValueP == numeric_limits<double>::quiet_NaN())
+		|| (*secondsValueP == numeric_limits<double>::quiet_NaN()))
+	{
+		result = numeric_limits<double>::quiet_NaN();
+		return;
+	}
+
+	switch (operand)
+	{
+	case Operations::plus:
+		result = *firstValueP + *secondsValueP;
+		break;
+	case Operations::minus:
+		result = *firstValueP - *secondsValueP;
+		break;
+	case Operations::mult:
+		result = *firstValueP * *secondsValueP;
+		break;
+	case Operations::divide:
+		if (*secondsValueP == 0)
+		{
+			result = 0;
+			break;
+		}
+		result = *firstValueP / *secondsValueP;
+		break;
+	}
 }
 
-bool CCalculator::IsVariableExist(const string& variableName) const
+bool CCalculator::VariableExists(const string& variableName) const
 {
 	auto it = m_variables.find(variableName);
 	if (it != m_variables.end())
@@ -42,7 +50,7 @@ bool CCalculator::IsVariableExist(const string& variableName) const
 	return false;
 }
 
-bool CCalculator::IsFunctionExist(const string& variableName) const
+bool CCalculator::FunctionExists(const string& variableName) const
 {
 	auto it = m_functions.find(variableName);
 	if (it != m_functions.end())
@@ -53,7 +61,7 @@ bool CCalculator::IsFunctionExist(const string& variableName) const
 	return false;
 }
 
-bool CCalculator::IsVariableNameCorrect(const string& variableName) const
+bool CCalculator::IsIdNameCorrect(const string& variableName) const
 {
 	if (variableName.empty())
 	{
@@ -72,9 +80,8 @@ bool CCalculator::IsVariableNameCorrect(const string& variableName) const
 
 bool CCalculator::CreateVar(const string& variableName)
 {
-	if ((!IsVariableNameCorrect(variableName)) || (IsVariableExist(variableName)))
+	if ((!IsIdNameCorrect(variableName)) || (VariableExists(variableName)))
 	{
-		
 		return false;
 	}
 
@@ -83,9 +90,10 @@ bool CCalculator::CreateVar(const string& variableName)
 }
 
 bool CCalculator::SetVar(pair<string, string> variableInfo)
+
 {
 	string variableName = variableInfo.first;
-	if (!IsVariableNameCorrect(variableName))
+	if (!IsIdNameCorrect(variableName))
 	{
 		return false;
 	}
@@ -101,11 +109,10 @@ bool CCalculator::SetVar(pair<string, string> variableInfo)
 		}
 
 		m_variables[variableInfo.first] = stof(variableValue);
-		return true;
 	}
-	catch (exception e)
+	catch (exception)
 	{
-		if (!IsVariableExist(variableValue))
+		if (!VariableExists(variableValue))
 		{
 			return false;
 		}
@@ -116,40 +123,19 @@ bool CCalculator::SetVar(pair<string, string> variableInfo)
 	return true;
 }
 
-boost::optional<double> CCalculator::GetVarValue(const string& varName) const
+boost::optional<double> CCalculator::GetValueByIdName(const string& varName)
 {
-	auto it = m_variables.find(varName);
-	if (it != m_variables.end())
+	auto varIt = m_variables.find(varName);
+	if (varIt != m_variables.end())
 	{
-		return it->second;
+		return varIt->second;
 	}
 
-	return boost::none;
-}
-
-boost::optional<double> CCalculator::GetFunctionValue(const string& varName) const
-{
-	auto it = m_functions.find(varName);
-	if (it != m_functions.end())
+	auto fnIt = m_functions.find(varName);
+	if (fnIt != m_functions.end())
 	{
-		return it->second;
-	}
-
-	return boost::none;
-}
-
-boost::optional<double> CCalculator::GetValueByName(const string& varName) const
-{
-	auto value = GetVarValue(varName);
-	if (value)
-	{
-		return value.value();
-	}
-
-	value = GetFunctionValue(varName);
-	if (value)
-	{
-		return value.value();
+		fnIt->second.Calculate();
+		return fnIt->second.result;
 	}
 
 	return boost::none;
@@ -160,59 +146,78 @@ map<string, double> CCalculator::GetVars() const
 	return m_variables;
 }
 
-map<string, double> CCalculator::GetFunctions() const
+map<string, SFunctionData> CCalculator::GetFunctions()
 {
+	for (auto& item : m_functions)
+	{
+		item.second.Calculate();
+	}
 	return m_functions;
 }
 
-bool CCalculator::SetFunction(const FunctionData& functionData)
+double* CCalculator::GetPointerToValue(const string& varName)
 {
-	if (!IsVariableNameCorrect(functionData.name))
+	auto varPtr = m_variables.find(varName);
+	if (varPtr != m_variables.end())
+	{
+		return &varPtr->second;
+	}
+
+	auto funcPtr = m_functions.find(varName);
+	if (funcPtr != m_functions.end())
+	{
+		funcPtr->second.Calculate();
+		return &funcPtr->second.result;
+	}
+
+	return NULL;
+}
+
+bool CCalculator::SetFunction(string& functionName, string& firstValue, string& secondValue, Operations& operand)
+{
+	if (!IsIdNameCorrect(functionName))
 	{
 		return false;
 	}
 
-	if (IsFunctionExist(functionData.name))
+	if (FunctionExists(functionName))
 	{
 		return false;
 	}
 
-	if (!functionData.operand)
+	SFunctionData function;
+
+	if (operand == Operations::none)
 	{
-		if (IsVariableExist(functionData.firstValue))
+		auto ptr = GetPointerToValue(firstValue);
+		if (ptr != NULL)
 		{
-			m_functions.emplace(functionData.name, m_variables[functionData.firstValue]);
+			function.firstValueP = ptr;
+			function.result = *function.firstValueP;
+
+			m_functions.emplace(functionName, function);
 			return true;
 		}
 
-		if (IsFunctionExist(functionData.firstValue))
-		{
-			m_functions.emplace(functionData.name, m_functions[functionData.firstValue]);
-			return true;
-		}
-
 		return false;
 	}
 
-	auto firstValue = GetValueByName(functionData.firstValue);
-	if (!firstValue)
+	auto firstV = GetPointerToValue(firstValue);
+	if (firstV == NULL)
 	{
 		return false;
 	}
+	function.firstValueP = firstV;
 
-	auto secondValue = GetValueByName(functionData.secondValue.value());
-	if (!secondValue)
+	auto secondV = GetPointerToValue(secondValue);
+	if (secondV == NULL)
 	{
 		return false;
 	}
+	function.secondsValueP = secondV;
 
-	auto result = CalculateTwoOperands(firstValue.value(), secondValue.value(), functionData.operand.value());
-	if (!result)
-	{
-		
-		return false;
-	}
+	function.operand = operand;
 
-	m_functions.emplace(functionData.name, result.value());
+	m_functions.emplace(functionName, function);
 	return true;
 }

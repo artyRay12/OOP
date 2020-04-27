@@ -6,13 +6,16 @@ using namespace std;
 
 stringstream input;
 stringstream output;
-void SetInput(const string& str, stringstream& stream = input)
+
+void SetInput(const string& str, stringstream& inp = input)
 {
-	stream.clear();
+	stringstream stream;
 	stream << str;
+	inp.swap(stream);
 }
 
-bool IsExist(const string& varName, map<string, double> data)
+template <typename T>
+bool IsExist(const string& varName, map<string, T> data)
 {
 	auto it = data.find(varName);
 	if (it != data.end())
@@ -20,16 +23,6 @@ bool IsExist(const string& varName, map<string, double> data)
 		return true;
 	}
 	return false;
-}
-
-boost::optional<double> GetValueFromMap(const string& varName, map<string, double> data)
-{
-	auto it = data.find(varName);
-	if (it != data.end())
-	{
-		return it->second;
-	}
-	return boost::none;
 }
 
 TEST_CASE("CreateVar() should put new var in map")
@@ -57,6 +50,15 @@ TEST_CASE("CreateVar() should put new var in map")
 		SetInput("var");
 		CHECK(!cc.CalculatorDialog());
 	}
+
+	SECTION("create two vars with same names")
+	{
+		SetInput("var x");
+		CHECK(cc.CalculatorDialog());
+
+		SetInput("var x");
+		CHECK(!cc.CalculatorDialog());
+	}
 }
 
 TEST_CASE("SetVar() should set variable to value")
@@ -68,7 +70,8 @@ TEST_CASE("SetVar() should set variable to value")
 	{
 		SetInput("let x=5");
 		cc.CalculatorDialog();
-		CHECK(GetValueFromMap("x", calc.GetVars()).value() == 5);
+
+		CHECK(calc.GetValueByIdName("x").value() == 5);
 	}
 
 	SECTION("SetVar() set variable equal to another variable")
@@ -79,7 +82,7 @@ TEST_CASE("SetVar() should set variable to value")
 		SetInput("let y=x");
 		cc.CalculatorDialog();
 
-		CHECK(GetValueFromMap("y", calc.GetVars()).value() == 5);
+		CHECK(calc.GetValueByIdName("y").value() == 5);
 	}
 
 	SECTION("SetVar() set variable equal to variable that doesnt exist")
@@ -97,25 +100,25 @@ TEST_CASE("SetVar() should set variable to value")
 
 		SetInput("let x=5");
 		cc.CalculatorDialog();
-		CHECK(GetValueFromMap("x", calc.GetVars()).value() == 5);
+		CHECK(calc.GetValueByIdName("x").value() == 5);
 	}
 
 	SECTION("SetVar() with no args, cant create var or set value")
 	{
 		SetInput("let x");
-		CHECK(!cc.CalculatorDialog());
+		CHECK(!IsExist("x", calc.GetVars()));
 	}
 
 	SECTION("SetVar() with wrong LHS")
 	{
-		SetInput("let 1x=5");
-		CHECK(!cc.CalculatorDialog());
+		SetInput("let x*=5");
+		CHECK(!IsExist("1x", calc.GetVars()));
 	}
 
 	SECTION("SetVar() with wrong RHS")
 	{
 		SetInput("let x=5s");
-		CHECK(!cc.CalculatorDialog());
+		CHECK(!IsExist("x", calc.GetVars()));
 	}
 }
 
@@ -126,16 +129,17 @@ TEST_CASE("SetFunction() should calculate Rhs")
 
 	SECTION("two correct variable in Rhs")
 	{
-		SetInput("let x=5");
+		SetInput("let z=5");
+		cout << input.str() << endl;
 		cc.CalculatorDialog();
 
 		SetInput("let y=5");
 		cc.CalculatorDialog();
 
-		SetInput("fn sum=x+y");
+		SetInput("fn sum=z+y");
 		cc.CalculatorDialog();
 
-		CHECK(GetValueFromMap("sum", calc.GetFunctions()).value() == 10);
+		CHECK(calc.GetValueByIdName("sum").value() == 10);
 	}
 
 	SECTION("one correct variable in Rhs")
@@ -143,10 +147,10 @@ TEST_CASE("SetFunction() should calculate Rhs")
 		SetInput("let x=5");
 		cc.CalculatorDialog();
 
-		SetInput("fn sum=x");
+		SetInput("fn f=x");
 		cc.CalculatorDialog();
 
-		CHECK(GetValueFromMap("sum", calc.GetFunctions()).value() == 5);
+		CHECK(calc.GetValueByIdName("f").value() == 5);
 	}
 
 	SECTION("uncorrect function name")
@@ -188,7 +192,7 @@ TEST_CASE("SetFunction() should calculate Rhs")
 		SetInput("fn sum1=sum");
 		cc.CalculatorDialog();
 
-		CHECK(GetValueFromMap("sum1", calc.GetFunctions()).value() == 10);
+		CHECK(calc.GetValueByIdName("sum1").value() == 10);
 	}
 
 	SECTION("correct two function in Rhs")
@@ -201,14 +205,20 @@ TEST_CASE("SetFunction() should calculate Rhs")
 
 		SetInput("fn sum=x+y");
 		cc.CalculatorDialog();
+		CHECK(calc.GetValueByIdName("sum").value() == 10);
 
 		SetInput("fn mult=x*y");
 		cc.CalculatorDialog();
+		CHECK(calc.GetValueByIdName("mult").value() == 25);
 
-		SetInput("fn result=sum+mult");
+		SetInput("fn sub=x-y");
 		cc.CalculatorDialog();
+		CHECK(calc.GetValueByIdName("sub").value() == 0);
 
-		CHECK(GetValueFromMap("result", calc.GetFunctions()).value() == 35);
+		SetInput("fn div=x/y");
+		cc.CalculatorDialog();
+		CHECK(calc.GetValueByIdName("div").value() == 1);
+
 	}
 
 	SECTION("ucorrect function in Rhs")
@@ -228,6 +238,12 @@ TEST_CASE("SetFunction() should calculate Rhs")
 		CHECK(!IsExist("result", calc.GetFunctions()));
 	}
 
+	SECTION("without Rhs, without '='")
+	{
+		SetInput("fn result+sum+mult");
+		CHECK(!cc.CalculatorDialog());
+	}
+
 	SECTION("Div by zero")
 	{
 		SetInput("let x=5");
@@ -239,6 +255,41 @@ TEST_CASE("SetFunction() should calculate Rhs")
 		SetInput("fn result=x/y");
 		cc.CalculatorDialog();
 
-		CHECK(!IsExist("result", calc.GetFunctions()));
+		CHECK(calc.GetValueByIdName("result").value() == 0);
+	}
+
+	SECTION("if variable was changed, function should change too")
+	{
+		SetInput("let x=5");
+		cc.CalculatorDialog();
+
+		SetInput("fn result=x");
+		cc.CalculatorDialog();
+
+		CHECK(calc.GetValueByIdName("result").value() == 5);
+
+		SetInput("let x=10");
+		cc.CalculatorDialog();
+
+		CHECK(calc.GetValueByIdName("result").value() == 10);
+	}
+
+	SECTION("if function 'F' was chahed, function 'F2' which use 'F' should change too")
+	{
+		SetInput("let x=5");
+		cc.CalculatorDialog();
+
+		SetInput("fn f=x");
+		cc.CalculatorDialog();
+
+		SetInput("fn f1=f");
+		cc.CalculatorDialog();
+
+		CHECK(calc.GetValueByIdName("f1").value() == 5);
+
+		SetInput("let x=10");
+		cc.CalculatorDialog();
+		CHECK(calc.GetValueByIdName("f").value() == 10);
+		CHECK(calc.GetValueByIdName("f1").value() == 10);
 	}
 }

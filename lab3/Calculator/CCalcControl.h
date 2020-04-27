@@ -11,18 +11,18 @@ class CCalcControl
 {
 public:
 	CCalcControl(CCalculator& calculator, std::istream& input, std::ostream& output);
-	bool CalculatorDialog();
+	bool CalculatorDialog() const;
 
 private:
 	bool CreateVar(std::istream& variableName) const;
 	bool SetVar(std::istream& variableName) const;
 	bool SetFunction(std::istream& variableName) const;
-	bool PrintVariableValue(std::istream& arg) const;
+	bool PrintValueByIdName(std::istream& arg) const;
 	bool PrintVars() const;
 	bool PrintFns() const;
 
 	boost::optional<RhsAndLhs> ParseStringToRhsAndLhs(const std::string& variable) const;
-	boost::optional<FunctionData> ParseStringToFunctionInfo(const std::string& functionBody) const;
+	bool ParseStringToFunctionInfo(const std::string& functionBody, std::string& functionName, std::string& firstValue, std::string& secondValue, Operations& operand) const;
 	
 	CCalculator &m_calc;
 	std::istream& m_input;

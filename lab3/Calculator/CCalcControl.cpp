@@ -5,22 +5,20 @@
 using namespace std;
 using namespace std::placeholders;
 
-
 CCalcControl::CCalcControl(CCalculator& calculator, istream& input, ostream& output)
 	: m_calc(calculator)
 	, m_input(input)
 	, m_output(output)
-	, m_actions({ 
-		{ "var", bind(&CCalcControl::CreateVar, this, _1) },
-		{ "let", bind(&CCalcControl::SetVar, this, _1) },
-		{ "print", bind(&CCalcControl::PrintVariableValue, this, _1) },
-		{ "fn", bind(&CCalcControl::SetFunction, this, _1) },
-		{ "printvars", bind(&CCalcControl::PrintVars, this) },
-		{ "printfns", bind(&CCalcControl::PrintFns, this) } })
+	, m_actions({ { "var", bind(&CCalcControl::CreateVar, this, _1) },
+		  { "let", bind(&CCalcControl::SetVar, this, _1) },
+		  { "print", bind(&CCalcControl::PrintValueByIdName, this, _1) },
+		  { "fn", bind(&CCalcControl::SetFunction, this, _1) },
+		  { "printvars", bind(&CCalcControl::PrintVars, this) },
+		  { "printfns", bind(&CCalcControl::PrintFns, this) } })
 {
 }
 
-bool CCalcControl::CalculatorDialog()
+bool CCalcControl::CalculatorDialog() const
 {
 	string command;
 	getline(m_input, command);
@@ -42,17 +40,16 @@ bool CCalcControl::CalculatorDialog()
 	}
 }
 
-boost::optional<FunctionData> CCalcControl::ParseStringToFunctionInfo(const string& functionBody) const
+bool CCalcControl::ParseStringToFunctionInfo(const string& functionBody, string& functionName, string& firstValue, string& secondValue, Operations& operand) const
 {
 	auto functionRhsLhs = ParseStringToRhsAndLhs(functionBody);
 	if (!functionRhsLhs)
 	{
 		m_output << "Wrong function expression \n";
-		return boost::none;
+		return false;
 	}
 
-	FunctionData function;
-	function.name = functionRhsLhs.value().first;
+	functionName = functionRhsLhs.value().first;
 	string functionExpression = functionRhsLhs.value().second;
 
 	for (auto operation : OPERATION_ID)
@@ -60,37 +57,39 @@ boost::optional<FunctionData> CCalcControl::ParseStringToFunctionInfo(const stri
 		size_t operationPos = functionExpression.find(operation.first);
 		if (operationPos != string::npos)
 		{
-			function.operand = operation.second;
-			function.firstValue = functionExpression.substr(0, operationPos);
-			function.secondValue = functionExpression.substr(operationPos + 1, functionExpression.length());
-			return function;
+			operand = operation.second;
+			firstValue = functionExpression.substr(0, operationPos);
+			secondValue = functionExpression.substr(operationPos + 1, functionExpression.length());
+			return true;
 		}
 	}
 
-	function.firstValue = functionExpression;
-	return function;
+	firstValue = functionExpression;
+	return true;
 }
 
 bool CCalcControl::SetFunction(istream& args) const
 {
-	string functionInString;
+	string functionInString, functionName, firstValue, secondValue;
+	Operations operand = Operations::none;
+
 	args >> functionInString;
 
-	auto functionInfo = ParseStringToFunctionInfo(functionInString);
-	if (!functionInfo)
+	if (!ParseStringToFunctionInfo(functionInString, functionName, firstValue, secondValue, operand))
 	{
 		m_output << "Invalid expression\n";
 		return false;
 	}
 
-	bool isFunctionSet = m_calc.SetFunction(functionInfo.value());
+	bool isFunctionSet = m_calc.SetFunction(functionName, firstValue, secondValue, operand);
 	if (!isFunctionSet)
 	{
 		m_output << "Invalid functon name, or expression\n";
 		return false;
 	}
 
-	m_output << "function " << functionInfo.value().name << " created\n";
+	m_output << "function " << functionName << " created\n";
+
 	return true;
 }
 
@@ -107,7 +106,7 @@ bool CCalcControl::CreateVar(istream& args) const
 		return false;
 	}
 
-	m_output <<  fixed << setprecision(2) << "\"" << variableName << "\" added\n";
+	m_output << fixed << setprecision(2) << "\"" << variableName << "\" added\n";
 	return true;
 }
 
@@ -148,12 +147,12 @@ bool CCalcControl::SetVar(istream& arg) const
 	return true;
 }
 
-bool CCalcControl::PrintVariableValue(istream& arg) const
+bool CCalcControl::PrintValueByIdName(istream& arg) const
 {
 	string variableName;
 	arg >> variableName;
 
-	auto variableValue = m_calc.GetValueByName(variableName);
+	auto variableValue = m_calc.GetValueByIdName(variableName);
 	if (!variableValue)
 	{
 		m_output << "This var or function doestn exist\n";
@@ -174,6 +173,9 @@ bool CCalcControl::PrintVars() const
 bool CCalcControl::PrintFns() const
 {
 	for (auto& t : m_calc.GetFunctions())
-		m_output << t.first << " = " << t.second << endl;
+	{
+		m_output << t.first  << " : " << t.second.result << endl;
+	}
+	
 	return true;
 }
