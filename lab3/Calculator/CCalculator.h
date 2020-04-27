@@ -25,8 +25,8 @@ const std::map<std::string, Operations> OPERATION_ID{
 
 struct SFunctionData
 {
-	double* firstValueP;
-	double* secondsValueP;
+	double* firstValuePtr;
+	double* secondValuePtr;
 	Operations operand = Operations::none;
 	void Calculate();
 	double result;

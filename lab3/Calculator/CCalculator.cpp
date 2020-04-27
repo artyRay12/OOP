@@ -6,12 +6,12 @@ void SFunctionData::Calculate()
 {
 	if (operand == Operations::none)
 	{
-		result = *firstValueP;
+		result = *firstValuePtr;
 		return;
 	}
 
-	if ((*firstValueP == numeric_limits<double>::quiet_NaN())
-		|| (*secondsValueP == numeric_limits<double>::quiet_NaN()))
+	if ((*firstValuePtr == numeric_limits<double>::quiet_NaN())
+		|| (*secondValuePtr == numeric_limits<double>::quiet_NaN()))
 	{
 		result = numeric_limits<double>::quiet_NaN();
 		return;
@@ -20,21 +20,21 @@ void SFunctionData::Calculate()
 	switch (operand)
 	{
 	case Operations::plus:
-		result = *firstValueP + *secondsValueP;
+		result = *firstValuePtr + *secondValuePtr;
 		break;
 	case Operations::minus:
-		result = *firstValueP - *secondsValueP;
+		result = *firstValuePtr - *secondValuePtr;
 		break;
 	case Operations::mult:
-		result = *firstValueP * *secondsValueP;
+		result = *firstValuePtr * *secondValuePtr;
 		break;
 	case Operations::divide:
-		if (*secondsValueP == 0)
+		if (*secondValuePtr == 0)
 		{
 			result = 0;
 			break;
 		}
-		result = *firstValueP / *secondsValueP;
+		result = *firstValuePtr / *secondValuePtr;
 		break;
 	}
 }
@@ -191,8 +191,8 @@ bool CCalculator::SetFunction(string& functionName, string& firstValue, string& 
 		auto ptr = GetPointerToValue(firstValue);
 		if (ptr != NULL)
 		{
-			function.firstValueP = ptr;
-			function.result = *function.firstValueP;
+			function.firstValuePtr = ptr;
+			function.result = *function.firstValuePtr;
 
 			m_functions.emplace(functionName, function);
 			return true;
@@ -201,19 +201,19 @@ bool CCalculator::SetFunction(string& functionName, string& firstValue, string& 
 		return false;
 	}
 
-	auto firstV = GetPointerToValue(firstValue);
-	if (firstV == NULL)
+	auto firstValuePtr = GetPointerToValue(firstValue);
+	if (firstValuePtr == NULL)
 	{
 		return false;
 	}
-	function.firstValueP = firstV;
+	function.firstValuePtr = firstValuePtr;
 
-	auto secondV = GetPointerToValue(secondValue);
-	if (secondV == NULL)
+	auto secondValuePtr = GetPointerToValue(secondValue);
+	if (secondValuePtr == NULL)
 	{
 		return false;
 	}
-	function.secondsValueP = secondV;
+	function.secondValuePtr = secondValuePtr;
 
 	function.operand = operand;
 
