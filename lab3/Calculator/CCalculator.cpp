@@ -90,7 +90,6 @@ bool CCalculator::CreateVar(const string& variableName)
 }
 
 bool CCalculator::SetVar(pair<string, string> variableInfo)
-
 {
 	string variableName = variableInfo.first;
 	if (!IsIdNameCorrect(variableName))
