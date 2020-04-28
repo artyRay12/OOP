@@ -154,15 +154,15 @@ map<string, SFunctionData> CCalculator::GetFunctions()
 	return m_functions;
 }
 
-double* CCalculator::GetPointerToValue(const string& varName)
+double* CCalculator::GetPointerToValue(const string& idName)
 {
-	auto varPtr = m_variables.find(varName);
+	auto varPtr = m_variables.find(idName);
 	if (varPtr != m_variables.end())
 	{
 		return &varPtr->second;
 	}
 
-	auto funcPtr = m_functions.find(varName);
+	auto funcPtr = m_functions.find(idName);
 	if (funcPtr != m_functions.end())
 	{
 		funcPtr->second.Calculate();

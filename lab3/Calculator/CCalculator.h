@@ -48,9 +48,9 @@ public:
 private:
 	bool IsIdNameCorrect(const std::string & variableName) const;
 	bool VariableExists(const std::string& variableName) const;
-	bool FunctionExists(const std::string& variableName) const;
+	bool FunctionExists(const std::string& functionName) const;
 
-	double* GetPointerToValue(const std::string& varName);
+	double* GetPointerToValue(const std::string& idName);
 	std::map<std::string, SFunctionData> m_functions;
 	std::map<std::string, double> m_variables;
 };
