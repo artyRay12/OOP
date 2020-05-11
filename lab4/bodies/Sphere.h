@@ -1,8 +1,8 @@
 #pragma once
-#include "Body.h"
+#include "CVolumetricShapes.h"
 
 class CBody;
-class CSphere final : public CBody
+class CSphere final : public CVolumetricShapes
 {
 public:
 	CSphere(double density, double radius);
@@ -11,6 +11,6 @@ public:
 	double GetVolume() const override;
 
 private:
-	//void AppendProperties(std::ostream& strm) const override;
+	void AppendProperties(std::ostream& strm) const override;
 	double m_radius;
 };

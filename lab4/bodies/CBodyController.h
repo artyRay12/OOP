@@ -1,13 +1,18 @@
 #pragma once
 #include <iostream>
-#include <functional>
 #include <map>
-#include <sstream>
 #include <vector>
 #include <iterator>
 
+#include <boost/optional.hpp>
+
 #include "CParallelepiped.h"
 #include "Sphere.h"
+#include "CÑone.h"
+#include "CCylinder.h"
+#include "CVolumetricShapes.h"
+#include "CCompound.h"
+
 
 
 class CBodyController
@@ -18,7 +23,14 @@ public:
 
 private:
 	bool AddParallelepiped(std::istream& args);
-	std::vector<std::string> ParseStringToVector(std::istream& args);
+	bool AddSphere(std::istream& args);
+	bool AddCone(std::istream& args);
+	bool AddCylinder(std::istream& args);
+	bool AddCompound(std::istream& args);
+
+	bool PrintBodiesInfo() const;
+
+	boost::optional<std::vector<double>> ParseStringToVector(std::istream& args);
 
 	std::istream& m_input;
 	std::ostream& m_output;

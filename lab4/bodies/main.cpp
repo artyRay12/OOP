@@ -12,6 +12,7 @@ int main()
 
 	while (!cin.eof() && !cin.fail())
 	{
+		cout << "NEW HANDLER\n";
 		control.HandleCommand();
 	}
 }

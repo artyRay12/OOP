@@ -30,6 +30,18 @@
     <ClInclude Include="CBodyController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CVolumetricShapes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CСone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCylinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCompound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Body.cpp">
@@ -47,5 +59,20 @@
     <ClCompile Include="CBodyController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CVolumetricShapes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CСone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCylinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCompound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
