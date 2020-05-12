@@ -9,7 +9,8 @@ CCompound::CCompound()
 
 double CCompound::GetDensity() const
 {
-	return GetMass() / GetDensity();
+	//return GetMass() / GetDensity();
+	return 20;
 }
 
 double CCompound::GetVolume() const
@@ -24,12 +25,21 @@ double CCompound::GetMass() const
 	return mass;
 }
 
-bool CCompound::AddChild(unique_ptr<CBody> child)
+bool CCompound::AddChild(shared_ptr<CBody> child)
 {
-	cout << "Add child " << child->ToString() << endl;
-	return false;
+	m_children.push_back(child);
+	return true;
+}
+
+int CCompound::GetChild() const
+{
+	return m_children.size();
 }
 
 void CCompound::AppendProperties(std::ostream& out) const
 {
+	for (auto ptr : m_children)
+	{
+		out << "\t" << ptr->GetType() << endl;
+	}
 }

@@ -21,10 +21,13 @@ CBodyController::CBodyController(istream& input, ostream& output)
 {
 }
 
-bool CBodyController::HandleCommand()
+bool CBodyController::HandleCommand(string str)
 {
 	string command;
-	getline(m_input, command);
+	if (str == "")
+		getline(m_input, command);
+	else
+		command = str;
 
 	stringstream commandStream(command);
 	string action;
@@ -83,8 +86,7 @@ bool CBodyController::AddParallelepiped(istream& args)
 	width = argsInVector.value()[2];
 	depth = argsInVector.value()[3];
 
-	m_bodies.emplace_back(make_unique<CParallelepiped>(density, depth, height, width));
-	cout << m_bodies[0]->ToString();
+	m_bodies.push_back(make_shared<CParallelepiped>(density, depth, height, width));
 
 	return true;
 }
@@ -103,7 +105,7 @@ bool CBodyController::AddSphere(std::istream& args)
 	density = argsInVector.value()[0];
 	radius = argsInVector.value()[1];
 
-	m_bodies.emplace_back(make_unique<CSphere>(density, radius));
+	m_bodies.push_back(make_shared<CSphere>(density, radius));
 
 	return true;
 }
@@ -123,8 +125,7 @@ bool CBodyController::AddCone(std::istream& args)
 	radius = argsInVector.value()[1];
 	height = argsInVector.value()[2];
 
-	m_bodies.emplace_back(make_unique<CCone>(density, radius, height));
-	cout << m_bodies[0]->GetDensity();
+	m_bodies.emplace_back(make_shared<CCone>(density, radius, height));
 	return true;
 }
 
@@ -143,8 +144,7 @@ bool CBodyController::AddCylinder(std::istream& args)
 	radius = argsInVector.value()[1];
 	height = argsInVector.value()[2];
 
-	m_bodies.emplace_back(make_unique<CCylinder>(density, radius, height));
-	cout << m_bodies[0]->GetDensity();
+	m_bodies.push_back(make_shared<CCylinder>(CCylinder(density, radius, height)));
 
 	return true;
 }
@@ -152,12 +152,28 @@ bool CBodyController::AddCylinder(std::istream& args)
 bool CBodyController::AddCompound(istream& args)
 {
 	m_output << "Enter the figures for Compund\n";
-	HandleCommand();
-	auto body = make_unique<CCompound>(CCompound());
+	auto body = make_shared<CCompound>(CCompound());
+	while (1)
+	{
+		//m_output << "Compound cycle\n";
 
-	body->AddChild(move(m_bodies[m_bodies.size() - 1]));
-	m_bodies.pop_back();
+		string command;
+		getline(m_input, command);
+		if (command == "done")
+		{
+			break;
+		}
 
+		HandleCommand(command);
+
+		body->AddChild(m_bodies[m_bodies.size() - 1]);
+		m_bodies.pop_back();
+
+		//cout << body->GetChild() << endl;
+	}
+
+	//cout << "ADDED " << body->GetChild() << " ELEMENTS IN COMPOUND" << endl;
+	m_bodies.push_back(body);
 	return true;
 }
 
@@ -173,6 +189,8 @@ bool CBodyController::PrintBodiesInfo() const
 	{
 		m_output << m_bodies[i]->ToString();
 	}
+
+	//m_output << m_bodies.size() << endl;
 
 	return true;
 }

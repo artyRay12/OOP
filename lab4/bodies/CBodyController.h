@@ -19,7 +19,7 @@ class CBodyController
 {
 public:
 	CBodyController(std::istream& input, std::ostream& output);
-	bool HandleCommand();
+	bool HandleCommand(std::string str = "");
 
 private:
 	bool AddParallelepiped(std::istream& args);
@@ -39,8 +39,7 @@ private:
 	using ActionMap = std::map<std::string, Handler>;
 	ActionMap m_actions;
 
-	using BodiesPtr = std::unique_ptr<CBody>;
-	std::vector<BodiesPtr> m_bodies;
+	std::vector<std::shared_ptr<CBody>> m_bodies;
 
 
 };
