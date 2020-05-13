@@ -29,9 +29,9 @@ double CParallelepiped::GetDepth() const
 	return m_depth;
 }
 
-void CParallelepiped::AppendProperties(std::ostream& out) const
+void CParallelepiped::AppendProperties(ostream& out) const
 {
-	out << "\twidth = " << GetWidth() << '\n';
-	out << "\theight = " << GetHeight() << '\n';
-	out << "\tdepth = " << GetDepth() << '\n';
+	out << "\twidth = " << GetWidth() << endl;
+	out << "\theight = " << GetHeight() << endl;
+	out << "\tdepth = " << GetDepth() << endl;
 }

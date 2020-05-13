@@ -9,19 +9,36 @@ CCompound::CCompound()
 
 double CCompound::GetDensity() const
 {
-	//return GetMass() / GetDensity();
-	return 20;
+	double density = 0;
+	for (shared_ptr<CBody> body : m_children)
+	{
+		density += body->GetDensity();
+	}
+	
+	return density / m_children.size();
 }
+
+
 
 double CCompound::GetVolume() const
 {
 	double volume = 0;
+	for (shared_ptr<CBody> body : m_children)
+	{
+		volume += body->GetVolume();
+	}
+
 	return volume;
 }
 
 double CCompound::GetMass() const
 {
 	double mass = 0;
+	for (shared_ptr<CBody> body : m_children)
+	{
+		mass += body->GetMass();
+	}
+
 	return mass;
 }
 
@@ -31,15 +48,12 @@ bool CCompound::AddChild(shared_ptr<CBody> child)
 	return true;
 }
 
-int CCompound::GetChild() const
+void CCompound::AppendProperties(ostream& output) const
 {
-	return m_children.size();
-}
-
-void CCompound::AppendProperties(std::ostream& out) const
-{
+	output << "\tConsists of : ";
 	for (auto ptr : m_children)
 	{
-		out << "\t" << ptr->GetType() << endl;
+		output << ptr->GetType() << " ";
 	}
+	output << endl;
 }

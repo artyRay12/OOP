@@ -1,6 +1,3 @@
-#include <string>
-#include <sstream>
-#include <iomanip>
 #include <iostream>
 #include "CBodyController.h"
 
@@ -12,7 +9,7 @@ int main()
 
 	while (!cin.eof() && !cin.fail())
 	{
-		cout << "MAIN HANDLER\n";
+		cout << "> ";
 		control.HandleCommand();
 	}
 }

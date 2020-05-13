@@ -1,23 +1,22 @@
 #pragma once
-
 #include "CBodyController.h"
+#include <algorithm>
+#include <iostream>
 
 using namespace std;
-using namespace std::placeholders;
+using namespace ::placeholders;
 
 CBodyController::CBodyController(istream& input, ostream& output)
 	: m_input(input)
 	, m_output(output)
-	, m_actions({
-		  { "Sph", bind(&CBodyController::AddSphere, this, _1) },
-		  { "Cone", bind(&CBodyController::AddCone, this, _1) },
-		  { "Par", bind(&CBodyController::AddParallelepiped, this, _1) },
-		  { "Cyl", bind(&CBodyController::AddCylinder, this, _1) },
-		  { "Print", bind(&CBodyController::PrintBodiesInfo, this) },
-		  { "Comp", bind(&CBodyController::AddCompound, this, _1) }
-		  /*{ "ShowMax", bind(&CBodyControl::ShowMax, this, _1) }, 
-		{ "ShowLight", bind(&CBodyControl::ShowLight, this, _1) }*/
-	  })
+	, m_actions({ { make_pair("Par", "Parallelepiped"), bind(&CBodyController::AddParallelepiped, this, _1) },
+		  { make_pair("Cyl", "Cylinder"), bind(&CBodyController::AddCylinder, this, _1) },
+		  { make_pair("Com", "Compound"), bind(&CBodyController::AddCompound, this, _1) },
+		  { make_pair("Sph", "Sphere"), bind(&CBodyController::AddSphere, this, _1) },
+		  { make_pair("Cone", "Cone"), bind(&CBodyController::AddCone, this, _1) },
+		  { make_pair("Print", "?"), bind(&CBodyController::PrintBodiesInfo, this) },
+		  { make_pair("Max", "ShowMax"), bind(&CBodyController::ShowMax, this) },
+		  { make_pair("Light", "ShowLight"), bind(&CBodyController::ShowLight, this) } })
 {
 }
 
@@ -34,38 +33,44 @@ bool CBodyController::HandleCommand(string str)
 
 	commandStream >> action;
 
-	auto it = m_actions.find(action);
+	auto it = m_actions.begin();
+	for (it; it != m_actions.end(); it++)
+	{
+		if ((it->first.first == action) || (it->first.second == action))
+		{
+			break;
+		}
+	}
+
 	if (it != m_actions.end())
 	{
 		return it->second(commandStream);
 	}
 	else
 	{
-		m_output << "!Error wrong command!\n";
+		cout << "!! Invalid command\n";
 		return false;
 	}
 }
 
-boost::optional<vector<double>> CBodyController::ParseStringToVector(istream& args)
+optional<vector<double>> CBodyController::ParseStringToVector(istream& args)
 {
 	string argsString;
 	getline(args, argsString);
 
 	istringstream strStream(argsString);
-	vector<string> parsedArgs((std::istream_iterator<std::string>(strStream)), std::istream_iterator<std::string>());
+	vector<string> parsedArgs((::istream_iterator<::string>(strStream)), ::istream_iterator<::string>());
 
 	vector<double> parsedArgsDouble;
 	try
 	{
-		transform(parsedArgs.begin(), parsedArgs.end(), std::back_inserter(parsedArgsDouble),
+		transform(parsedArgs.begin(), parsedArgs.end(), ::back_inserter(parsedArgsDouble),
 			[](const string& str) { return stod(str); });
 	}
 	catch (exception& e)
 	{
-		return boost::none;
+		return nullopt;
 	}
-
-	//copy(parsedArgsDouble.begin(), parsedArgsDouble.end(), std::ostream_iterator<double>(cout, ", "));
 
 	return parsedArgsDouble;
 }
@@ -75,9 +80,9 @@ bool CBodyController::AddParallelepiped(istream& args)
 	double density, width, height, depth;
 
 	auto argsInVector = ParseStringToVector(args);
-	if (!argsInVector)
+	if ((!argsInVector) || (argsInVector.value().size() != 4))
 	{
-		cout << "Error! Use numbers as args\n";
+		cout << "Error! Wrong args, use 4 numbers please!\n";
 		return false;
 	}
 
@@ -91,14 +96,14 @@ bool CBodyController::AddParallelepiped(istream& args)
 	return true;
 }
 
-bool CBodyController::AddSphere(std::istream& args)
+bool CBodyController::AddSphere(istream& args)
 {
 	double density, radius;
 
 	auto argsInVector = ParseStringToVector(args);
-	if (!argsInVector)
+	if ((!argsInVector) || (argsInVector.value().size() != 2))
 	{
-		cout << "Error! Use numbers as args\n";
+		cout << "Error! Wrong args, use 2 numbers please!\n";
 		return false;
 	}
 
@@ -110,14 +115,14 @@ bool CBodyController::AddSphere(std::istream& args)
 	return true;
 }
 
-bool CBodyController::AddCone(std::istream& args)
+bool CBodyController::AddCone(istream& args)
 {
 	double density, radius, height;
 
 	auto argsInVector = ParseStringToVector(args);
-	if (!argsInVector)
+	if ((!argsInVector) || (argsInVector.value().size() != 3))
 	{
-		cout << "Error! Use numbers as args\n";
+		cout << "Error! Wrong args, use 3 numbers please!\n";
 		return false;
 	}
 
@@ -125,18 +130,18 @@ bool CBodyController::AddCone(std::istream& args)
 	radius = argsInVector.value()[1];
 	height = argsInVector.value()[2];
 
-	m_bodies.emplace_back(make_shared<CCone>(density, radius, height));
+	m_bodies.push_back(make_shared<CCone>(density, radius, height));
 	return true;
 }
 
-bool CBodyController::AddCylinder(std::istream& args)
+bool CBodyController::AddCylinder(istream& args)
 {
 	double density, radius, height;
 
 	auto argsInVector = ParseStringToVector(args);
-	if (!argsInVector)
+	if ((!argsInVector) || (argsInVector.value().size() != 3))
 	{
-		cout << "Error! Use numbers as args\n";
+		cout << "Error! Wrong args, use 3 numbers please!\n";
 		return false;
 	}
 
@@ -151,11 +156,11 @@ bool CBodyController::AddCylinder(std::istream& args)
 
 bool CBodyController::AddCompound(istream& args)
 {
-	m_output << "Enter the figures for Compund\n";
 	auto body = make_shared<CCompound>(CCompound());
+	m_output << "Enter \"done\" if u finish with Compound\n";  
 	while (1)
 	{
-		//m_output << "Compound cycle\n";
+		m_output << "Add in Compund:> ";
 
 		string command;
 		getline(m_input, command);
@@ -163,16 +168,19 @@ bool CBodyController::AddCompound(istream& args)
 		{
 			break;
 		}
-
-		HandleCommand(command);
+		else
+		{
+			if (!HandleCommand(command))
+			{
+				continue;
+			}
+		}
 
 		body->AddChild(m_bodies[m_bodies.size() - 1]);
 		m_bodies.pop_back();
-
-		//cout << body->GetChild() << endl;
 	}
 
-	//cout << "ADDED " << body->GetChild() << " ELEMENTS IN COMPOUND" << endl;
+	cout << "Compound added\n";
 	m_bodies.push_back(body);
 	return true;
 }
@@ -181,7 +189,7 @@ bool CBodyController::PrintBodiesInfo() const
 {
 	if (m_bodies.empty())
 	{
-		cout << "empty bodies\n";
+		cout << "No bodies there\n";
 		return false;
 	}
 
@@ -190,7 +198,51 @@ bool CBodyController::PrintBodiesInfo() const
 		m_output << m_bodies[i]->ToString();
 	}
 
-	//m_output << m_bodies.size() << endl;
+	return true;
+}
 
+bool CBodyController::ShowMax() const
+{
+	if (m_bodies.size() == 0)
+	{
+		return false;
+	}
+
+	double maxWeight = 0;
+	shared_ptr<CBody> heaviestBody = nullptr;
+	for (shared_ptr<CBody> body : m_bodies)
+	{
+		if (body->GetMass() > maxWeight)
+		{
+			maxWeight = body->GetMass();
+			heaviestBody = body;
+		}
+	}
+
+	m_output << heaviestBody->ToString();
+	return true;
+}
+
+bool CBodyController::ShowLight() const
+{
+	if (m_bodies.size() == 0)
+	{
+		return false;
+	}
+
+	double minWeight = 0;
+	shared_ptr<CBody> lightestBody = nullptr;
+
+	for (shared_ptr<CBody> body : m_bodies)
+	{
+		double weight = (body->GetDensity() - 1000) * 100 * body->GetVolume();
+		if (weight < minWeight)
+		{
+			minWeight = weight;
+			lightestBody = body;
+		}
+	}
+
+	m_output << lightestBody->ToString();
 	return true;
 }

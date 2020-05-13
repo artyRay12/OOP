@@ -1,7 +1,9 @@
 #include "Body.h"
+using namespace std;
 
-CBody::CBody(const std::string& type)
+CBody::CBody(const string& type, const double density)
 	: m_type(type)
+	, m_density(density)
 {
 }
 
@@ -9,20 +11,25 @@ CBody::~CBody()
 {
 }
 
-std::string CBody::GetType()
+string CBody::GetType()
 {
 	return m_type;
 }
 
-std::string CBody::ToString() const
+double CBody::GetDensity() const
 {
-	std::ostringstream strm;
-	strm << m_type << ":" << std::endl
-		 << std::setprecision(10)
-		 << "\tdensity = " << GetDensity() << std::endl
-		 << "\tvolume = " << GetVolume() << std::endl
-		 << "\tmass = " << GetMass() << std::endl;
-	AppendProperties(strm);
+	return m_density;
+}
 
-	return strm.str();
+string CBody::ToString() const
+{
+	ostringstream stream;
+	stream << m_type << ":"
+		   << "density = " << GetDensity() << endl
+		   << "\tvolume = " << GetVolume() << endl
+		   << "\tmass = " << GetMass() << endl;
+	AppendProperties(stream);
+	stream << endl;
+
+	return stream.str();
 }

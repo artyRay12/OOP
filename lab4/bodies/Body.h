@@ -1,19 +1,18 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include <iomanip>
 
 class CBody
 {
 public:
-	CBody(const std::string& type);
+	CBody(const std::string& type, const double density = 0);
 	virtual ~CBody();
 
-	 virtual double GetDensity() const = 0;
-	 virtual double GetMass() const = 0;
-	 virtual double GetVolume() const = 0;
+	virtual double GetDensity() const;
+	virtual double GetMass() const = 0;
+	virtual double GetVolume() const = 0;
 
-	 std::string GetType();
+	std::string GetType();
 	
 	std::string ToString() const;
 

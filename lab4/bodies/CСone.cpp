@@ -1,8 +1,7 @@
 #include "CÑone.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
-
 using namespace std;
-const double M_PI = 3.14;
 
 CCone::CCone(const double density, const double radius, const double height)
 	: CVolumetricShapes::CVolumetricShapes("Cone", density)
@@ -26,8 +25,8 @@ double CCone::GetVolume() const
 	return pow(GetRadius(), 2) * M_PI * GetHeight() / 3;
 }
 
-void CCone::AppendProperties(std::ostream& out) const
+void CCone::AppendProperties(ostream& output) const
 {
-	out << "\tradius = " << GetRadius() << '\n';
-	out << "\theight = " << GetHeight() << '\n';
+	output << "\tradius = " << GetRadius() << endl;
+	output << "\theight = " << GetHeight() << endl;
 }

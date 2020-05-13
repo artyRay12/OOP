@@ -1,6 +1,8 @@
 #include "Sphere.h"
-#include <cmath>
-#define M_PI 3.14
+#define _USE_MATH_DEFINES
+#include <math.h>
+using namespace std;
+
 
 CSphere::CSphere(double density, double radius)
 	: CVolumetricShapes::CVolumetricShapes("Sphere", density)
@@ -8,17 +10,17 @@ CSphere::CSphere(double density, double radius)
 {
 }
 
-double CSphere::GetRadius()const
+double CSphere::GetRadius() const
 {
 	return m_radius;
 }
 
-double CSphere::GetVolume()const
+double CSphere::GetVolume() const
 {
 	return (pow(m_radius, 3) * M_PI) * 4 / 3;
 }
 
-void CSphere::AppendProperties(std::ostream& out) const
+void CSphere::AppendProperties(std::ostream& output) const
 {
-	out << "\tradius = " << GetRadius() << '\n';
+	output << "\tradius = " << GetRadius() << endl;
 }

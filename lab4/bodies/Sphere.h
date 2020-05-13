@@ -1,7 +1,6 @@
 #pragma once
 #include "CVolumetricShapes.h"
 
-class CBody;
 class CSphere final : public CVolumetricShapes
 {
 public:

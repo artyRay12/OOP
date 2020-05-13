@@ -1,7 +1,7 @@
 #include "CCylinder.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+using namespace std;
 
 
 CCylinder::CCylinder(const double density, const double height, const double radius)
@@ -25,8 +25,8 @@ double CCylinder::GetVolume() const
 	return pow(GetRadius(), 2) * M_PI * GetHeight();
 }
 
-void CCylinder::AppendProperties(std::ostream& out) const
+void CCylinder::AppendProperties(ostream& output) const
 {
-	out << "\tradius = " << GetRadius() << '\n';
-	out << "\theight = " << GetHeight() << '\n';
+	output << "\tradius = " << GetRadius() << endl;
+	output << "\theight = " << GetHeight() << endl;
 }

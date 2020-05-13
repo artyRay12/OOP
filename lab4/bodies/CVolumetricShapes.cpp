@@ -2,15 +2,9 @@
 
 using namespace std;
 
-CVolumetricShapes::CVolumetricShapes(const string& type, double density)
-	: CBody(type)
-	, m_density(density)
+CVolumetricShapes::CVolumetricShapes(const string& type, const double density)
+	: CBody(type, density)
 {
-}
-
-double CVolumetricShapes::GetDensity() const
-{
-	return m_density;
 }
 
 double CVolumetricShapes::GetMass() const
