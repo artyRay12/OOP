@@ -2,6 +2,7 @@
 #include "CBodyController.h"
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 
 using namespace std;
 using namespace ::placeholders;
@@ -9,7 +10,7 @@ using namespace ::placeholders;
 CBodyController::CBodyController(istream& input, ostream& output)
 	: m_input(input)
 	, m_output(output)
-	, m_actions({ { make_pair("Par", "Parallelepiped"), bind(&CBodyController::AddParallelepiped, this, _1) },
+	, m_actions({ { make_pair("Par", "Parallelipiped"), bind(&CBodyController::AddParallelepiped, this, _1) },
 		  { make_pair("Cyl", "Cylinder"), bind(&CBodyController::AddCylinder, this, _1) },
 		  { make_pair("Com", "Compound"), bind(&CBodyController::AddCompound, this, _1) },
 		  { make_pair("Sph", "Sphere"), bind(&CBodyController::AddSphere, this, _1) },
@@ -51,6 +52,11 @@ bool CBodyController::HandleCommand(string str)
 		cout << "!! Invalid command\n";
 		return false;
 	}
+}
+
+vector<shared_ptr<CBody>> GetBodies(CBodyController controller)
+{
+	return controller.m_bodies;
 }
 
 optional<vector<double>> CBodyController::ParseStringToVector(istream& args)
@@ -157,7 +163,7 @@ bool CBodyController::AddCylinder(istream& args)
 bool CBodyController::AddCompound(istream& args)
 {
 	auto body = make_shared<CCompound>(CCompound());
-	m_output << "Enter \"done\" if u finish with Compound\n";  
+	m_output << "Enter \"done\" if u finish with Compound\n";
 	while (1)
 	{
 		m_output << "Add in Compund:> ";

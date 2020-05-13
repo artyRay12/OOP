@@ -5,7 +5,7 @@ using namespace std;
 
 
 CCylinder::CCylinder(const double density, const double height, const double radius)
-	: CVolumetricShapes("cylinder", density)
+	: CVolumetricShapes("Cylinder", density)
 	, m_height(height)
 	, m_radius(radius)
 {

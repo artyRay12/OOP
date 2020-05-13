@@ -5,7 +5,7 @@ CParallelepiped::CParallelepiped(const double density, const double depth, const
 	: m_width(width)
 	, m_height(height)
 	, m_depth(depth)
-	, CVolumetricShapes::CVolumetricShapes("parallelipiped", density)
+	, CVolumetricShapes::CVolumetricShapes("Parallelipiped", density)
 {
 }
 

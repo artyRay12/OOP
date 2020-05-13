@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
 #include <vector>
-#include <iterator>
 #include <optional>
 #include <functional>
 
@@ -20,6 +19,8 @@ public:
 	CBodyController(std::istream& input, std::ostream& output);
 	bool HandleCommand(std::string str = "");
 
+	friend std::vector<std::shared_ptr<CBody>> GetBodies(CBodyController controller);
+
 private:
 	bool AddParallelepiped(std::istream& args);
 	bool AddSphere(std::istream& args);
@@ -27,7 +28,6 @@ private:
 	bool AddCylinder(std::istream& args);
 	bool AddCompound(std::istream& args);
 
-	
 	bool PrintBodiesInfo() const;
 	bool ShowMax() const;
 	bool ShowLight() const;
