@@ -3,14 +3,14 @@
 using namespace std;
 
 CCompound::CCompound()
-	: CBody("compound")
+	: CBody("Compound")
 {
 }
 
 double CCompound::GetDensity() const
 {
 	double density = 0;
-	for (shared_ptr<CBody> body : m_children)
+	for (const shared_ptr<CBody> &body : m_children)
 	{
 		density += body->GetDensity();
 	}
@@ -19,11 +19,10 @@ double CCompound::GetDensity() const
 }
 
 
-
 double CCompound::GetVolume() const
 {
 	double volume = 0;
-	for (shared_ptr<CBody> body : m_children)
+	for (const shared_ptr<CBody> &body : m_children)
 	{
 		volume += body->GetVolume();
 	}
@@ -34,7 +33,7 @@ double CCompound::GetVolume() const
 double CCompound::GetMass() const
 {
 	double mass = 0;
-	for (shared_ptr<CBody> body : m_children)
+	for (const shared_ptr<CBody> &body : m_children)
 	{
 		mass += body->GetMass();
 	}
@@ -50,7 +49,7 @@ bool CCompound::AddChild(shared_ptr<CBody> child)
 
 void CCompound::AppendProperties(ostream& output) const
 {
-	output << "\tConsists of : ";
+	output << "\tConsists of: ";
 	for (auto ptr : m_children)
 	{
 		output << ptr->GetType() << " ";

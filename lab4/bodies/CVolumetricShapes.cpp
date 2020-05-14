@@ -1,5 +1,4 @@
 #include "CVolumetricShapes.h"
-
 using namespace std;
 
 CVolumetricShapes::CVolumetricShapes(const string& type, const double density)

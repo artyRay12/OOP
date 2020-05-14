@@ -12,7 +12,6 @@
 #include <math.h>
 
 #include <array>
-#include <iostream>
 #include <sstream>
 
 using namespace std;
@@ -135,8 +134,6 @@ TEST_CASE("Parallelipiped need 4 args for creating")
 
 TEST_CASE("Properties test")
 {
-	
-
 	SECTION("Sphere <density> <radius>")
 	{
 		CBodyController control(input, output);
@@ -220,4 +217,129 @@ TEST_CASE("Properties test")
 
 		CHECK(output.str() == stream.str());
 	}
+
+	SECTION("Parallelipiped <density> <depth> <height> <width>")
+	{
+		CBodyController control(input, output);
+		double density = 1;
+		double depth = 2;
+		double height = 3;
+		double width = 4;
+		double volume = 12;
+		double mass = 12;
+
+		SetInput("Parallelipiped " + to_string(density) + " " + to_string(depth) + " " + to_string(height) + " " + to_string(width));
+		control.HandleCommand();
+
+		SetInput("?");
+
+		output.str(std::string());
+		control.HandleCommand();
+
+		stringstream stream;
+		stream << "Parallelipiped:"
+			   << "density = " << density << endl
+			   << "\tvolume = " << volume << endl
+			   << "\tmass = " << mass << endl
+			   << "\tdepth = " << depth << endl
+			   << "\theight = " << height << endl
+			   << "\twidth = " << width << endl;
+
+		stream << endl;
+
+		CHECK(output.str() == stream.str());
+	}
+}
+
+TEST_CASE("Compound consist shapes we test before, and can contain another Compound..recursion hell")
+{
+	SECTION("Create Compound <= Sphere + Cone")
+	{
+		CBodyController control(input, output);
+		SetInput("Compound\n Sphere 1 2\nCone 1 2 3\ndone"); //esli delat' postro4no togda oshibka :(
+		control.HandleCommand();
+
+		SetInput("?");
+		output.str(std::string());
+		control.HandleCommand();
+
+		stringstream stream;
+		stream << "Compound:"
+			   << "density = " << 1 << endl
+			   << "\tvolume = " << 46.0767 << endl
+			   << "\tmass = " << 46.0767 << endl
+			   << "\tConsists of: Sphere Cone \n";
+		stream << endl;
+
+		CHECK(output.str() == stream.str());
+	}
+
+	SECTION("Create Compound <= Compound <= Sphere + Cone, should have same mass and volume")
+	{
+		CBodyController control(input, output);
+		SetInput("Compound\n Compound\n Sphere 1 2\nCone 1 2 3\ndone\ndone");
+		control.HandleCommand();
+
+		SetInput("?");
+		output.str(std::string());
+		control.HandleCommand();
+
+		stringstream stream;
+		stream << "Compound:"
+			   << "density = " << 1 << endl
+			   << "\tvolume = " << 46.0767 << endl
+			   << "\tmass = " << 46.0767 << endl
+			   << "\tConsists of: Compound \n";
+		stream << endl;
+
+		CHECK(output.str() == stream.str());
+	}
+}
+
+TEST_CASE("ShowMax should print info about haviest body")
+{
+	CBodyController control(input, output);
+	SetInput("Sphere 1 2");
+	control.HandleCommand();
+
+	SetInput("Cone 1 2 3");
+	control.HandleCommand();
+
+	SetInput("Max");
+	output.str(std::string());
+	control.HandleCommand();
+
+	stringstream stream;
+	stream << "Sphere:"
+		   << "density = " << 1 << endl
+		   << "\tvolume = " << 33.5103 << endl
+		   << "\tmass = " << 33.5103 << endl
+		   << "\tradius = " << 2 << endl;
+	stream << endl;
+
+	CHECK(output.str() == stream.str());
+}
+
+TEST_CASE("Light should print info about haviest body")
+{
+	CBodyController control(input, output);
+	SetInput("Sphere 1 2");
+	
+	SetInput("Cone 1 2 3");
+	control.HandleCommand();
+	
+	SetInput("Light");
+	output.str(std::string());
+	control.HandleCommand();
+
+	stringstream stream;
+	stream << "Cone:"
+		   << "density = " << 1 << endl
+		   << "\tvolume = " << 12.5664 << endl
+		   << "\tmass = " << 12.5664 << endl
+		   << "\tradius = " << 2 << endl
+		   << "\theight = " << 3 << endl;
+	stream << endl;
+
+	CHECK(output.str() == stream.str());
 }

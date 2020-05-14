@@ -1,4 +1,5 @@
 #include "CParallelepiped.h"
+#include <iostream>
 using namespace std;
 
 CParallelepiped::CParallelepiped(const double density, const double depth, const double height, const double width)
@@ -29,9 +30,9 @@ double CParallelepiped::GetDepth() const
 	return m_depth;
 }
 
-void CParallelepiped::AppendProperties(ostream& out) const
+void CParallelepiped::AppendProperties(ostream& output) const
 {
-	out << "\twidth = " << GetWidth() << endl;
-	out << "\theight = " << GetHeight() << endl;
-	out << "\tdepth = " << GetDepth() << endl;
+	output << "\tdepth = " << GetDepth() << endl;
+	output << "\theight = " << GetHeight() << endl;
+	output << "\twidth = " << GetWidth() << endl;
 }

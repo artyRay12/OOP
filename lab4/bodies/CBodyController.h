@@ -1,17 +1,15 @@
 #pragma once
-#include <map>
-#include <vector>
-#include <optional>
 #include <functional>
+#include <map>
+#include <optional>
+#include <vector>
 
-#include "CParallelepiped.h"
-#include "Sphere.h"
-#include "CÑone.h"
-#include "CCylinder.h"
-#include "CVolumetricShapes.h"
 #include "CCompound.h"
-
-
+#include "CCylinder.h"
+#include "CParallelepiped.h"
+#include "CVolumetricShapes.h"
+#include "CÑone.h"
+#include "Sphere.h"
 
 class CBodyController
 {
@@ -19,7 +17,7 @@ public:
 	CBodyController(std::istream& input, std::ostream& output);
 	bool HandleCommand(std::string str = "");
 
-	friend std::vector<std::shared_ptr<CBody>> GetBodies(CBodyController controller);
+	friend std::vector<std::shared_ptr<CBody>> GetBodies(CBodyController controller); // for tests
 
 private:
 	bool AddParallelepiped(std::istream& args);
@@ -42,6 +40,5 @@ private:
 	ActionMap m_actions;
 
 	std::vector<std::shared_ptr<CBody>> m_bodies;
-
-
+	int compoundLevel = 0;
 };

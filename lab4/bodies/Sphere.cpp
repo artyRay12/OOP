@@ -4,7 +4,7 @@
 using namespace std;
 
 
-CSphere::CSphere(double density, double radius)
+CSphere::CSphere(const double density, const double radius)
 	: CVolumetricShapes::CVolumetricShapes("Sphere", density)
 	, m_radius(radius)
 {

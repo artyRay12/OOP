@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <limits>
 
 using namespace std;
 using namespace ::placeholders;
@@ -25,9 +26,13 @@ bool CBodyController::HandleCommand(string str)
 {
 	string command;
 	if (str == "")
+	{
 		getline(m_input, command);
+	}
 	else
+	{
 		command = str;
+	}
 
 	stringstream commandStream(command);
 	string action;
@@ -73,7 +78,7 @@ optional<vector<double>> CBodyController::ParseStringToVector(istream& args)
 		transform(parsedArgs.begin(), parsedArgs.end(), ::back_inserter(parsedArgsDouble),
 			[](const string& str) { return stod(str); });
 	}
-	catch (exception& e)
+	catch (exception)
 	{
 		return nullopt;
 	}
@@ -93,9 +98,9 @@ bool CBodyController::AddParallelepiped(istream& args)
 	}
 
 	density = argsInVector.value()[0];
-	height = argsInVector.value()[1];
-	width = argsInVector.value()[2];
-	depth = argsInVector.value()[3];
+	depth = argsInVector.value()[1];
+	height = argsInVector.value()[2];
+	width = argsInVector.value()[3];
 
 	m_bodies.push_back(make_shared<CParallelepiped>(density, depth, height, width));
 
@@ -163,15 +168,28 @@ bool CBodyController::AddCylinder(istream& args)
 bool CBodyController::AddCompound(istream& args)
 {
 	auto body = make_shared<CCompound>(CCompound());
-	m_output << "Enter \"done\" if u finish with Compound\n";
-	while (1)
+
+	if (compoundLevel == 0)
 	{
-		m_output << "Add in Compund:> ";
+		m_output << "Enter \"done\" if u finish with Compound\n";
+	}
+	compoundLevel++;
+
+	while (1) // tak mojno delat'? prosto while(1)
+	{
+		m_output << "Add in";
+		for (int i = 0; i < compoundLevel; i++)
+		{
+			m_output << " Compound: ";   //4tob ydobnei bilo videt' urovni Compound
+		}
+		m_output << "> ";
 
 		string command;
 		getline(m_input, command);
+
 		if (command == "done")
 		{
+			compoundLevel--;
 			break;
 		}
 		else
@@ -186,7 +204,7 @@ bool CBodyController::AddCompound(istream& args)
 		m_bodies.pop_back();
 	}
 
-	cout << "Compound added\n";
+	m_output << "Compound added\n";
 	m_bodies.push_back(body);
 	return true;
 }
@@ -195,11 +213,11 @@ bool CBodyController::PrintBodiesInfo() const
 {
 	if (m_bodies.empty())
 	{
-		cout << "No bodies there\n";
+		m_output << "No bodies there\n";
 		return false;
 	}
 
-	for (int i = 0; i < m_bodies.size(); i++)
+	for (size_t i = 0; i < m_bodies.size(); i++)
 	{
 		m_output << m_bodies[i]->ToString();
 	}

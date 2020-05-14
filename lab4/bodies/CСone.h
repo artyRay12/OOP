@@ -11,7 +11,7 @@ public:
 
 	double GetVolume() const override;
 private:
-	void AppendProperties(std::ostream& out) const override;
+	void AppendProperties(std::ostream& output) const override;
 	double m_radius;
 	double m_height;
 	

@@ -4,12 +4,12 @@
 class CSphere final : public CVolumetricShapes
 {
 public:
-	CSphere(double density, double radius);
+	CSphere(const double density, const double radius);
 
 	double GetRadius() const;
 	double GetVolume() const override;
 
 private:
-	void AppendProperties(std::ostream& strm) const override;
+	void AppendProperties(std::ostream& stream) const override;
 	double m_radius;
 };
