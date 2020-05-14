@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bodies", "bodies\bodies.vcxproj", "{171341E7-130A-47F3-9E44-952BDA576262}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3dbody", "3dbody\3dbody.vcxproj", "{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bodiesTest", "bodiesTest\bodiesTest.vcxproj", "{9251360F-C930-48B1-B4C7-D4F449AE694A}"
 EndProject
 Global
@@ -23,14 +21,6 @@ Global
 		{171341E7-130A-47F3-9E44-952BDA576262}.Release|x64.ActiveCfg = Release|Win32
 		{171341E7-130A-47F3-9E44-952BDA576262}.Release|x86.ActiveCfg = Release|Win32
 		{171341E7-130A-47F3-9E44-952BDA576262}.Release|x86.Build.0 = Release|Win32
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Debug|x64.ActiveCfg = Debug|x64
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Debug|x64.Build.0 = Debug|x64
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Debug|x86.ActiveCfg = Debug|Win32
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Debug|x86.Build.0 = Debug|Win32
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Release|x64.ActiveCfg = Release|x64
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Release|x64.Build.0 = Release|x64
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Release|x86.ActiveCfg = Release|Win32
-		{4D1AF30B-4944-452F-B8CA-D14ADBACE5D5}.Release|x86.Build.0 = Release|Win32
 		{9251360F-C930-48B1-B4C7-D4F449AE694A}.Debug|x64.ActiveCfg = Debug|x64
 		{9251360F-C930-48B1-B4C7-D4F449AE694A}.Debug|x64.Build.0 = Debug|x64
 		{9251360F-C930-48B1-B4C7-D4F449AE694A}.Debug|x86.ActiveCfg = Debug|Win32

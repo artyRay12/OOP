@@ -1,7 +1,7 @@
 #pragma once
 #include "CVolumetricShapes.h"
 
-class CSphere final : public CVolumetricShapes
+class CSphere : public CVolumetricShapes
 {
 public:
 	CSphere(const double density, const double radius);
