@@ -86,8 +86,8 @@
     <ClInclude Include="Body.h" />
     <ClInclude Include="CBodyController.h" />
     <ClInclude Include="CCompound.h" />
+    <ClInclude Include="CCone.h" />
     <ClInclude Include="CCylinder.h" />
-    <ClInclude Include="CСone.h" />
     <ClInclude Include="CParallelepiped.h" />
     <ClInclude Include="CVolumetricShapes.h" />
     <ClInclude Include="Sphere.h" />
@@ -95,8 +95,8 @@
   <ItemGroup>
     <ClCompile Include="CBodyController.cpp" />
     <ClCompile Include="CCompound.cpp" />
+    <ClCompile Include="CCone.cpp" />
     <ClCompile Include="CCylinder.cpp" />
-    <ClCompile Include="CСone.cpp" />
     <ClCompile Include="CParallelepiped.cpp" />
     <ClCompile Include="CVolumetricShapes.cpp" />
     <ClCompile Include="main.cpp" />

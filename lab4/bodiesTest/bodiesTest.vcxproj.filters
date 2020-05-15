@@ -39,10 +39,10 @@
     <ClCompile Include="..\bodies\CVolumetricShapes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\bodies\CСone.cpp">
+    <ClCompile Include="..\bodies\Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\bodies\Sphere.cpp">
+    <ClCompile Include="..\bodies\CCone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,10 +65,10 @@
     <ClInclude Include="..\bodies\CVolumetricShapes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\bodies\CСone.h">
+    <ClInclude Include="..\bodies\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\bodies\Sphere.h">
+    <ClInclude Include="..\bodies\CCone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

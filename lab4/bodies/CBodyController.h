@@ -8,7 +8,7 @@
 #include "CCylinder.h"
 #include "CParallelepiped.h"
 #include "CVolumetricShapes.h"
-#include "CÑone.h"
+#include "CCone.h"
 #include "Sphere.h"
 
 class CBodyController

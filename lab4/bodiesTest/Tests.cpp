@@ -6,7 +6,7 @@
 #include "lab4/bodies/CCylinder.h"
 #include "lab4/bodies/CParallelepiped.h"
 #include "lab4/bodies/CVolumetricShapes.h"
-#include "lab4/bodies/CÑone.h"
+#include "lab4/bodies/CCone.h"
 #include "lab4/bodies/Sphere.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
