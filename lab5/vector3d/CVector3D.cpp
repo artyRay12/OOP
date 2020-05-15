@@ -44,12 +44,12 @@ CVector3D CVector3D::operator-() const
 	return CVector3D(-x, -y, -z);
 }
 
-CVector3D const CVector3D::operator+(CVector3D const& vector2)
+CVector3D const CVector3D::operator+(CVector3D const& vector2) const
 {
 	return CVector3D(x + vector2.x, y + vector2.y, z + vector2.z);
 }
 
-CVector3D const CVector3D::operator-(CVector3D const& vector2)
+CVector3D const CVector3D::operator-(CVector3D const& vector2) const
 {
 	return CVector3D(x - vector2.x, y - vector2.y, z - vector2.z);
 }

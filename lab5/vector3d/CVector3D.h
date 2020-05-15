@@ -13,8 +13,8 @@ public:
 	CVector3D operator-() const;
 	CVector3D operator+() const;
 
-	CVector3D const operator+(CVector3D const& vector2);
-	CVector3D const operator-(CVector3D const& vector2);
+	CVector3D const operator+(CVector3D const& vector2) const;
+	CVector3D const operator-(CVector3D const& vector2) const;
 
 	CVector3D const operator+=(CVector3D const& vector2);
 	CVector3D const operator-=(CVector3D const& vector2);
