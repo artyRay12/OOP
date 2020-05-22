@@ -59,18 +59,21 @@ bool CStudent::IsAgeCorrect(const size_t age) const
 
 bool CStudent::Rename(const string& newName, const string& newSurname, const string& newPatronymic)
 {
+	string trimmedNewName = boost::trim_copy(newName);
+	string trimmedSurname = boost::trim_copy(newSurname);
 
-	if (boost::trim_copy(newName).empty() || boost::trim_copy(newSurname).empty())
+	if (trimmedNewName.empty() || trimmedSurname.empty())
 	{
 		throw invalid_argument("name and surname cannot be empty\n");
 		return false;
 	}
-	name = boost::trim_copy(newName);
-	surname = boost::trim_copy(newSurname);
+	name = trimmedNewName;
+	surname = trimmedSurname;
 
-	if (!boost::trim_copy(patronymic).empty())
+	string trimmedPatronymic = boost::trim_copy(patronymic);
+	if (trimmedPatronymic.empty())
 	{
-		CStudent::patronymic = boost::trim_copy(patronymic);
+		patronymic = trimmedPatronymic;
 	}
 
 	return true;
