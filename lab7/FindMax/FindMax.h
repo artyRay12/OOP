@@ -9,12 +9,13 @@ bool FindMax(std::vector<T> const& arr, T& maxValue)
 		return false;
 	}
 
-	maxValue = arr[0];
-	for (size_t i = 1; i < arr.size(); i++)
-	{
-		if (maxValue < arr[i])
-			maxValue = arr[i];
-	}
+	const T *maxElem = &arr[0];
+
+	for (const auto &elem: arr)
+		if (*maxElem < elem)
+			maxElem = &elem;
+
+	maxValue = *maxElem;
 
 	return true;
 }
@@ -28,9 +29,10 @@ bool FindMax<const char*>(std::vector<const char*> const& arr, const char*& maxV
 	}
 
 	maxValue = arr[0];
-	for (size_t i = 0; i < arr.size(); i++)
-		if (strcmp(arr[i], maxValue) == 1)
-			maxValue = arr[i];
+
+	for (const auto &elem: arr)
+		if (strcmp(elem, maxValue) > 0)
+			maxValue = elem;
 
 	return true;
 }
